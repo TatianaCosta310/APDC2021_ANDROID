@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Closing The Gap</string>
+    <!-- Strings related to login and Register -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_userName">UserName</string>
+    <string name="prompt_userName_or_Email">UserName or Email </string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_password_confirmation"> Confirm Password</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">"Login"</string>
+    <string name="address_principal"> "Main Address"</string>
+    <string name="address_second"> "Complementary Address"</string>
+    <string name="locality"> "Locality"</string>
+    <string name="fix_number"> "Fix Number"</string>
+    <string name="mobile_phone"> "Mobile Phone Number"</string>
+
+    <!-- Strings related to page User name -->
+    <string name="action_sign_up_register"> Sign up or Register</string>
+    <string name="action_login"> Login </string>
+    <string name="optional"> "Optional"</string>
+
+    <!-- Strings related to messages-->
+    <string name="welcome">"Welcome To Closing The Gap App !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="must_match_password"> This password must be the same as the one above</string>
+    <string name="prompt_no_account_yet"> "No account yet? Create an Account"</string>
+    <string name="fill_next_optional"> "If you don't want to fill now, you can do it later, click on Next button"</string>
+    <string name="click_next_button">"If you are a regular user, just click on the Finish button"</string>
+
+    <!-- Strings related to Buttons Names -->
+    <string name="nextButton"> "Next"</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_up_short">Sign up</string>
+    <string name="action_finish">Finish</string>
+
+    <!-- Strings related to User Type -->
+    <string name="user_type"> "User Type"</string>
+    <string name="user_short"> "User "</string>
+    <string name="volunteer"> "volunteer "</string>
+    <string name="organization"> " organization "</string>
+
+
+</resources>
