@@ -47,6 +47,7 @@ public class Register  extends AppCompatActivity {
                     return;
                 }
                 nextOptionsButton.setEnabled(loginFormState.isDataValid());
+
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -69,6 +70,7 @@ public class Register  extends AppCompatActivity {
 
 
                 loadingProgressBar.setVisibility(View.GONE);
+
                 if (loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
                 }
@@ -111,7 +113,7 @@ public class Register  extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString(),null);
+                            passwordEditText.getText().toString(),confirmPasswordEditText.getText().toString());
                 }
                 return false;
             }

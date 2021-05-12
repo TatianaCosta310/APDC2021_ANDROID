@@ -35,12 +35,12 @@
         android:layout_marginTop="150dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_userName"
+        android:drawableLeft="@drawable/ic_action_name"
         android:inputType ="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/email"
@@ -50,12 +50,12 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_email"
+        android:drawableLeft="@drawable/email_image"
         android:inputType ="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username2"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/username2" />
 
 
     <EditText
@@ -66,12 +66,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_password"
+        android:drawableLeft="@drawable/password_lock"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
 
 
     <EditText
@@ -82,31 +82,28 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_password_confirmation"
+        android:drawableLeft="@drawable/password_lock"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password21"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/password21" />
 
 
    <Button
-        android:id="@+id/next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="64dp"
-        android:backgroundTint="@color/turquoise_200"
-        android:enabled="false"
-        android:text="@string/nextButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password23"
-        app:layout_constraintVertical_bias="0.2" />
+
+    android:id="@+id/next"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/turquoise_500"
+    android:enabled="false"
+    android:text="@string/nextButton"
+       android:layout_marginStart="48dp"
+       android:layout_marginTop="30dp"
+       android:layout_marginEnd="48dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/password23"/>
 
 
     <ProgressBar
@@ -120,9 +117,10 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/password21"
+        app:layout_constraintStart_toStartOf="@+id/password23"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

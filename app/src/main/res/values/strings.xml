@@ -3,7 +3,7 @@
     <!-- Strings related to login and Register -->
     <string name="prompt_email">Email</string>
     <string name="prompt_userName">UserName</string>
-    <string name="prompt_userName_or_Email">UserName or Email </string>
+    <string name="prompt_userName_or_Email">UserName/Email </string>
     <string name="prompt_password">Password</string>
     <string name="prompt_password_confirmation"> Confirm Password</string>
     <string name="login_failed">"Login failed"</string>
