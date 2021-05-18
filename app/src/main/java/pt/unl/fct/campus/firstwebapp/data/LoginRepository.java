@@ -31,10 +31,7 @@ public class LoginRepository {
         return user != null;
     }
 
-    public void logout() {
-        user = null;
-        dataSource.logout();
-    }
+
 
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
@@ -48,6 +45,29 @@ public class LoginRepository {
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
+        return result;
+    }
+
+
+    public Result<LoggedInUser> logout(String username, String password) {
+        user = null;
+
+        Result<LoggedInUser> result = dataSource.logout(username, password);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+        }
+        return result;
+    }
+
+    public Result<LoggedInUser> register(String username, String password,String email,String address,String cAddress,
+                                         String fixNumber, String mobileNumber,String userType) {
+
+
+        Result<LoggedInUser> result = dataSource.register(username, password,email,address,cAddress,fixNumber,mobileNumber,userType);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+        }
+
         return result;
     }
 }

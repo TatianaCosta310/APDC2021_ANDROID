@@ -1,6 +1,8 @@
 package pt.unl.fct.campus.firstwebapp.data;
 
 import android.app.Application;
+import android.widget.Toast;
+
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
 import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
 import pt.unl.fct.campus.firstwebapp.data.model.UserCredentials;
@@ -20,7 +22,7 @@ public class LoginDataSource extends Application {
 
     private UserService service;
 
-    public LoginDataSource(){
+    public LoginDataSource() {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://silver-device-307912.ey.r.appspot.com/")
@@ -30,9 +32,9 @@ public class LoginDataSource extends Application {
         this.service = retrofit.create(UserService.class);
     }
 
-    public Result<LoggedInUser> login(String username, String password ) {
+    public Result<LoggedInUser> login(String username, String password) {
 
-        Call<UserAuthenticated> userAuthenticatedCall = service.authenticateUser(new UserCredentials(username,password));
+        Call<UserAuthenticated> userAuthenticatedCall = service.authenticateUser(new UserCredentials(username, password));
 
         try {
 
@@ -43,8 +45,8 @@ public class LoginDataSource extends Application {
                 return new Result.Success<>(new LoggedInUser(ua.getTokenID(), ua.getUsername()));
             }
             return new Result.Error(new Exception(response.errorBody().toString()));
-        }catch (IOException e){
-            return new Result.Error(new IOException("Error Logging in",e));
+        } catch (IOException e) {
+            return new Result.Error(new IOException("Error Logging in", e));
 
         }
             /*LoggedInUser fakeUser =
@@ -58,7 +60,44 @@ public class LoginDataSource extends Application {
 
     }
 
-    public void logout() {
+    public Result<LoggedInUser> logout(String username, String password) {
 
+
+        Call<UserAuthenticated> logoutUser = service.authenticateUser(new UserCredentials(username, password));
+
+        try {
+
+            Response<UserAuthenticated> response = logoutUser.execute();
+
+            if (response.isSuccessful()) {
+                UserAuthenticated ua = response.body();
+                return new Result.Success<>(new LoggedInUser(ua.getTokenID(), ua.getUsername()));
+            }
+            return new Result.Error(new Exception(response.errorBody().toString()));
+        } catch (IOException e) {
+            return new Result.Error(new IOException("Error Logging out", e));
+
+        }
+    }
+
+
+    public Result<LoggedInUser> register(String username, String password,String email,String address,String cAddress,
+                                         String fixNumber, String mobileNumber,String userType) {
+
+        Call<UserAuthenticated> registrate = service.authenticateUser(new UserCredentials(username, password,email,address,cAddress,fixNumber,mobileNumber,userType));
+
+        try {
+
+            Response<UserAuthenticated> response = registrate.execute();
+
+            if (response.isSuccessful()) {
+                UserAuthenticated ua = response.body();
+                return new Result.Success<>(new LoggedInUser(ua.getTokenID(), ua.getUsername()));
+            }
+            return new Result.Error(new Exception(response.errorBody().toString()));
+        } catch (IOException e) {
+            return new Result.Error(new IOException("Error Logging out", e));
+
+        }
     }
 }

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import pt.unl.fct.campus.firstwebapp.R;
 
 public class RegisterOptional  extends AppCompatActivity {
-
+    private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

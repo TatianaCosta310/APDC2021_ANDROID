@@ -123,11 +123,12 @@ public class Register  extends AppCompatActivity {
         nextOptionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+
+                /**loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
-
+*/
             }
         });
     }
@@ -140,7 +141,7 @@ public class Register  extends AppCompatActivity {
 
     private void updateUiWithUser(LoggedInUserView model) {
 
-        openNextOptionalPage();
+       openNextOptionalPage();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

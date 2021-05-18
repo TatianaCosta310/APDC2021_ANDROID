@@ -7,7 +7,17 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface UserService {
+
     @POST("rest/log/v1")
     Call<UserAuthenticated> authenticateUser(@Body UserCredentials user);
+
+    @POST("rest/logout/logout1")
+    Call<UserAuthenticated> logoutUser(@Body UserCredentials user);
+
+    @POST
+    Call<UserCredentials> registrate(@Body UserCredentials user);
+
+    //@POST
+   // Call<T> createEvent();
 
 }
