@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
+import java.util.concurrent.Executor;
+
 import pt.unl.fct.campus.firstwebapp.data.LoginRepository;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
@@ -17,8 +19,12 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
+    private Executor executor;
+
+    LoginViewModel(LoginRepository loginRepository,Executor executor) {
+
         this.loginRepository = loginRepository;
+        this.executor = executor;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -29,16 +35,22 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password,String confirmPassword) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password,confirmPassword);
+    public void login(String username, String password ) {
 
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<LoggedInUser> result = loginRepository.login(username, password);
+
+                if (result instanceof Result.Success) {
+                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.login_failed));
+                }
+
+            }
+        });
     }
 
     public void loginDataChanged(String username, String password, String confirmPassword) {
@@ -46,11 +58,7 @@ public class LoginViewModel extends ViewModel {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null,null));
         } else if (!isPasswordValid(password)) {
             loginFormState.setValue(new LoginFormState(null, R.string.invalid_password,null));
-
-
-        } else if (confirmPassword != null){
-
-            if(!isConfirmPasswordValid(password, confirmPassword))
+        } else if (confirmPassword != null && !isConfirmPasswordValid(password, confirmPassword)){
             loginFormState.setValue(new LoginFormState(null,null, R.string.must_match_password));
         } else {
             loginFormState.setValue(new LoginFormState(true));

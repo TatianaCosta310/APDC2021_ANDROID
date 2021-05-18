@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 
 public class Register  extends AppCompatActivity {
@@ -31,7 +32,7 @@ public class Register  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
 
         final EditText usernameEditText = findViewById(R.id.username2);
@@ -46,6 +47,7 @@ public class Register  extends AppCompatActivity {
                 if (loginFormState == null) {
                     return;
                 }
+
                 nextOptionsButton.setEnabled(loginFormState.isDataValid());
 
                 if (loginFormState.getUsernameError() != null) {
@@ -67,7 +69,6 @@ public class Register  extends AppCompatActivity {
                 if (loginResult == null) {
                     return;
                 }
-
 
                 loadingProgressBar.setVisibility(View.GONE);
 
@@ -113,7 +114,7 @@ public class Register  extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString(),confirmPasswordEditText.getText().toString());
+                            passwordEditText.getText().toString());
                 }
                 return false;
             }
@@ -124,7 +125,7 @@ public class Register  extends AppCompatActivity {
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(),confirmPasswordEditText.getText().toString());
+                        passwordEditText.getText().toString());
 
 
             }

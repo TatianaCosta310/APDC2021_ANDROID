@@ -6,14 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.ui.login.Activity_login_page2;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoggedInUserView;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginFormState;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginResult;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModel;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModelFactory;
-import pt.unl.fct.campus.firstwebapp.ui.login.Register;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_login);
 
-    loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+    loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
             .get(LoginViewModel.class);
 
     final EditText usernameEditText = findViewById(R.id.username);
@@ -60,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         }
     });
 
-           loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+          loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
         @Override
         public void onChanged(@Nullable LoginFormState loginFormState) {
             if (loginFormState == null) {
@@ -95,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             setResult(Activity.RESULT_OK);
 
             //Complete and destroy login activity once successful
-            finish();
+           // finish();
         }
     });
 
@@ -127,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(),null);
+                        passwordEditText.getText().toString());
             }
             return false;
         }
@@ -137,9 +131,23 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            loadingProgressBar.setVisibility(View.VISIBLE);
+
+
+            Toast.makeText(MainActivity.this,"Username: " + usernameEditText.getText().toString(),
+                            Toast.LENGTH_LONG).show();
+
+            //Model model = Model.getInstance(MainActivity.this.getApplication());
+            //model.login(usernameEditText.getText().toString(),passwordEditText.getText().toString());
+
+            //if(model.getResponse() == 1){
+                loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString(),null);
+                  passwordEditText.getText().toString());
+            //}
+            //else{
+                //Toast.makeText(MainActivity.this,"Login Failed please try again ",
+                  //      Toast.LENGTH_LONG).show();
+            //}
 
 
         }
@@ -155,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openActivity_login2(){
 
-        Intent intent = new Intent(this, Activity_login_page2.class);
+        Intent intent = new Intent(this, Main_Page.class);
         startActivity(intent);
     }
 
@@ -163,9 +171,6 @@ public class MainActivity extends AppCompatActivity {
 
         openActivity_login2();
 
-
-        // String welcome = getString(R.string.welcome) + model.getDisplayName();
-        //Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

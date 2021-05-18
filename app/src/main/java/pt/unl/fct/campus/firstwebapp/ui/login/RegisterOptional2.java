@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatCheckBox;
 
 import pt.unl.fct.campus.firstwebapp.R;
 
@@ -62,7 +60,7 @@ public class RegisterOptional2 extends AppCompatActivity {
 
     }
     public void  openPage() {
-        Intent intent = new Intent(this, Activity_login_page2.class);
+        Intent intent = new Intent(this, Main_Page.class);
         startActivity(intent);
     }
 }

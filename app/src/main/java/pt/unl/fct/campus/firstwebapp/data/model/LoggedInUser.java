@@ -7,6 +7,7 @@ public class LoggedInUser {
 
     private String userId;
     private String displayName;
+    private long authToken;
 
     public LoggedInUser(String userId, String displayName) {
         this.userId = userId;
