@@ -8,7 +8,7 @@ public class UserAuthenticated {
     long creationData;
     long expirationData;
 
-    public void UserAuthenticated( String username, String tokenID,String role,long creationData,long expirationData){
+    public  UserAuthenticated( String username, String tokenID,String role,long creationData,long expirationData){
         this.username = username;
         this.tokenID = tokenID;
         this.role = role;

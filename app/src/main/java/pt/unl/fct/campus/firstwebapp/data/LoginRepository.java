@@ -1,5 +1,6 @@
 package pt.unl.fct.campus.firstwebapp.data;
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
+import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -59,11 +60,11 @@ public class LoginRepository {
         return result;
     }
 
-    public Result<LoggedInUser> register(String username, String password,String email,String address,String cAddress,
+    public Result<RegisterData> register(String username, String password,String email,String address,String cAddress,
                                          String fixNumber, String mobileNumber,String userType) {
 
 
-        Result<LoggedInUser> result = dataSource.register(username, password,email,address,cAddress,fixNumber,mobileNumber,userType);
+        Result<RegisterData> result = dataSource.register(username, password,email,address,cAddress,fixNumber,mobileNumber,userType);
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }

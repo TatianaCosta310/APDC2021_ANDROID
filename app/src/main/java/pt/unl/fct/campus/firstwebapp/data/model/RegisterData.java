@@ -1,8 +1,6 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
-import android.net.wifi.hotspot2.pps.Credential;
-
-public class UserCredentials {
+public class RegisterData   {
 
     String username;
     String password;
@@ -14,15 +12,9 @@ public class UserCredentials {
 
     String userType;
 
-    public UserCredentials(String username, String password){
-        this.username = username;
-        this.password = password;
+    public RegisterData(String username, String password, String email, String address, String cAddress,
+                     String fixNumber, String mobileNumber, String userType){
 
-
-    }
-
-    public UserCredentials(String username, String password,String email,String address,String cAddress,
-                           String fixNumber, String mobileNumber, String userType){
 
         this.username = username;
         this.password = password;
@@ -34,6 +26,7 @@ public class UserCredentials {
         this.userType = userType;
 
     }
+
 
     public String getUsername(){
         return username;

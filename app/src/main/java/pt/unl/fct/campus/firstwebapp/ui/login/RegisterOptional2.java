@@ -11,7 +11,9 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 
 public class RegisterOptional2 extends AppCompatActivity {
@@ -19,10 +21,13 @@ public class RegisterOptional2 extends AppCompatActivity {
     CheckBox checkBoxUser, checkBoxCompany;
     private LoginViewModel loginViewModel;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register3);
+
+
 
         checkBoxUser = findViewById(R.id.check1);
         checkBoxCompany = findViewById(R.id.check2);
@@ -32,13 +37,13 @@ public class RegisterOptional2 extends AppCompatActivity {
 
         final Button finishButton = findViewById(R.id.finish);
 
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(LoginViewModel.class);
+
         finishButton.setEnabled(true);
         finishButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View v){
-
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
 
                 openPage();
 
