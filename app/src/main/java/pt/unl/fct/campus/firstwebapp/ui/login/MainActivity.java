@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.user.Main_Page;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             loadingProgressBar.setVisibility(View.VISIBLE);
-            openRegisterPage();
+            openPage(Register.class);
 
         }
     });
@@ -154,22 +155,17 @@ public class MainActivity extends AppCompatActivity {
     });
 }
 
-    public void  openRegisterPage(){
-        Intent intent = new Intent(this, Register.class);
+    public void  openPage(Class c){
+
+        Intent intent = new Intent(this , c);
+
         startActivity(intent);
-    }
 
-
-
-    public void openActivity_login2(){
-
-        Intent intent = new Intent(this, Main_Page.class);
-        startActivity(intent);
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
 
-        openActivity_login2();
+        openPage(Main_Page.class);
 
     }
 

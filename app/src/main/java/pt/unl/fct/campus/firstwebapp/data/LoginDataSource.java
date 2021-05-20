@@ -86,7 +86,7 @@ public class LoginDataSource extends Application {
             return executeService.ExecuteServiceRegister(response);
 
         } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+            return new Result.Error(new IOException("Error Making Register", e));
         }
 
 

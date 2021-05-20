@@ -12,6 +12,7 @@ import pt.unl.fct.campus.firstwebapp.data.LoginRepository;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 
 public class LoginViewModel extends ViewModel {
 
@@ -41,6 +42,26 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void run() {
                 Result<LoggedInUser> result = loginRepository.login(username, password);
+
+                if (result instanceof Result.Success) {
+                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.login_failed));
+                }
+
+            }
+        });
+    }
+
+
+    public void registrate(String username, String password, String email,String mainAdress, String optionalAdress, String fixNumber,
+                           String mobileNumber , String userType) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<RegisterData> result = loginRepository.register(username, password,email,mainAdress,optionalAdress,fixNumber,mobileNumber,userType);
 
                 if (result instanceof Result.Success) {
                     LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();

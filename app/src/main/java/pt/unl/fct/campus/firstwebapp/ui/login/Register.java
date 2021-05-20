@@ -38,6 +38,8 @@ public class Register  extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.username2);
         final EditText passwordEditText = findViewById(R.id.password21);
         final EditText confirmPasswordEditText = findViewById(R.id.password23);
+        final EditText emailEditText = findViewById(R.id.email);
+
         final Button nextOptionsButton = findViewById(R.id.next);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading2);
 
@@ -76,7 +78,10 @@ public class Register  extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
+                    updateUiWithUser(loginResult.getSuccess(), usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString(),
+                            confirmPasswordEditText.getText().toString(),
+                            emailEditText.getText().toString());
                 }
                 setResult(Activity.RESULT_OK);
 
@@ -126,9 +131,11 @@ public class Register  extends AppCompatActivity {
 
                 //loadingProgressBar.setVisibility(View.VISIBLE);
                 //loginViewModel.login(usernameEditText.getText().toString(),
-                  //      passwordEditText.getText().toString());
+                //      passwordEditText.getText().toString());
 
-                openNextOptionalPage();
+                openNextOptionalPage(usernameEditText.getText().toString(), passwordEditText.getText().toString(),
+                        confirmPasswordEditText.getText().toString(),
+                        emailEditText.getText().toString());
 
 
             }
@@ -136,15 +143,28 @@ public class Register  extends AppCompatActivity {
     }
 
 
-    public void  openNextOptionalPage(){
+    public void  openNextOptionalPage( String username, String password, String checkPass, String email){
+
         Intent intent = new Intent(this, RegisterOptional.class);
+
+        // mandar os argumentos para a outra atividade
+        Bundle params = new Bundle();
+        params.putString("username", username);
+        params.putString("password", password);
+        params.putString("confirmPassword", checkPass);
+        params.putString("email", email);
+
+        intent.putExtras(params);
         startActivity(intent);
+
 
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
+    //o que faz este método?
+    private void updateUiWithUser(LoggedInUserView model, String username, String password,
+                                  String checkPass, String email) {
 
-       openNextOptionalPage();
+        openNextOptionalPage(username, password, checkPass, email);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

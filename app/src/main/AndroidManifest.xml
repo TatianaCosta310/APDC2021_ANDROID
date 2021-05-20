@@ -20,10 +20,13 @@
         android:theme="@style/Theme.ClosingTheGap"
         android:usesCleartextTraffic="true">
 
-       <activity android:name=".ui.login.Main_Page"></activity>
+       <activity android:name=".user.Main_Page"></activity>
         <activity android:name=".ui.login.Register"></activity>
         <activity android:name=".ui.login.RegisterOptional"></activity>
         <activity android:name=".ui.login.RegisterOptional2"></activity>
+        <activity android:name=".user.Profile"></activity>
+        <activity android:name=".user.Settings"></activity>
+
 
 
         <activity
