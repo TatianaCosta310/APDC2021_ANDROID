@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
+import android.widget.Toast;
 
 import java.util.concurrent.Executor;
 
 import pt.unl.fct.campus.firstwebapp.data.LoginRepository;
 import pt.unl.fct.campus.firstwebapp.data.Result;
+import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 
 public class LoginViewModel extends ViewModel {
@@ -36,16 +39,18 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
+
+
     public void login(String username, String password ) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<LoggedInUser> result = loginRepository.login(username, password);
+                Result<LoginData> result = loginRepository.login(username, password);
 
                 if (result instanceof Result.Success) {
-                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+                    LoginData data = ((Result.Success<LoginData>) result).getData();
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername())));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.login_failed));
                 }
@@ -55,42 +60,100 @@ public class LoginViewModel extends ViewModel {
     }
 
 
-    public void registrate(String username, String password, String email,String mainAdress, String optionalAdress, String fixNumber,
-                           String mobileNumber , String userType) {
+    public void logout() {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<RegisterData> result = loginRepository.register(username, password,email,mainAdress,optionalAdress,fixNumber,mobileNumber,userType);
+                Result<Void> result = loginRepository.logout();
 
                 if (result instanceof Result.Success) {
-                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("Logout")));
+                }else {
+                    loginResult.postValue(new LoginResult(R.string.logout_failed));
+                }
+            }
+        });
+    }
+
+
+    public void registrate(String name, String password, String email) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<RegisterData> result = loginRepository.register(name, password,email);
+
+                if (result instanceof Result.Success) {
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(name)));
                 } else {
-                    loginResult.postValue(new LoginResult(R.string.login_failed));
+                    loginResult.postValue(new LoginResult(R.string.register_failed));
                 }
 
             }
         });
     }
 
-    public void loginDataChanged(String username, String password, String confirmPassword) {
+
+    public void updateInfo(String userType, String fixNumber, String mobileNumber, String address, String cAddress,String locality) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<AdditionalAttributes> result = loginRepository.updateInfo(userType, fixNumber,mobileNumber,address,cAddress,locality);
+
+                if (result instanceof Result.Success) {
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(userType)));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.update_failed));
+                }
+
+            }
+        });
+    }
+
+
+    public void removeAccount(String password) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<LoginData> result = loginRepository.removeAccount(password);
+
+                if (result instanceof Result.Success) {
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("")));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.remove_failed));
+                }
+
+            }
+        });
+    }
+
+    public void loginDataChanged(String username, String password, String confirmPassword,String name) {
         if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null,null));
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null, null,null));
         } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password,null));
-        } else if (confirmPassword != null && !isConfirmPasswordValid(password, confirmPassword)){
-            loginFormState.setValue(new LoginFormState(null,null, R.string.must_match_password));
-        } else {
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password, null,null));
+        } else if (confirmPassword != null && !isConfirmPasswordValid(password, confirmPassword)) {
+            loginFormState.setValue(new LoginFormState(null, null, R.string.must_match_password,null));
+        }else if(name!= null && !isValidName(name)){
+            new LoginFormState(null, null, null,R.string.invalid_name);
+        }else {
             loginFormState.setValue(new LoginFormState(true));
         }
     }
 
+    private boolean isValidName(String name) {
+        if (name == null)
+            return false;
+
+        return true;
+    }
+
     // A placeholder username validation check
     private boolean isUserNameValid(String username) {
-        if (username == null) {
-            return false;
-        }
+
         if (username.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         } else {

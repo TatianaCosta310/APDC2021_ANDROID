@@ -1,18 +1,21 @@
 package pt.unl.fct.campus.firstwebapp.ui.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.user.Main_Page;
 
 public class RegisterOptional2 extends AppCompatActivity {
 
@@ -35,18 +38,24 @@ public class RegisterOptional2 extends AppCompatActivity {
         String username = bundleExtra.getString("username");
         String password = bundleExtra.getString("password");
         String email = bundleExtra.getString("email");
-        String mainAdress = bundleExtra.getString("mainAdress");
-        String optionalAdress = bundleExtra.getString("optionalAdress");
+
+       /* String address = bundleExtra.getString("mainAdress");
+        String c_address = bundleExtra.getString("optionalAdress");
         String fixNumber = bundleExtra.getString("fixNumber");
+
         String mobileNumber = bundleExtra.getString("mobileNumber");
 
+        String locality = bundleExtra.getString("locality");
+*/
+
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(LoginViewModel.class);
+        
         checkBoxUser = findViewById(R.id.check1);
         checkBoxCompany = findViewById(R.id.check2);
 
         final Button finishButton = findViewById(R.id.finish);
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
-                .get(LoginViewModel.class);
 
 
         finishButton.setEnabled(true);
@@ -54,17 +63,41 @@ public class RegisterOptional2 extends AppCompatActivity {
             @Override
             public void onClick (View v){
 
-                loginViewModel.registrate(username,password,email,mainAdress,optionalAdress,fixNumber,mobileNumber,userType);
+                loginViewModel.registrate(username,password,email);
 
-              //loginViewModel.login(usernameEditText.getText().toString(),
-                //        passwordEditText.getText().toString());
+                //Nao completo pelo Daniel
+               // loginViewModel.updateInfo(userType,fixNumber,mobileNumber,address,c_address,locality);
+
 
                 openPage();
+            }
+        });
 
+        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+
+            @Override
+            public void onChanged(@Nullable LoginResult loginResult) {
+                if (loginResult == null) {
+                    return;
+                }
+
+                if (loginResult.getError() != null) {
+                    showRegisterFailed(loginResult.getError());
+                }
+                if (loginResult.getSuccess() != null) {
+                    updateUiWithUser(loginResult.getSuccess());
+                    setResult(Activity.RESULT_OK);
+                }
+
+
+                //Complete and destroy login activity once successful
+                // finish();
             }
         });
 
     }
+
+
 
     public void controlCheckBoxes(View v){
 
@@ -96,7 +129,16 @@ public class RegisterOptional2 extends AppCompatActivity {
     }
     public void  openPage() {
 
-        Intent intent = new Intent(this,Main_Page.class);
+        Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
+    }
+
+    private void updateUiWithUser(LoggedInUserView model) {
+
+        openPage();
+    }
+
+    private void showRegisterFailed(@StringRes Integer errorString) {
+        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 }

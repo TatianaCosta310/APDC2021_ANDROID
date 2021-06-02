@@ -74,6 +74,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Address2" />
 
+    <EditText
+        android:id="@+id/locality"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:hint="Locality"
+        android:drawableLeft="@drawable/locality_image"
+        android:inputType="text"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FixNumber" />
+
 
     <EditText
         android:id="@+id/MobileNumber"
@@ -88,7 +103,7 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/FixNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/locality" />
 
 
     <TextView

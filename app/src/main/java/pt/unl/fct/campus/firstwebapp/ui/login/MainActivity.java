@@ -36,12 +36,11 @@ public class MainActivity extends AppCompatActivity {
     loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
             .get(LoginViewModel.class);
 
-    final EditText usernameEditText = findViewById(R.id.username);
+    final EditText usernameEditText = findViewById(R.id.email);
     final EditText passwordEditText = findViewById(R.id.password);
     final Button loginButton = findViewById(R.id.login);
     final Button signUpButton = findViewById(R.id.register);
     final ProgressBar loadingProgressBar = findViewById(R.id.loading);
-
 
 
         signUpButton.setEnabled(true);
@@ -50,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             loadingProgressBar.setVisibility(View.VISIBLE);
-            openPage(Register.class);
+         //   openPage(Register.class);
+
+            doSignup();
 
         }
     });
@@ -86,11 +87,12 @@ public class MainActivity extends AppCompatActivity {
             }
             if (loginResult.getSuccess() != null) {
                 updateUiWithUser(loginResult.getSuccess());
+                setResult(Activity.RESULT_OK);
             }
-            setResult(Activity.RESULT_OK);
+
 
             //Complete and destroy login activity once successful
-           // finish();
+            finish();
         }
     });
 
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
             loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString(), null);
+                    passwordEditText.getText().toString(), null,null);
         }
     };
 
@@ -122,37 +124,28 @@ public class MainActivity extends AppCompatActivity {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                       passwordEditText.getText().toString());
+
             }
             return false;
         }
     });
 
-            loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
 
-        @Override
-        public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
+                Toast.makeText(getApplicationContext(),"Username: " + usernameEditText.getText().toString(),
+                        Toast.LENGTH_LONG).show();
 
-            Toast.makeText(MainActivity.this,"Username: " + usernameEditText.getText().toString(),
-                            Toast.LENGTH_LONG).show();
-
-            //Model model = Model.getInstance(MainActivity.this.getApplication());
-            //model.login(usernameEditText.getText().toString(),passwordEditText.getText().toString());
-
-            //if(model.getResponse() == 1){
                 loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString(),
-                  passwordEditText.getText().toString());
-            //}
-            //else{
-                //Toast.makeText(MainActivity.this,"Login Failed please try again ",
-                  //      Toast.LENGTH_LONG).show();
-            //}
+                loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
 
+            }
+        });
 
-        }
-    });
 }
 
     public void  openPage(Class c){
@@ -163,10 +156,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void doSignup(){
+      openPage( Register.class);
+
+    }
     private void updateUiWithUser(LoggedInUserView model) {
 
-        openPage(Main_Page.class);
-
+         openPage(Main_Page.class);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

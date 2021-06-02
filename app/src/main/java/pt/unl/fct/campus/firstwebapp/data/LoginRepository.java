@@ -1,5 +1,6 @@
 package pt.unl.fct.campus.firstwebapp.data;
-import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
+import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 
 /**
@@ -14,7 +15,7 @@ public class LoginRepository {
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
-    private LoggedInUser user = null;
+    private LoginData user = null;
 
     // private constructor : singleton access
     private LoginRepository(LoginDataSource dataSource) {
@@ -34,39 +35,66 @@ public class LoginRepository {
 
 
 
-    private void setLoggedInUser(LoggedInUser user) {
+    private void setLoggedInUser(LoginData user) {
         this.user = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password){
+    private void setLoggedOutUser() {
+        this.user = null;
+        // If user credentials will be cached in local storage, it is recommended it be encrypted
+        // @see https://developer.android.com/training/articles/keystore
+    }
+
+    public Result<LoginData> login(String username, String password){
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
+        Result<LoginData> result = dataSource.login(username, password);
         if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+            setLoggedInUser(((Result.Success<LoginData>) result).getData());
         }
         return result;
     }
 
 
-    public Result<LoggedInUser> logout(String username, String password) {
+    public Result<Void> logout() {
         user = null;
 
-        Result<LoggedInUser> result = dataSource.logout(username, password);
+        Result<Void> result = dataSource.logout();
         if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+            setLoggedOutUser();
         }
         return result;
     }
 
-    public Result<RegisterData> register(String username, String password,String email,String address,String cAddress,
-                                         String fixNumber, String mobileNumber,String userType) {
+    public Result<RegisterData> register(String name, String password,String email) {
 
 
-        Result<RegisterData> result = dataSource.register(username, password,email,address,cAddress,fixNumber,mobileNumber,userType);
+        Result<RegisterData> result = dataSource.register(name, password,email);
         if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+            setLoggedInUser(((Result.Success<LoginData>) result).getData());
+        }
+
+        return result;
+    }
+
+    public Result<AdditionalAttributes> updateInfo(String userType, String fixNumber, String mobileNumber, String address, String cAddress,String locality) {
+
+
+        Result<AdditionalAttributes> result = dataSource.updateInfo(userType, fixNumber,mobileNumber,address,cAddress,locality);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<LoginData>) result).getData());
+        }
+
+        return result;
+    }
+
+    public Result<LoginData> removeAccount(String password) {
+
+
+        Result<LoginData> result = dataSource.removeAccount(password);
+        if (result instanceof Result.Success) {
+            setLoggedInUser(((Result.Success<LoginData>) result).getData());
         }
 
         return result;

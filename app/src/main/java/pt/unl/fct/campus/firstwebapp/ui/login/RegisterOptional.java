@@ -13,15 +13,12 @@ import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 
 public class RegisterOptional  extends AppCompatActivity {
-    private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register2);
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
-                .get(LoginViewModel.class);
 
         //mudar pos parametros registo opcional
 
@@ -29,7 +26,10 @@ public class RegisterOptional  extends AppCompatActivity {
         final EditText optionalAdress = findViewById(R.id.Address2);
         final EditText fixNumber = findViewById(R.id.FixNumber);
         final EditText mobileNumber = findViewById(R.id.MobileNumber);
+        final EditText locality = findViewById(R.id.locality);
+
         final Button nextOptionsButton = findViewById(R.id.next2);
+
         nextOptionsButton.setEnabled(true);
 
 
@@ -37,7 +37,7 @@ public class RegisterOptional  extends AppCompatActivity {
             @Override
             public void onClick (View v){
                 openNextOptionalPage(mainAdress.getText().toString(),optionalAdress.getText().toString(),
-                        fixNumber.getText().toString(), mobileNumber.getText().toString());
+                        fixNumber.getText().toString(), mobileNumber.getText().toString(),locality.toString());
 
             }
         });
@@ -45,7 +45,7 @@ public class RegisterOptional  extends AppCompatActivity {
     }
 
     public void  openNextOptionalPage(String mainAdress, String optionalAdress, String fixNumber,
-                                      String mobileNumber){
+                                      String mobileNumber, String locality){
 
         Intent intent = new Intent(this,RegisterOptional2.class);
         // mandar os argumentos para a outra atividade
@@ -57,10 +57,12 @@ public class RegisterOptional  extends AppCompatActivity {
             params = oldIntent.getExtras();
         else params=new Bundle();
 
+
         params.putString("mainAdress", mainAdress);
         params.putString("optionalAdress", optionalAdress);
         params.putString("fixNumber", fixNumber);
         params.putString("mobileNumber", mobileNumber);
+        params.putString("locality",locality);
 
         intent.putExtras(params);
         startActivity(intent);

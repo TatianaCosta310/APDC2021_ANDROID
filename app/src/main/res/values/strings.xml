@@ -22,6 +22,7 @@
     <!-- Strings related to messages-->
     <string name="welcome">"Welcome To Closing The Gap App !"</string>
     <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_name">Not a valid name</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="must_match_password"> This password must be the same as the one above</string>
     <string name="prompt_no_account_yet"> "No account yet? Create an Account"</string>
@@ -42,5 +43,40 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Strings related to User Type -->
+    <string name="action_see_profile"> "My Profile"</string>
+    <string name="editProfile">Update Profile</string>
+    <string name="action_update_user">Update Your Profile</string>
+    <string name="prompt_newAddress">New Address</string>
+    <string name="prompt_newAddress2">New Complementary Address</string>
+    <string name="prompt_newFixNumber">New Fix Number</string>
+    <string name="prompt_newMobileNumber">New Mobile Number</string>
+    <string name="update_user">Update</string>
+    <string name="register_failed">Register Failed</string>
+    <string name="logout_failed">Logout Failed</string>
+    <string name="update_failed">Update Info Failed</string>
 
+
+    <!-- Strings options for Settings page-->
+    <string name="option_Settings"> ListView</string>
+    <string name="remove_failed">Remove Account Failed</string>
+
+    <!-- Strings options for Events page-->
+    <string name="CreateEvent">Create Event</string>
+    <string name="EventName">Event Name</string>
+    <string name="StartDate">Start Day</string>
+    <string name="DueDate">Duo Date</string>
+    <string name="Description">Description</string>
+    <string name="Numvolunteer">Number of Volunteers</string>
+    <string name="OriginPlace">Origin Place</string>
+
+    <string-array name="options_List">
+            <item> Change Password </item>
+            <item> Remove Account </item>
+            <item> Help </item>
+
+        </string-array>
+    
+
+        
 </resources>

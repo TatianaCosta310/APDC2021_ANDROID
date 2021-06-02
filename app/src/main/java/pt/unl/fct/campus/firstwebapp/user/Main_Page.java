@@ -5,17 +5,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
+import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModel;
+import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModelFactory;
+import pt.unl.fct.campus.firstwebapp.ui.login.MainActivity;
+import pt.unl.fct.campus.firstwebapp.ui.login.Settings;
 
 public class Main_Page extends AppCompatActivity {
 
 
     ImageButton openOptionsMenu;
+    Button createEventButton,seeEventButton;
+
+    private LoginViewModel loginViewModel;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -23,7 +35,13 @@ public class Main_Page extends AppCompatActivity {
 
         setContentView(R.layout.activity_main1);
 
+
         openOptionsMenu = findViewById(R.id.imageButton);
+        createEventButton = findViewById(R.id.button);
+        seeEventButton = findViewById(R.id.button2);
+
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(LoginViewModel.class);
 
        openOptionsMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,12 +61,35 @@ public class Main_Page extends AppCompatActivity {
                             case R.id.settings:
                                openProfilePage(Settings.class);
                                 return true;
+                            case R.id.logout:
+                                //fazer logout do user
+                                doLogout();
+                                return true;
                             default:
                                 return false;
                         }
                     }
                 });
                 popupMenu.show();
+            }
+        });
+
+
+
+        createEventButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                openProfilePage(CreateEventPage.class);
+        }
+        });
+
+
+        seeEventButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //openProfilePage(SeeEvents.class);
             }
         });
     }
@@ -58,6 +99,14 @@ public class Main_Page extends AppCompatActivity {
         Intent intent = new Intent(this , c);
 
         startActivity(intent);
+    }
+
+    public void  doLogout(){
+
+        loginViewModel.logout();
+        openProfilePage(MainActivity.class);
+
+
     }
 
 

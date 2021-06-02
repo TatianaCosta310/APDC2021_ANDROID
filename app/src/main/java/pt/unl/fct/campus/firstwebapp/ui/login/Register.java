@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.io.Serializable;
+
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 
@@ -52,8 +54,12 @@ public class Register  extends AppCompatActivity {
 
                 nextOptionsButton.setEnabled(loginFormState.isDataValid());
 
-                if (loginFormState.getUsernameError() != null) {
+                if (loginFormState.getname() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                }
+
+                if (loginFormState.getUsernameError() != null) {
+                    emailEditText.setError(getString(loginFormState.getUsernameError()));
                 }
                 if (loginFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
@@ -103,8 +109,8 @@ public class Register  extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(), confirmPasswordEditText.getText().toString());
+                loginViewModel.loginDataChanged(emailEditText.getText().toString(),
+                        passwordEditText.getText().toString(), confirmPasswordEditText.getText().toString(),usernameEditText.getText().toString());
             }
         };
 
@@ -137,7 +143,6 @@ public class Register  extends AppCompatActivity {
                         confirmPasswordEditText.getText().toString(),
                         emailEditText.getText().toString());
 
-
             }
         });
     }
@@ -154,13 +159,13 @@ public class Register  extends AppCompatActivity {
         params.putString("confirmPassword", checkPass);
         params.putString("email", email);
 
+
         intent.putExtras(params);
         startActivity(intent);
 
 
     }
 
-    //o que faz este método?
     private void updateUiWithUser(LoggedInUserView model, String username, String password,
                                   String checkPass, String email) {
 

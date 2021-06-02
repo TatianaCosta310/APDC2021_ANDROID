@@ -75,17 +75,16 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Event"
-            android:layout_marginTop="320dp"
             android:layout_marginStart="90dp"
-            android:textSize="10dp"
-            />
+            android:layout_marginTop="320dp"
+            android:text="Create Event"
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Event"
+            android:text="See Events"
             android:layout_marginTop="320dp"
             android:layout_marginStart="250dp"
             android:textSize="10dp"

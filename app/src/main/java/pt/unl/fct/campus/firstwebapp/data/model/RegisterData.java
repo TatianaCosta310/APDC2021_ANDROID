@@ -2,34 +2,21 @@ package pt.unl.fct.campus.firstwebapp.data.model;
 
 public class RegisterData   {
 
-    String username;
+    String name;
     String password;
     String email;
-    String fixNumber;
-    String mobileNumber;
-    String address;
-    String cAddress;
-
-    String userType;
-
-    public RegisterData(String username, String password, String email, String address, String cAddress,
-                     String fixNumber, String mobileNumber, String userType){
 
 
-        this.username = username;
+    public RegisterData(String name, String password, String email){
+
+        this.name = name;
         this.password = password;
         this.email = email;
-        this.address = address;
-        this.cAddress = cAddress;
-        this.fixNumber = fixNumber;
-        this.mobileNumber = mobileNumber;
-        this.userType = userType;
-
     }
 
 
     public String getUsername(){
-        return username;
+        return name;
     }
 
     public String getPassword() {
@@ -40,13 +27,5 @@ public class RegisterData   {
         return email;
     }
 
-    public String getAddress() { return address; }
 
-    public String getcAddress() { return cAddress; }
-
-    public String getFixNumber() { return fixNumber; }
-
-    public String getMobileNumber() { return mobileNumber; }
-
-    public String getUserType() { return userType; }
 }
