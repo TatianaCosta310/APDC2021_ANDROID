@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             loadingProgressBar.setVisibility(View.VISIBLE);
-         //   openPage(Register.class);
 
             doSignup();
 
@@ -148,9 +147,17 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-    public void  openPage(Class c){
+    public void  openPage(Class c, LoggedInUserView model) {
 
-        Intent intent = new Intent(this , c);
+        Intent intent = new Intent(this, c);
+
+        if(model != null){
+
+            Bundle params = new Bundle();
+            params.putString("token", model.getToken());
+
+            intent.putExtras(params);
+        }
 
         startActivity(intent);
 
@@ -158,12 +165,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void doSignup(){
-      openPage( Register.class);
+      openPage( Register.class, null);
 
     }
     private void updateUiWithUser(LoggedInUserView model) {
 
-         openPage(Main_Page.class);
+         openPage(Main_Page.class,model);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

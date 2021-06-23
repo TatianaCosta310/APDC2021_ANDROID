@@ -1,7 +1,15 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
 import android.app.Application;
+import android.os.Bundle;
 import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import java.net.CookieStore;
+import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import retrofit2.Response;
@@ -17,7 +25,13 @@ public class ExecuteService extends Application {
 
             if (response.isSuccessful()) {
                 LoginData ua = response.body();
-                return new Result.Success<>(new LoginData(ua.email, ua.password));
+
+                String token = response.headers().get("Set-Cookie");
+
+                LoginData data = new LoginData(ua.getUsername(), ua.getPassword());
+                data.setToken(token);
+
+                return new Result.Success<>(data);
             }
 
             return new Result.Error(new Exception(response.errorBody().toString()));
@@ -55,5 +69,27 @@ public class ExecuteService extends Application {
             return new Result.Success<>("Success, Account Removed");
         }
         return new Result.Error(new Exception(response.errorBody().toString()));
+    }
+
+    public Result<Void> ExecuteServiceCreateEvent(Response<Void> response){
+
+        if (response.isSuccessful()) {
+            return new Result.Success<>("SUCCESS, EVENT CREATED");
+        }
+
+        return new Result.Error(new Exception(response.errorBody().toString()));
+
+    }
+
+    public Result<List<JsonObject>> ExecuteServiceEvents(Response<List<JsonObject>> response) {
+
+        if (response.isSuccessful()) {
+            List<JsonObject> ua = response.body();
+            int size = ua.size();
+
+            return new Result.Success<>(ua);
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+
     }
 }

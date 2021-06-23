@@ -16,6 +16,7 @@ import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
+import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
 
 public class LoginViewModel extends ViewModel {
 
@@ -50,7 +51,7 @@ public class LoginViewModel extends ViewModel {
 
                 if (result instanceof Result.Success) {
                     LoginData data = ((Result.Success<LoginData>) result).getData();
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername())));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.login_failed));
                 }
@@ -68,7 +69,7 @@ public class LoginViewModel extends ViewModel {
                 Result<Void> result = loginRepository.logout();
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("Logout")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("Logout","")));
                 }else {
                     loginResult.postValue(new LoginResult(R.string.logout_failed));
                 }
@@ -85,7 +86,7 @@ public class LoginViewModel extends ViewModel {
                 Result<RegisterData> result = loginRepository.register(name, password,email);
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(name)));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(name,"")));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.register_failed));
                 }
@@ -103,7 +104,7 @@ public class LoginViewModel extends ViewModel {
                 Result<AdditionalAttributes> result = loginRepository.updateInfo(userType, fixNumber,mobileNumber,address,cAddress,locality);
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(userType)));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(userType,"")));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.update_failed));
                 }
@@ -113,15 +114,15 @@ public class LoginViewModel extends ViewModel {
     }
 
 
-    public void removeAccount(String password) {
+    public void removeAccount(String token,String password) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<LoginData> result = loginRepository.removeAccount(password);
+                Result<LoginData> result = loginRepository.removeAccount(token,password);
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("","")));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.remove_failed));
                 }

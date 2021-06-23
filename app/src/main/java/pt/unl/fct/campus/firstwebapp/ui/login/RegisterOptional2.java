@@ -56,8 +56,6 @@ public class RegisterOptional2 extends AppCompatActivity {
 
         final Button finishButton = findViewById(R.id.finish);
 
-
-
         finishButton.setEnabled(true);
         finishButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -90,8 +88,8 @@ public class RegisterOptional2 extends AppCompatActivity {
                 }
 
 
-                //Complete and destroy login activity once successful
-                // finish();
+                //Complete and destroy register activity once successful
+                finish();
             }
         });
 

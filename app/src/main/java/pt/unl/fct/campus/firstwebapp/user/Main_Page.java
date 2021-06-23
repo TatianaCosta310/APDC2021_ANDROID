@@ -2,19 +2,24 @@ package pt.unl.fct.campus.firstwebapp.user;
 
 
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
+import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
+import pt.unl.fct.campus.firstwebapp.data.Events.SeeFinishedEventsPage;
 import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModel;
 import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModelFactory;
 import pt.unl.fct.campus.firstwebapp.ui.login.MainActivity;
@@ -24,7 +29,8 @@ public class Main_Page extends AppCompatActivity {
 
 
     ImageButton openOptionsMenu;
-    Button createEventButton,seeEventButton;
+    ImageView image;
+    Button createEventButton,seeEventButton,seeFinishedEventsButton;
 
     private LoginViewModel loginViewModel;
 
@@ -39,6 +45,8 @@ public class Main_Page extends AppCompatActivity {
         openOptionsMenu = findViewById(R.id.imageButton);
         createEventButton = findViewById(R.id.button);
         seeEventButton = findViewById(R.id.button2);
+        seeFinishedEventsButton = findViewById(R.id.button3);
+        image = findViewById(R.id.person);
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
@@ -89,14 +97,36 @@ public class Main_Page extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                //openProfilePage(SeeEvents.class);
+                openProfilePage(SeeEventsPage.class);
+            }
+        });
+
+        seeFinishedEventsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                openProfilePage(SeeFinishedEventsPage.class);
             }
         });
     }
 
     public void  openProfilePage(Class c){
 
+        Bundle params = new Bundle();
+
         Intent intent = new Intent(this , c);
+
+
+        Intent oldIntent = getIntent();
+
+        if(oldIntent != null)
+            params = oldIntent.getExtras();
+        else params=new Bundle();
+
+
+        //params.putByteArray("pic",image.toString().getBytes());
+
+        intent.putExtras(params);
 
         startActivity(intent);
     }

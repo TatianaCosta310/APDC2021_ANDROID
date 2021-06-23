@@ -71,12 +71,19 @@
     <string name="OriginPlace">Origin Place</string>
 
     <string-array name="options_List">
-            <item> Change Password </item>
-            <item> Remove Account </item>
-            <item> Help </item>
+        <item> Change Password </item>
+        <item> Remove Account </item>
+        <item> Help </item>
 
-        </string-array>
-    
+    </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="Failed_Create_Event">Failed To create Event</string>
+    <string name="invalid_day">Invalid Day</string>
+    <string name="inavlid_hour">Invalid hour</string>
+    <string name="StartHour">Start Hour</string>
+    <string name="FinalHour">Final Hour</string>
+    <string name="Failed_See_Event">Failed To see Events</string>
+    <string name="Goal">Goal</string>
 
-        
+
 </resources>

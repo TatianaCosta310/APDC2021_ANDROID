@@ -2,6 +2,7 @@ package pt.unl.fct.campus.firstwebapp.data;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
+import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -89,10 +90,10 @@ public class LoginRepository {
         return result;
     }
 
-    public Result<LoginData> removeAccount(String password) {
+    public Result<LoginData> removeAccount(String token,String password) {
 
 
-        Result<LoginData> result = dataSource.removeAccount(password);
+        Result<LoginData> result = dataSource.removeAccount(token,password);
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoginData>) result).getData());
         }

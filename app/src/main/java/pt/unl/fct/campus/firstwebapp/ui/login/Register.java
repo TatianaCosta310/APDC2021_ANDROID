@@ -84,7 +84,7 @@ public class Register  extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess(), usernameEditText.getText().toString(),
+                    updateUiWithUser(usernameEditText.getText().toString(),
                             passwordEditText.getText().toString(),
                             confirmPasswordEditText.getText().toString(),
                             emailEditText.getText().toString());
@@ -116,6 +116,7 @@ public class Register  extends AppCompatActivity {
 
 
         usernameEditText.addTextChangedListener(afterTextChangedListener);
+        emailEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         confirmPasswordEditText.addTextChangedListener(afterTextChangedListener);
 
@@ -124,8 +125,11 @@ public class Register  extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                    //loginViewModel.login(usernameEditText.getText().toString(),
+                      //      passwordEditText.getText().toString());
+                    openNextOptionalPage(usernameEditText.getText().toString(), passwordEditText.getText().toString(),
+                            confirmPasswordEditText.getText().toString(),
+                            emailEditText.getText().toString());
                 }
                 return false;
             }
@@ -166,7 +170,7 @@ public class Register  extends AppCompatActivity {
 
     }
 
-    private void updateUiWithUser(LoggedInUserView model, String username, String password,
+    private void updateUiWithUser( String username, String password,
                                   String checkPass, String email) {
 
         openNextOptionalPage(username, password, checkPass, email);

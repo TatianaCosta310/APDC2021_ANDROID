@@ -44,45 +44,82 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/eventDateCreation"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/eventStartText"
+        style="@style/text_box_style"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="cursive"
+        android:text="@string/StartDate"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventName"/>
+
+    <TextView
+        android:id="@+id/eventDateCreation"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/StartDate"
-        android:inputType ="datetime"
         android:selectAllOnFocus="true"
+        android:textSize="19dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.014"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventName" />
+        app:layout_constraintTop_toBottomOf="@id/eventStartText" />
 
-    <EditText
-        android:id="@+id/eventDue"
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/eventDuoText"
+        style="@style/text_box_style"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="cursive"
+        android:text="@string/DueDate"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventDateCreation"/>
+
+    <TextView
+        android:id="@+id/eventDue"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/DueDate"
-        android:inputType ="datetime"
         android:selectAllOnFocus="true"
+        android:textSize="19dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.014"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventDateCreation" />
+        app:layout_constraintTop_toBottomOf="@id/eventDuoText" />
 
     <EditText
         android:id="@+id/eventNumberVolunteers"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/Numvolunteer"
-        android:inputType ="number"
+        android:inputType="number"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/eventDue" />
 
@@ -94,7 +131,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/OriginPlace"
-        android:inputType ="number"
+        android:inputType="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +145,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:hint="Place where it will take place"
-        android:inputType ="number"
+        android:inputType ="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -130,20 +167,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/eventPlace" />
 
+
     <EditText
         android:id="@+id/eventDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="100dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/Description"
-        android:inputType ="text"
+        android:inputType="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.108"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView3" />
-
 
     <TextView
         android:id="@+id/textView4"
@@ -164,12 +201,12 @@
         android:id="@+id/imageButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="6dp"
         android:background="@drawable/camera"
         android:onClick="Upload"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView4" />
+        app:layout_constraintTop_toBottomOf="@id/textView5" />
 
     <TextView
         android:id="@+id/textView5"
@@ -189,24 +226,91 @@
         android:id="@+id/imageUp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="276dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/no_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/eventDescription" />
 
+
     <Button
-        style="@style/text_box_style"
         android:id="@+id/ButtonFinish"
-        android:fontFamily="cursive"
-        android:layout_width="100dp"
+        style="@style/text_box_style"
+        android:layout_width="101dp"
         android:layout_height="38dp"
-        android:layout_marginStart="280dp"
-        android:layout_marginTop="5dp"
-        android:textSize="15dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="cursive"
         android:text="@string/CreateEvent"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageUp" />
 
+    <TextView
+        android:id="@+id/eventStartHourText"
+        style="@style/text_box_style"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="cursive"
+        android:text="@string/StartHour"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:drawableBottom="@drawable/image_relogio"
+        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventName"/>
+
+
+
+    <TextView
+        android:id="@+id/eventFinalHourText"
+        style="@style/text_box_style"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="cursive"
+        android:text="@string/FinalHour"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:drawableBottom="@drawable/image_relogio"
+        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventStartHourText"/>
+
+    <TextView
+        style="@style/text_box_style"
+        android:id="@+id/textView6"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:text="Goal"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:fontFamily="cursive"
+        android:textAlignment="center"
+        android:textSize="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventPlace"/>
+
+
+    <EditText
+        android:id="@+id/eventGoals"
+        android:layout_width="100dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/Goal"
+        android:inputType="text"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView6" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

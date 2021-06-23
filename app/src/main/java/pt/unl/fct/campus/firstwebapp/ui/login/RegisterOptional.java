@@ -32,7 +32,6 @@ public class RegisterOptional  extends AppCompatActivity {
 
         nextOptionsButton.setEnabled(true);
 
-
         nextOptionsButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick (View v){
@@ -66,5 +65,7 @@ public class RegisterOptional  extends AppCompatActivity {
 
         intent.putExtras(params);
         startActivity(intent);
+
+        finish();
     }
 }

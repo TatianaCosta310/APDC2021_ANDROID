@@ -2,13 +2,11 @@ package pt.unl.fct.campus.firstwebapp.data;
 
 import android.app.Application;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
+import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
 import pt.unl.fct.campus.firstwebapp.data.model.UserService;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -28,22 +26,9 @@ public class LoginDataSource extends Application {
 
     public LoginDataSource() {
 
-       /* OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request request = chain.request().newBuilder().addHeader("parameter", "value").build();
-                return chain.proceed(request);
-            }
-        });
-*/
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://apdc-project-310922.ew.r.appspot.com/")
-                //.baseUrl("https://silver-device-307912.ey.r.appspot.com/")
                 .addConverterFactory(GsonConverterFactory.create())
-               // .client(httpClient.build())
                 .build();
 
         this.service = retrofit.create(UserService.class);
@@ -56,15 +41,6 @@ public class LoginDataSource extends Application {
 
             Response<LoginData> response = userAuthenticatedCall.execute();
 
-
-           /* if(response.isSuccessful()){
-                LoginData ua = response.body();
-                return new Result.Success<>(new LoggedInUser(ua.getUsername(), ua.getPassword()));
-            }
-            return new Result.Error(new Exception(response.errorBody().toString()));
-        }catch (IOException e){
-            return new Result.Error(new IOException("Error logging in", e));
-        }*/
             ExecuteService executeService = new ExecuteService();
 
             return executeService.ExecuteService(response);
@@ -91,7 +67,7 @@ public class LoginDataSource extends Application {
             return executeService.ExecuteServiceLogout(response);
 
         } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+            return new Result.Error(new IOException("Error logging out", e));
         }
 
     }
@@ -133,9 +109,11 @@ public class LoginDataSource extends Application {
         }
     }
 
-    public Result<LoginData> removeAccount(String password) {
+    public Result<LoginData> removeAccount(String token,String password) {
 
-        Call<Void> removeAccount = service.removeAccount(password);
+        Call<Void> removeAccount = service.removeAccount(token,password);
+
+
 
 
         try {
