@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import okhttp3.Cookie;
+import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
@@ -35,12 +36,9 @@ public class EventDataSource {
     }
 
 
-    public Result<Void> createEvent(String token,String name, String description,String goal,String location,
-                                         String  meetingPlace, String startDate, String endDate,
-                                         String startTime,String  endTime,long volunteers){//,MultipartBody.Part images) {
+    public Result<Void> createEvent(String token,RequestBody event) {
 
-        Call<Void> userAuthenticatedCall = service.createEvent(token, name,description,goal, location,
-                meetingPlace, startDate, endDate, startTime, endTime, volunteers);//,images);
+        Call<Void> userAuthenticatedCall = service.createEvent(token,event);
         try {
 
             Response<Void> response = userAuthenticatedCall.execute();

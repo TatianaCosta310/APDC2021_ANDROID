@@ -28,8 +28,6 @@ public class EventsAdapter extends BaseAdapter {
         this.context = context;
         this.events = events ;
 
-        int size = events.size();
-
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -68,14 +66,14 @@ public class EventsAdapter extends BaseAdapter {
 
         EventData2 event = events.get(position);
 
-        String numMax = String.valueOf(event.getVolunteers());
+        String numMax = String.valueOf(event.volunteers);
         String interested = String.valueOf( event.currentParticipants);
 
-        owner.setText("Organizer: " + event.getOrganizer());
+        owner.setText(String.format("Organizer: %s", event.getOrganizer()));
         name.setText(event.getName());
-       description.setText("Description: " + event.getDescription());
-        from.setText("From: " + event.getLocation());
-        where.setText("Where: " + event.getMeetingPlace());
+       description.setText(String.format("Description: %s", event.getDescription()));
+        from.setText(String.format("From: %s", event.getLocation()));
+        where.setText(String.format("Where: %s", event.getMeetingPlace()));
         when.setText("When: " + event.getStartDate() );
         until.setText("Until: " + event.getEndDate());
         numMaxVol.setText("Max Volunteers: " + numMax);

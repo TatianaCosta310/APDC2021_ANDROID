@@ -72,20 +72,21 @@ public class LoginRepository {
 
 
         Result<RegisterData> result = dataSource.register(name, password,email);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoginData>) result).getData());
-        }
 
         return result;
     }
 
-    public Result<AdditionalAttributes> updateInfo(String userType, String fixNumber, String mobileNumber, String address, String cAddress,String locality) {
+    public Result<AdditionalAttributes> updateInfo( String cookie,AdditionalAttributes atribs) {
 
 
-        Result<AdditionalAttributes> result = dataSource.updateInfo(userType, fixNumber,mobileNumber,address,cAddress,locality);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoginData>) result).getData());
-        }
+        Result<AdditionalAttributes> result = dataSource.updateInfo(cookie,atribs);
+
+        return result;
+    }
+
+    public Result<AdditionalAttributes> getInfos(String token) {
+
+        Result<AdditionalAttributes> result = dataSource.getInfos(token);
 
         return result;
     }
@@ -100,4 +101,6 @@ public class LoginRepository {
 
         return result;
     }
+
+
 }

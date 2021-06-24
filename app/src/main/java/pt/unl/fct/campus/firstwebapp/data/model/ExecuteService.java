@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.net.CookieStore;
 import java.util.List;
 
+import okhttp3.Cookie;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import retrofit2.Response;
 
@@ -55,6 +56,18 @@ public class ExecuteService extends Application {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
+
+    public Result<AdditionalAttributes> ExecuteServiceGetInfo(Response<AdditionalAttributes> response) {
+
+        if (response.isSuccessful()) {
+
+            AdditionalAttributes ua = response.body();
+
+            return new Result.Success<>(ua);
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+    }
+
     public Result<Void> ExecuteServiceLogout(Response<Void> response) {
 
         if (response.isSuccessful()) {
@@ -92,4 +105,6 @@ public class ExecuteService extends Application {
         return new Result.Error(new Exception(response.errorBody().toString()));
 
     }
+
+
 }

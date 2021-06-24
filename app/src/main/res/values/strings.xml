@@ -84,6 +84,7 @@
     <string name="FinalHour">Final Hour</string>
     <string name="Failed_See_Event">Failed To see Events</string>
     <string name="Goal">Goal</string>
+    <string name="get_infos_failed">Failed To Get Infos</string>
 
 
 </resources>

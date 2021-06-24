@@ -9,6 +9,7 @@ import java.util.List;
 import kotlin.ParameterName;
 import okhttp3.Cookie;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpHeaders;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -36,9 +37,11 @@ public interface UserService {
    @POST("rest/login/op1")
     Call<Void> register(@Body RegisterData data);
 
-   // Esta feito pelo server como?? ver isso e aplicar!
    @POST("rest/login/op3")
-    Call<Void> updateInfos(@Body AdditionalAttributes atributs);
+    Call<Void> updateInfos(@Header("Cookie") String value,@Body AdditionalAttributes atributs);
+
+    @GET("rest/login/infos")
+    Call<AdditionalAttributes> getInfos(@Header("Cookie") String value);
 
    @FormUrlEncoded
    @HTTP(method = "DELETE",path = "rest/login/op8", hasBody = true)
@@ -56,10 +59,12 @@ public interface UserService {
     @GET("rest/events/view/finished")
     Call< List<JsonObject>> seeFinishedEvents(@Header("Cookie") String value);
 
-    @Multipart
+    //Fazer nao esta a resultar e falta parte dos mapas!
+
     @POST("rest/events/create")
-    Call<Void> createEvent(@Header("Cookie") String value,
-                           @Part("name") String name,
+    Call<Void> createEvent(@Header("token") String value,
+                           @Body RequestBody event
+                          /* @Part("name") String name,
                            @Part("description") String description,
                            @Part("name") String goals,
                            @Part("location") String location,
@@ -68,7 +73,8 @@ public interface UserService {
                            @Part("endDate") String endDate,
                            @Part("startTime") String startTime,
                            @Part("endTime") String endTime,
-                           @Part("volunteers") long volunteers);
+                           @Part("volunteers") long volunteers,
+                           @Part("Image") String image*/);
 
     // @Part MultipartBody.Part image);
 

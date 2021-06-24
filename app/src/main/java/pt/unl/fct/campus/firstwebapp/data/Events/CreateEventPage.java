@@ -36,15 +36,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
-import pt.unl.fct.campus.firstwebapp.user.Main_Page;
+import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
 
 public class CreateEventPage extends AppCompatActivity implements StoragePics {
@@ -53,6 +60,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
     ImageView image ;
     Button createEventButton;
     Bitmap bitmap;
+    Bundle params;
 
 
     TextView eventDateCreation, eventDue, eventStartHour,eventFinalHour;
@@ -64,6 +72,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
     private   File imageFile;
     private String path,token;
+
 
     private int timeHour,timeMinute;
 
@@ -97,7 +106,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
 
         Intent oldIntent = getIntent();
-        Bundle params = oldIntent.getExtras();
+         params = oldIntent.getExtras();
 
         token = params.getString("token");
 
@@ -240,11 +249,34 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                 //RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),imageFile);
                 //requestImage = MultipartBody.Part.createFormData("img", imageFile.getName(),requestFile);
 
+                Gson gson = new Gson();
+
+                EventData e = new EventData();
 
 
-                eventViewModel.createEvent(token,eventName.getText().toString(),description.getText().toString(),goal.getText().toString(),origin.getText().toString(),
-                        location.getText().toString(),eventDateCreation.getText().toString(),eventDue.getText().toString(),
-                        eventStartHour.getText().toString(),eventFinalHour.getText().toString(),numVolunteers.getText().toString());//,requestImage);
+              // Create the Event object
+               // Long v1 = new Long(30);
+                //Long vol = v1.valueOf(numVolunteers.getText().toString());
+
+
+
+                //Send to Server
+
+                RequestBody event = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("name", eventName.getText().toString())
+                        .addFormDataPart("description", description.getText().toString())
+                        .addFormDataPart("goals", goal.getText().toString())
+                        .addFormDataPart("startDate", eventDateCreation.getText().toString())
+                        .addFormDataPart("endDate",eventDue.getText().toString())
+                        .addFormDataPart("startTime" , eventStartHour.getText().toString())
+                        .addFormDataPart("endTime",eventFinalHour.getText().toString())
+                        .addFormDataPart("location",origin.getText().toString())
+                        .addFormDataPart("volunteers",numVolunteers.getText().toString())
+                        .addFormDataPart("image",image.toString())
+                        .build();
+
+                eventViewModel.createEvent(token,event);//,requestImage);
 
 
             }
@@ -334,6 +366,13 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
     public void  openIntent(){
 
         Intent intent = new Intent(this , Main_Page.class);
+
+        Intent oldIntent = getIntent();
+
+        if(oldIntent != null) {
+            params = oldIntent.getExtras();
+            intent.putExtras(params);
+        }
 
         startActivity(intent);
 

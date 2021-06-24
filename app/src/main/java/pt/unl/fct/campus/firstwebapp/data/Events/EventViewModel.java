@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 
 import pt.unl.fct.campus.firstwebapp.R;
@@ -45,15 +46,12 @@ public class EventViewModel extends ViewModel {
 
 
 
-    public void createEvent(String token, String name,String description,String goal, String location,
-                            String  meetingPlace, String startDate, String endDate,
-                            String startTime, String  endTime, String volunteers){//, MultipartBody.Part images ) {
+    public void createEvent(String token, RequestBody event) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<Void> result = eventRepository.createEvent( token,name, goal, description,  location,
-                          meetingPlace,  startDate,  endDate, startTime,   endTime,  volunteers);//, images);
+                Result<Void> result = eventRepository.createEvent( token,event);
 
                 if (result instanceof Result.Success) {
 

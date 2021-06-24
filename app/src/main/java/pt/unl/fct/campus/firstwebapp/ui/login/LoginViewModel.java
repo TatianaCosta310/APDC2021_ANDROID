@@ -96,15 +96,15 @@ public class LoginViewModel extends ViewModel {
     }
 
 
-    public void updateInfo(String userType, String fixNumber, String mobileNumber, String address, String cAddress,String locality) {
+    public void updateInfo( String cookie,AdditionalAttributes atribs) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<AdditionalAttributes> result = loginRepository.updateInfo(userType, fixNumber,mobileNumber,address,cAddress,locality);
+                Result<AdditionalAttributes> result = loginRepository.updateInfo(cookie,atribs);
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(userType,"")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("success","")));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.update_failed));
                 }
@@ -113,6 +113,23 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
+    public void getInfos(String token) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<AdditionalAttributes> result = loginRepository.getInfos(token);
+
+                if (result instanceof Result.Success) {
+                    AdditionalAttributes data = ((Result.Success<AdditionalAttributes>) result).getData();
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data)));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.get_infos_failed));
+                }
+
+            }
+        });
+    }
 
     public void removeAccount(String token,String password) {
 
@@ -172,6 +189,7 @@ public class LoginViewModel extends ViewModel {
 
              return  password.matches(confirmPassword);
         }
+
 
 
 }

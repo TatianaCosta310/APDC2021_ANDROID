@@ -91,9 +91,9 @@ public class LoginDataSource extends Application {
         }
     }
 
-    public Result<AdditionalAttributes> updateInfo(String perfil,String telephone, String cellphone, String address, String more_address, String locality) {
+    public Result<AdditionalAttributes> updateInfo(String cookie,AdditionalAttributes atribs) {
 
-        Call<Void> updateInfos = service.updateInfos(new AdditionalAttributes(perfil, telephone, cellphone,address,more_address,locality));
+        Call<Void> updateInfos = service.updateInfos(cookie,atribs);
 
 
         try {
@@ -108,6 +108,26 @@ public class LoginDataSource extends Application {
             return new Result.Error(new IOException("Error Making Update", e));
         }
     }
+
+
+    public Result<AdditionalAttributes> getInfos(String token) {
+
+        Call<AdditionalAttributes> updateInfos = service.getInfos(token);
+
+
+        try {
+
+            Response<AdditionalAttributes> response = updateInfos.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceGetInfo(response);
+
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error Making Update", e));
+        }
+    }
+
 
     public Result<LoginData> removeAccount(String token,String password) {
 
@@ -128,4 +148,6 @@ public class LoginDataSource extends Application {
             return new Result.Error(new IOException("Error Removing Account", e));
         }
     }
+
+
 }

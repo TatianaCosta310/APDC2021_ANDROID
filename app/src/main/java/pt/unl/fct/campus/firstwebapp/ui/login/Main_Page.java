@@ -1,4 +1,4 @@
-package pt.unl.fct.campus.firstwebapp.user;
+package pt.unl.fct.campus.firstwebapp.ui.login;
 
 
 import android.content.Intent;
@@ -20,10 +20,6 @@ import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeFinishedEventsPage;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModel;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModelFactory;
-import pt.unl.fct.campus.firstwebapp.ui.login.MainActivity;
-import pt.unl.fct.campus.firstwebapp.ui.login.Settings;
 
 public class Main_Page extends AppCompatActivity {
 
@@ -119,14 +115,18 @@ public class Main_Page extends AppCompatActivity {
 
         Intent oldIntent = getIntent();
 
-        if(oldIntent != null)
+        if(oldIntent != null) {
             params = oldIntent.getExtras();
-        else params=new Bundle();
 
+            if(params != null)
+            intent.putExtras(params);
+        } else {
+            params = new Bundle();
+        }
 
         //params.putByteArray("pic",image.toString().getBytes());
 
-        intent.putExtras(params);
+
 
         startActivity(intent);
     }

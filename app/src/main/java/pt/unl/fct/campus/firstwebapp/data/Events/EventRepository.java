@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
@@ -35,17 +36,13 @@ public class EventRepository extends AppCompatActivity {
 
 
 
-    public Result<Void> createEvent(String token,String name, String description, String goal,String location,
-                                    String  meetingPlace, String startDate, String endDate,
-                                    String startTime, String  endTime, String volunteers){//, MultipartBody.Part images){
+    public Result<Void> createEvent(String token, RequestBody event){
 
-        Long v1 = new Long(30);
+        //Long v1 = new Long(30);
 
-        Long v = v1.valueOf(volunteers);
+        //Long v = v1.valueOf(volunteers);
 
-        Result<Void> result = dataSource.createEvent(token,name, description,goal,  location,
-                                                     meetingPlace,  startDate,  endDate,
-                                                     startTime, endTime,v);//, images);
+        Result<Void> result = dataSource.createEvent(token,event);
 
         return result;
     }

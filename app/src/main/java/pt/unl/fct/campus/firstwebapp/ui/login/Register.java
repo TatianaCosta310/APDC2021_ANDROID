@@ -84,15 +84,19 @@ public class Register  extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(usernameEditText.getText().toString(),
+                    openNextOptionalPage();
+
+                    /*updateUiWithUser(usernameEditText.getText().toString(),
                             passwordEditText.getText().toString(),
                             confirmPasswordEditText.getText().toString(),
-                            emailEditText.getText().toString());
+                            emailEditText.getText().toString());*/
+
+
                 }
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
-                finish();
+                //finish();
             }
         });
 
@@ -125,11 +129,9 @@ public class Register  extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //loginViewModel.login(usernameEditText.getText().toString(),
-                      //      passwordEditText.getText().toString());
-                    openNextOptionalPage(usernameEditText.getText().toString(), passwordEditText.getText().toString(),
-                            confirmPasswordEditText.getText().toString(),
-                            emailEditText.getText().toString());
+                    loginViewModel.registrate(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString(),emailEditText.getText().toString());
+
                 }
                 return false;
             }
@@ -139,41 +141,21 @@ public class Register  extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //loadingProgressBar.setVisibility(View.VISIBLE);
-                //loginViewModel.login(usernameEditText.getText().toString(),
-                //      passwordEditText.getText().toString());
-
-                openNextOptionalPage(usernameEditText.getText().toString(), passwordEditText.getText().toString(),
-                        confirmPasswordEditText.getText().toString(),
-                        emailEditText.getText().toString());
+                loginViewModel.registrate(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString(), emailEditText.getText().toString());
 
             }
         });
     }
 
 
-    public void  openNextOptionalPage( String username, String password, String checkPass, String email){
+    public void  openNextOptionalPage( ){
 
-        Intent intent = new Intent(this, RegisterOptional.class);
+        Intent intent = new Intent(this, MainActivity.class);
 
-        // mandar os argumentos para a outra atividade
-        Bundle params = new Bundle();
-        params.putString("username", username);
-        params.putString("password", password);
-        params.putString("confirmPassword", checkPass);
-        params.putString("email", email);
-
-
-        intent.putExtras(params);
         startActivity(intent);
 
 
-    }
-
-    private void updateUiWithUser( String username, String password,
-                                  String checkPass, String email) {
-
-        openNextOptionalPage(username, password, checkPass, email);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

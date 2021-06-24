@@ -16,15 +16,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
 
 public class RegisterOptional2 extends AppCompatActivity {
 
     CheckBox checkBoxUser, checkBoxCompany;
     private LoginViewModel loginViewModel;
 
-    String userType;
+    Bundle bundleExtra;
 
-
+    String userType = "Volunteer";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,20 +34,19 @@ public class RegisterOptional2 extends AppCompatActivity {
 
 
         Intent oldIntent = getIntent();
-        Bundle bundleExtra = oldIntent.getExtras();
+         bundleExtra = oldIntent.getExtras();
 
-        String username = bundleExtra.getString("username");
-        String password = bundleExtra.getString("password");
-        String email = bundleExtra.getString("email");
 
-       /* String address = bundleExtra.getString("mainAdress");
+        String address = bundleExtra.getString("mainAdress");
         String c_address = bundleExtra.getString("optionalAdress");
         String fixNumber = bundleExtra.getString("fixNumber");
 
         String mobileNumber = bundleExtra.getString("mobileNumber");
 
         String locality = bundleExtra.getString("locality");
-*/
+
+        String cookie = bundleExtra.getString("token");
+
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
@@ -61,13 +61,20 @@ public class RegisterOptional2 extends AppCompatActivity {
             @Override
             public void onClick (View v){
 
-                loginViewModel.registrate(username,password,email);
 
-                //Nao completo pelo Daniel
-               // loginViewModel.updateInfo(userType,fixNumber,mobileNumber,address,c_address,locality);
+                AdditionalAttributes atribs = new AdditionalAttributes();
+
+                atribs.setAddress(address);
+                atribs.setMore_address(c_address);
+                atribs.setCellphone(mobileNumber);
+                atribs.setTelephone(fixNumber);
+                atribs.setLocality(locality);
+                atribs.setPerfil(userType);
+
+                loginViewModel.updateInfo(cookie,atribs);
 
 
-                openPage();
+
             }
         });
 
@@ -127,7 +134,16 @@ public class RegisterOptional2 extends AppCompatActivity {
     }
     public void  openPage() {
 
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, Main_Page.class);
+
+
+        Intent oldIntent = getIntent();
+
+        if(oldIntent != null) {
+            bundleExtra = oldIntent.getExtras();
+            intent.putExtras(bundleExtra);
+        }
+
         startActivity(intent);
     }
 

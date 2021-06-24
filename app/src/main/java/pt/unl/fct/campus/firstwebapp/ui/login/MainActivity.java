@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.user.Main_Page;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //Complete and destroy login activity once successful
-            finish();
+           // finish();
         }
     });
 

@@ -1,34 +1,63 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
-public class AdditionalAttributes {
+    public class AdditionalAttributes {
 
-    String fixNumber;
-    String mobileNumber;
-    String address;
-    String cAddress;
-    String locality;
+        public String getPerfil() {
+            return perfil;
+        }
 
-    String userType;
+        public void setPerfil(String perfil) {
+            this.perfil = perfil;
+        }
 
-    public AdditionalAttributes(String userType, String fixNumber, String mobileNumber, String address, String cAddress,String locality){
+        public String getTelephone() {
+            return telephone;
+        }
 
-        this.userType = userType;
-        this.fixNumber = fixNumber;
-        this.mobileNumber = mobileNumber;
-        this.address = address;
-        this.cAddress = cAddress;
-        this.locality = locality;
+        public void setTelephone(String telephone) {
+            this.telephone = telephone;
+        }
+
+        public String getCellphone() {
+            return cellphone;
+        }
+
+        public void setCellphone(String cellphone) {
+            this.cellphone = cellphone;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getMore_address() {
+            return more_address;
+        }
+
+        public void setMore_address(String more_address) {
+            this.more_address = more_address;
+        }
+
+        public String getLocality() {
+            return locality;
+        }
+
+        public void setLocality(String locality) {
+            this.locality = locality;
+        }
+
+        String perfil, telephone, cellphone, address, more_address, locality;
+
+        public AdditionalAttributes() {
+            perfil = "";
+            telephone = "";
+            cellphone = "";
+            address = "";
+            more_address = "";
+            locality = "";
+        }
     }
-
-    public String getUserType() { return userType; }
-
-    public String getAddress() { return address; }
-
-    public String getcAddress() { return cAddress; }
-
-    public String getFixNumber() { return fixNumber; }
-
-    public String getMobileNumber() { return mobileNumber; }
-
-    public String getLocality() { return locality; }
-}

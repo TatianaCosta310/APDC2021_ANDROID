@@ -1,4 +1,4 @@
-package pt.unl.fct.campus.firstwebapp.user;
+package pt.unl.fct.campus.firstwebapp.ui.login;
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,7 +17,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import pt.unl.fct.campus.firstwebapp.R;
@@ -44,13 +42,13 @@ public class Profile extends AppCompatActivity implements StoragePics {
         Intent oldIntent = getIntent();
         Bundle bundleExtra = oldIntent.getExtras();
 
-       String a = bundleExtra.getByteArray("pic").toString();
+//       String a = bundleExtra.getByteArray("pic").toString();
       //  image =  (ImageView) a ;  ;
 
         updatePorfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateUser();
+                updateUser(bundleExtra);
             }
         });
 
@@ -64,8 +62,16 @@ public class Profile extends AppCompatActivity implements StoragePics {
 }
 
 
-    private void updateUser() {
+    private void updateUser(Bundle bundleExtra) {
         Intent intent = new Intent(this, UpdateUser.class);
+
+        Intent oldIntent = getIntent();
+
+        if(oldIntent != null) {
+            bundleExtra = oldIntent.getExtras();
+            intent.putExtras(bundleExtra);
+        }
+
         startActivity(intent);
     }
 
