@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:visibility="visible"
+    tools:context=".ui.login.Profile">
+
+    <TextView
+        android:id="@+id/UserProfileTxt"
+        android:layout_width="225dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="cursive"
+        android:text="@string/action_see_profile"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.548"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+
+        android:id="@+id/editProfileTxt"
+        android:layout_width="310dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="@color/turquoise_500"
+        android:enabled="true"
+        android:text="@string/editProfile"
+        style="@style/text_box_style"
+        android:fontFamily="cursive"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/UserProfileTxt" />
+
+    <!-- TODO: ver como colocar a foto de perfil do utilizador e o nome-->
+
+    <!-- biografia do utilizador -->
+
+    <ImageButton
+        android:id="@+id/buttoncamera"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="48dp"
+        android:onClick="Upload"
+        android:background="@drawable/camera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editProfileTxt" />
+
+    <TextView
+        android:id="@+id/UserProfilePicText"
+        android:layout_width="225dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="420dp"
+        android:fontFamily="cursive"
+        android:text="Change Profile Image"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.548"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Events library"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="561dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="@color/turquoise_500"
+        android:enabled="true"
+        style="@style/text_box_style"
+        android:fontFamily="cursive"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/UserProfilePicText"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
