@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import java.io.IOException;
 
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Events.MyEvents;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
 
 public class Profile extends AppCompatActivity implements StoragePics {
@@ -32,9 +33,9 @@ public class Profile extends AppCompatActivity implements StoragePics {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
 
-        // como meter o nome do utilizador no perfil??
 
         final Button updatePorfile = findViewById(R.id.editProfileTxt);
+        final Button getMyEvents = findViewById(R.id.button4);
         final ImageButton changeprofilePic=findViewById(R.id.buttoncamera);
 
         image = findViewById(R.id.person);
@@ -42,13 +43,18 @@ public class Profile extends AppCompatActivity implements StoragePics {
         Intent oldIntent = getIntent();
         Bundle bundleExtra = oldIntent.getExtras();
 
-//       String a = bundleExtra.getByteArray("pic").toString();
-      //  image =  (ImageView) a ;  ;
-
         updatePorfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateUser(bundleExtra);
+            }
+        });
+
+
+        getMyEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMyEvents(bundleExtra);
             }
         });
 
@@ -60,6 +66,20 @@ public class Profile extends AppCompatActivity implements StoragePics {
 
         });
 }
+
+    private void getMyEvents(Bundle bundleExtra) {
+
+        Intent intent = new Intent(this, MyEvents.class);
+
+        Intent oldIntent = getIntent();
+
+        if(oldIntent != null) {
+            bundleExtra = oldIntent.getExtras();
+            intent.putExtras(bundleExtra);
+        }
+
+        startActivity(intent);
+    }
 
 
     private void updateUser(Bundle bundleExtra) {

@@ -63,7 +63,7 @@ public class UpdateUser extends AppCompatActivity {
         }
 
         loginViewModel.getInfos(token);
-        
+
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
 
             @Override
@@ -87,7 +87,7 @@ public class UpdateUser extends AppCompatActivity {
 
             }
         });
-        
+
 
         update.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -142,5 +142,3 @@ public class UpdateUser extends AppCompatActivity {
         startActivity(intent);
     }
 }
-
-

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,26 +33,39 @@ public class SeeEventsPage extends AppCompatActivity {
 
     private EventsAdapter adapter;
 
+    EventData2 event = null;
 
     ListView listView;
 
     Bundle params;
+
+    TextView text;
+
+    String token;
+
+    Intent oldIntent;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listviewadapter);
 
+        text = findViewById(R.id.textListEvents);
+        text.setText("Events");
+
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
 
-        Intent oldIntent = getIntent();
+         oldIntent = getIntent();
         params = oldIntent.getExtras();
 
-        String token = params.getString("token");
+         token = params.getString("token");
 
-        eventViewModel.seeEvent(token, token,true);
+
+
+        eventViewModel.seeEvent(token, token,"actual");
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -75,7 +90,7 @@ public class SeeEventsPage extends AppCompatActivity {
                         Gson gson = new Gson();
                         // String c = list.get(0).toString();
                         // vou obter dados dos eventos
-                        EventData2 event = null;
+
 
                         for (int i = 0; i < list.size(); i++) {
                             event = gson.fromJson(list.get(i).toString(), EventData2.class);
@@ -101,7 +116,7 @@ public class SeeEventsPage extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,events);
+        adapter = new EventsAdapter(this,this,events,R.layout.actual_events,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -39,19 +39,30 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
+import retrofit2.http.HTTP;
+import retrofit2.http.Multipart;
 
 
 public class CreateEventPage extends AppCompatActivity implements StoragePics {
@@ -64,20 +75,20 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
 
     TextView eventDateCreation, eventDue, eventStartHour,eventFinalHour;
-    EditText eventName,numVolunteers,origin,location,description, goal;
+    EditText eventName,numVolunteers,description, goal;
 
     private EventViewModel eventViewModel;
     private DatePickerDialog.OnDateSetListener mDateSetListenerStart,mDateSetListenerEnd;
 
 
-    private   File imageFile;
-    private String path,token;
+    private String token,location;
 
 
     private int timeHour,timeMinute;
 
     private  Calendar cal;
 
+    MapsActivity map;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,14 +98,14 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
 
+        map = new MapsActivity();
+
         image =  findViewById(R.id.imageUp);
         createEventButton = findViewById(R.id.ButtonFinish);
 
         eventName = findViewById(R.id.eventName);
         goal = findViewById(R.id.eventGoals);
         numVolunteers = findViewById(R.id.eventNumberVolunteers);
-        origin = findViewById(R.id.eventOrigin);
-        location = findViewById(R.id.eventPlace);
         description = findViewById(R.id.eventDescription);
 
         eventDateCreation = findViewById(R.id.eventDateCreation);
@@ -103,12 +114,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         eventStartHour = findViewById(R.id.eventStartHourText);
         eventFinalHour = findViewById(R.id.eventFinalHourText);
 
-
-
         Intent oldIntent = getIntent();
          params = oldIntent.getExtras();
 
         token = params.getString("token");
+        location = params.getString("location");
 
         //eventDateCreation.setPaintFlags(eventDateCreation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         //eventDue.setPaintFlags(eventDue.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -125,10 +135,6 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                 createEventButton.setEnabled(createFormState.isDataValid());
                 if (createFormState.getOriginError() != null) {
                     eventName.setError(getString(createFormState.getOriginError()));
-                }
-
-                if (createFormState.getPlaceError() != null) {
-                    location.setError(getString(createFormState.getPlaceError()));
                 }
 
                 if (createFormState.getStartDateError() != null) {
@@ -168,13 +174,16 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             }
         });
 
+
         eventDateCreation.setOnClickListener(v -> {
 
            doCalendarSelection(mDateSetListenerStart);
 
             mDateSetListenerStart = (view, year, month, day) -> {
                 month = month +1;
-                String date = month + "/" + day + "/" + year;
+
+
+                String date = year + "-" + month + "-" + day;
                 eventDateCreation.setText(date);
             };
         });
@@ -185,7 +194,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
             mDateSetListenerEnd = (view, year, month, day) -> {
                 month = month + 1;
-                String date = month + "/" + day + "/" + year;
+                String date = year + "-" + month + "-" + day;
                 eventDue.setText(date);
             };
         });
@@ -206,7 +215,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                                 cal.set(0,0,0,timeHour,timeMinute);
 
 
-                                eventStartHour.setText(DateFormat.format("hh:mm aa",cal));
+                                eventStartHour.setText(DateFormat.format("hh:mm",cal));
                             }
                         },12,0,false
                         );
@@ -229,7 +238,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                                 cal.set(0,0,0,timeHour,timeMinute);
 
 
-                                eventFinalHour.setText(DateFormat.format("hh:mm aa",cal));
+                                eventFinalHour.setText(DateFormat.format("hh:mm",cal));
                             }
                         },12,0,false
                 );
@@ -238,13 +247,15 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             }
         });
 
+
+
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 MultipartBody.Part requestImage = null;
 
-               // imageFile = new File( path); // *this* here is context, which can be Activity/Fragment
+//                imageFile = new File( path); // *this* here is context, which can be Activity/Fragment
 
                 //RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),imageFile);
                 //requestImage = MultipartBody.Part.createFormData("img", imageFile.getName(),requestFile);
@@ -253,30 +264,76 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                 EventData e = new EventData();
 
+                // Create the Event object
+                Long v1 = new Long(30);
+                Long vol = v1.valueOf(numVolunteers.getText().toString());
 
-              // Create the Event object
-               // Long v1 = new Long(30);
-                //Long vol = v1.valueOf(numVolunteers.getText().toString());
 
-
+                e.setName(eventName.getText().toString());
+                e.setDescription(description.getText().toString());
+                e.setGoals(goal.getText().toString());
+                e.setVolunteers(vol);
+                e.setStartTime(eventStartHour.getText().toString());
+                e.setEndTime(eventFinalHour.getText().toString());
+                e.setStartDate(eventDateCreation.getText().toString() );
+                e.setEndDate(eventDue.getText().toString());
+                e.setLocation(location);
 
                 //Send to Server
+                /*let formData = new FormData();
+                formData.append("img_cover",fil);
+                formData.append("evd",evd);
+                */
 
-                RequestBody event = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("name", eventName.getText().toString())
-                        .addFormDataPart("description", description.getText().toString())
-                        .addFormDataPart("goals", goal.getText().toString())
-                        .addFormDataPart("startDate", eventDateCreation.getText().toString())
-                        .addFormDataPart("endDate",eventDue.getText().toString())
-                        .addFormDataPart("startTime" , eventStartHour.getText().toString())
-                        .addFormDataPart("endTime",eventFinalHour.getText().toString())
-                        .addFormDataPart("location",origin.getText().toString())
-                        .addFormDataPart("volunteers",numVolunteers.getText().toString())
-                        .addFormDataPart("image",image.toString())
-                        .build();
+                String o = gson.toJson(e);
 
-                eventViewModel.createEvent(token,event);//,requestImage);
+               RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
+
+                Map<String, RequestBody> map = new HashMap<>();
+
+                map.put("evd",re);
+
+                //Image
+
+                int size = bitmap.getRowBytes() * bitmap.getHeight();
+                ByteBuffer b = ByteBuffer.allocate(size);
+                bitmap.copyPixelsToBuffer(b);
+                byte[] bytes = new byte[size];
+
+
+                File f = new File( CreateEventPage.this.getCacheDir(),"image.png");
+                try {
+                    f.createNewFile();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(f);
+                    fos.write(bitmapdata);
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+                try {
+                    fos.flush();
+                    fos.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+                RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), f);
+                map.put("img_cover",fbody);
+
+                eventViewModel.createEvent(token,map);
 
 
             }
@@ -333,11 +390,13 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                         cursor.moveToFirst();
                         int indexImage = cursor.getColumnIndex(imageProj[0]);
                          bitmap = null;
-                         path = cursor.getString(indexImage);
+                         //path = cursor.getString(indexImage);
                         cursor.close();
 
                         try{
                             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
+
+
                         }catch(IOException e){
                             e.printStackTrace();
                         }

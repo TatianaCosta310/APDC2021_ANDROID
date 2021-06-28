@@ -34,7 +34,7 @@ public class RegisterOptional2 extends AppCompatActivity {
 
 
         Intent oldIntent = getIntent();
-         bundleExtra = oldIntent.getExtras();
+        bundleExtra = oldIntent.getExtras();
 
 
         String address = bundleExtra.getString("mainAdress");
@@ -50,7 +50,7 @@ public class RegisterOptional2 extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
-        
+
         checkBoxUser = findViewById(R.id.check1);
         checkBoxCompany = findViewById(R.id.check2);
 

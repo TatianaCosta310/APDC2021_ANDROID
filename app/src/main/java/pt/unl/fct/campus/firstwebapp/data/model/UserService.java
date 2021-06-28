@@ -5,10 +5,12 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 import kotlin.ParameterName;
 import okhttp3.Cookie;
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpHeaders;
 import retrofit2.Call;
@@ -23,25 +25,26 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UserService {
 
-   @POST("rest/login/op2")
+    @POST("rest/login/op2")
     Call<LoginData> authenticateUser(@Body LoginData data);
 
    @GET("rest/login/op7")
-    Call<Void> logoutUser();
+   Call<Void> logoutUser();
 
    @POST("rest/login/op1")
-    Call<Void> register(@Body RegisterData data);
+   Call<Void> register(@Body RegisterData data);
 
    @POST("rest/login/op3")
-    Call<Void> updateInfos(@Header("Cookie") String value,@Body AdditionalAttributes atributs);
+   Call<Void> updateInfos(@Header("Cookie") String value,@Body AdditionalAttributes atributs);
 
-    @GET("rest/login/infos")
-    Call<AdditionalAttributes> getInfos(@Header("Cookie") String value);
+   @GET("rest/login/infos")
+   Call<AdditionalAttributes> getInfos(@Header("Cookie") String value);
 
    @FormUrlEncoded
    @HTTP(method = "DELETE",path = "rest/login/op8", hasBody = true)
@@ -59,26 +62,19 @@ public interface UserService {
     @GET("rest/events/view/finished")
     Call< List<JsonObject>> seeFinishedEvents(@Header("Cookie") String value);
 
-    //Fazer nao esta a resultar e falta parte dos mapas!
-
+    @Multipart
     @POST("rest/events/create")
-    Call<Void> createEvent(@Header("token") String value,
-                           @Body RequestBody event
-                          /* @Part("name") String name,
-                           @Part("description") String description,
-                           @Part("name") String goals,
-                           @Part("location") String location,
-                           @Part("meetingPlace") String meetingPlace,
-                           @Part("startDate") String startDate,
-                           @Part("endDate") String endDate,
-                           @Part("startTime") String startTime,
-                           @Part("endTime") String endTime,
-                           @Part("volunteers") long volunteers,
-                           @Part("Image") String image*/);
+    Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap  Map<String, RequestBody> map);
 
-    // @Part MultipartBody.Part image);
+    //DA ERRRO 403
+    @FormUrlEncoded
+    @POST("rest/events/participate")
+   // @HTTP(method = "POST",path = "rest/events/participate", hasBody = true)
+    Call<Void> participate(@Header("token") String token, @Field("eid") long eventid);
 
 
-
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @GET("rest/events/view/myevents")
+    Call< List<JsonObject>> seeMyEvents(@Header("Cookie") String value);
 
 }

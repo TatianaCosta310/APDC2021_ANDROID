@@ -84,7 +84,7 @@ public class ExecuteService extends Application {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
-    public Result<Void> ExecuteServiceCreateEvent(Response<Void> response){
+    public Result<EventData2> ExecuteServiceCreateEvent(Response<EventData2> response){
 
         if (response.isSuccessful()) {
             return new Result.Success<>("SUCCESS, EVENT CREATED");
@@ -107,4 +107,11 @@ public class ExecuteService extends Application {
     }
 
 
+    public Result<Void> ExecuteServiceParticipate(Response<Void> response) {
+        if (response.isSuccessful()) {
+
+            return new Result.Success<>("SUCCES");
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+    }
 }

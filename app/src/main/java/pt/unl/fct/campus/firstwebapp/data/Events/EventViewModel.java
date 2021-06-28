@@ -13,13 +13,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 
 
 public class EventViewModel extends ViewModel {
@@ -40,18 +43,18 @@ public class EventViewModel extends ViewModel {
         return eventFormState;
     }
 
-    LiveData<EventResult> getLoginResult() {
+    public LiveData<EventResult> getLoginResult() {
         return eventResult;
     }
 
 
 
-    public void createEvent(String token, RequestBody event) {
+    public void createEvent(String token, Map<String, RequestBody> map) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<Void> result = eventRepository.createEvent( token,event);
+                Result<EventData2> result = eventRepository.createEvent( token,map);
 
                 if (result instanceof Result.Success) {
 
@@ -66,7 +69,7 @@ public class EventViewModel extends ViewModel {
     }
 
 
-    public void seeEvent(String value,String token,Boolean actual) {
+    public void seeEvent(String value,String token,String actual) {
 
         executor.execute(new Runnable() {
             @Override
@@ -86,6 +89,46 @@ public class EventViewModel extends ViewModel {
         });
     }
 
+    public void getMyEvents(String token, String token1, String b) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<List<JsonObject>> result = eventRepository.seeEvents(token,token1,b);
+
+                if (result instanceof Result.Success) {
+                    List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
+                    // loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
+                    eventResult.postValue(new EventResult(new EventCreatedView(list)));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_See_Event));
+                }
+
+            }
+        });
+    }
+
+
+    public void participate(String token, long eventId) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<Void> result = eventRepository.participate(token,eventId);
+
+                if (result instanceof Result.Success) {
+                    List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
+                    // loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
+                    eventResult.postValue(new EventResult(new EventCreatedView(list)));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_See_Event));
+                }
+
+            }
+        });
+    }
 
     public void CreateDataChanged(String name,Date startDay, Date finalDay,String startHour,String finalHour,String origin, String place) {
         if (!isNameValid(name)) {

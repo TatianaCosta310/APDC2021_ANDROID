@@ -123,34 +123,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/eventDue" />
 
-    <EditText
-        android:id="@+id/eventOrigin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="@string/OriginPlace"
-        android:inputType="text"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventNumberVolunteers" />
-
-    <EditText
-        android:id="@+id/eventPlace"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="Place where it will take place"
-        android:inputType ="text"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventOrigin" />
-
 
     <TextView
         android:id="@+id/textView3"
@@ -158,14 +130,14 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:fontFamily="cursive"
         android:text="@string/Description"
         android:textAlignment="center"
         android:textSize="34dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventPlace" />
+        app:layout_constraintTop_toBottomOf="@id/eventNumberVolunteers" />
 
 
     <EditText
@@ -289,13 +261,13 @@
         android:layout_height="50dp"
         android:text="Goal"
         android:layout_marginStart="230dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
         android:fontFamily="cursive"
         android:textAlignment="center"
         android:textSize="34dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventPlace"/>
+        app:layout_constraintTop_toBottomOf="@id/eventNumberVolunteers"/>
 
 
     <EditText
@@ -303,7 +275,7 @@
         android:layout_width="100dp"
         android:layout_height="90dp"
         android:layout_marginStart="230dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/Goal"
         android:inputType="text"

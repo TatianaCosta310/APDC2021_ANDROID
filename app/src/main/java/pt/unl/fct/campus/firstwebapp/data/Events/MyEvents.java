@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,18 +24,15 @@ import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.EventsAdapter;
 
-public class SeeFinishedEventsPage extends AppCompatActivity {
+public class MyEvents  extends AppCompatActivity {
 
     private EventViewModel eventViewModel;
 
     private ArrayList<EventData2> eventsList = new ArrayList<>();
 
-    EventData2 event = null;
-
     private EventsAdapter adapter;
 
-
-    Button doParticipate;
+    EventData2 event = null;
 
     ListView listView;
 
@@ -51,26 +47,23 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.listviewadapter);
 
-
         text = findViewById(R.id.textListEvents);
+        text.setText("Events");
 
 
-
-        text.setText("Finished Events");
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
 
-         oldIntent = getIntent();
-         params = oldIntent.getExtras();
+        oldIntent = getIntent();
+        params = oldIntent.getExtras();
 
-         token = params.getString("token");
-
-        eventViewModel.seeEvent(token, token,"finished");
+        token = params.getString("token");
 
 
-
+        eventViewModel.getMyEvents(token, token,"mine");
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -89,7 +82,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
                     List<JsonObject> list = model.getEventsList();
 
                     if (list.size() == 0) {
-                        //criar alerta a dizer que nao existem Eventos ainda terminados!
+                        //criar alerta a dizer que nao existem Eventos criados pelo usuario!
                     } else {
 
                         Gson gson = new Gson();
@@ -98,7 +91,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
 
                         for (int i = 0; i < list.size(); i++) {
-                            event = gson.fromJson(list.get(0).toString(), EventData2.class);
+                            event = gson.fromJson(list.get(i).toString(), EventData2.class);
                             eventsList.add(event);
                         }
 
@@ -119,19 +112,19 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
     public void showEvents(ArrayList<EventData2> events) {
 
-        listView = (ListView) findViewById(R.id.listViewEvents);
+        listView = findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,this,events,R.layout.finished_events,token,oldIntent);
+        adapter = new EventsAdapter(this,this,events,R.layout.myevents,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(SeeFinishedEventsPage.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyEvents.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    }
+}
 

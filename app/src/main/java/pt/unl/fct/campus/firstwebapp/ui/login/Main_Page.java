@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
@@ -43,6 +44,7 @@ public class Main_Page extends AppCompatActivity {
         seeEventButton = findViewById(R.id.button2);
         seeFinishedEventsButton = findViewById(R.id.button3);
         image = findViewById(R.id.person);
+
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
@@ -84,7 +86,7 @@ public class Main_Page extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                openProfilePage(CreateEventPage.class);
+                openProfilePage(MapsActivity.class);
         }
         });
 
@@ -123,10 +125,6 @@ public class Main_Page extends AppCompatActivity {
         } else {
             params = new Bundle();
         }
-
-        //params.putByteArray("pic",image.toString().getBytes());
-
-
 
         startActivity(intent);
     }

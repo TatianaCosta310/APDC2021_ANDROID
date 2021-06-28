@@ -9,11 +9,14 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 
 public class EventRepository extends AppCompatActivity {
@@ -36,27 +39,37 @@ public class EventRepository extends AppCompatActivity {
 
 
 
-    public Result<Void> createEvent(String token, RequestBody event){
+    public Result<EventData2> createEvent(String token , Map<String, RequestBody> map){
 
         //Long v1 = new Long(30);
 
         //Long v = v1.valueOf(volunteers);
 
-        Result<Void> result = dataSource.createEvent(token,event);
+        Result<EventData2> result = dataSource.createEvent(token,map);
 
         return result;
     }
 
-    public Result<List<JsonObject>> seeEvents(String value, String token,Boolean actual) {
+    public Result<List<JsonObject>> seeEvents(String value, String token,String actual) {
 
 
-        Result<List<JsonObject> > result;
+        Result<List<JsonObject> > result = null;
 
-        if(actual == true){
+        if(actual.equals("actual")){
             result = dataSource.seeEvents(value, token);
-        }else {
+        }else if(actual.equals("finished")){
             result = dataSource.seeFinishedEvents(value, token);
+        }else if(actual.equals("mine")){
+            result = dataSource.seemyEvents(value, token);
         }
+
+        return result;
+    }
+
+    public Result<Void> participate(String token, long eventId) {
+
+        Result<Void > result = dataSource.participate(token, eventId);
+
 
         return result;
     }

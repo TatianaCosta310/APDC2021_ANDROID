@@ -18,12 +18,12 @@ public class EventResult {
     }
 
     @Nullable
-    EventCreatedView getSuccess() {
+    public EventCreatedView getSuccess() {
         return success;
     }
 
     @Nullable
-    Integer getError() {
+    public Integer getError() {
         return error;
     }
 }
