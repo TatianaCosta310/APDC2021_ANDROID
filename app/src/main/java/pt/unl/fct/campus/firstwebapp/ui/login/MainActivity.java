@@ -152,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(model != null){
 
+            String b = model.getDisplayName();
+            String a = model.getToken();
+
             Bundle params = new Bundle();
             params.putString("token", model.getToken());
 

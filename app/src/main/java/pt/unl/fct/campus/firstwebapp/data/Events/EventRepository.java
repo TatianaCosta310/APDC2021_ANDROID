@@ -39,7 +39,7 @@ public class EventRepository extends AppCompatActivity {
 
 
 
-    public Result<EventData2> createEvent(String token , Map<String, RequestBody> map){
+    public Result<EventData2> createEvent(String token ,Map<String,RequestBody> map){
 
         //Long v1 = new Long(30);
 
@@ -73,5 +73,22 @@ public class EventRepository extends AppCompatActivity {
 
         return result;
     }
+
+    public Result<Void> removeParticipation(String token, long eventId) {
+
+        Result<Void > result = dataSource.removeParticipation(token, eventId);
+
+
+        return result;
+    }
+
+    public Result<Void> doRemoveEvent(String eventId, String token) {
+
+        Result<Void > result = dataSource.doRemoveEvent(eventId,token);
+
+        return result;
+    }
+
+
 }
 

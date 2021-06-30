@@ -31,6 +31,7 @@ import retrofit2.http.Query;
 
 public interface UserService {
 
+    //UESER ENDPOINTS
     @POST("rest/login/op2")
     Call<LoginData> authenticateUser(@Body LoginData data);
 
@@ -54,6 +55,18 @@ public interface UserService {
     @POST("rest/login/op11")
     Call<Void> changePassword();
 
+
+    //EVENTS ENDPOINTS
+    @Multipart
+    @POST("rest/events/create")
+    Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
+
+ //   Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String, RequestBody> params);
+
+    // da 401 whyy???
+    @DELETE("rest/events/delete/{eventId}")
+    Call<Void>  doRemoveEvent(@Path(value = "eventId") String eventId, @Header("Cookie") String token);
+
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/view")
     Call<List<JsonObject>> seeEvents(@Header("Cookie") String value);
@@ -62,19 +75,18 @@ public interface UserService {
     @GET("rest/events/view/finished")
     Call< List<JsonObject>> seeFinishedEvents(@Header("Cookie") String value);
 
-    @Multipart
-    @POST("rest/events/create")
-    Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap  Map<String, RequestBody> map);
-
-    //DA ERRRO 403
-    @FormUrlEncoded
-    @POST("rest/events/participate")
-   // @HTTP(method = "POST",path = "rest/events/participate", hasBody = true)
-    Call<Void> participate(@Header("token") String token, @Field("eid") long eventid);
-
-
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/view/myevents")
     Call< List<JsonObject>> seeMyEvents(@Header("Cookie") String value);
+
+    @FormUrlEncoded
+    @HTTP(method = "POST",path = "rest/events/participate", hasBody = true)
+    Call<Void> participate(@Header("Cookie") String token, @Field("eid") long eventid);
+
+   @Headers({"Content-Type: application/x-www-form-urlencoded"})
+    @DELETE("rest/events/rparticipation/{eventid}")
+  //@FormUrlEncoded
+  //@HTTP(method = "DELETE",path = "rest/events/rparticipation/{eventid}", hasBody = true)
+    Call<Void> removeParticipation(@Header("Cookie") String token, @Path("eventid") long eventid);
 
 }

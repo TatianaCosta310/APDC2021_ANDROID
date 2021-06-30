@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
@@ -49,7 +50,7 @@ public class EventViewModel extends ViewModel {
 
 
 
-    public void createEvent(String token, Map<String, RequestBody> map) {
+    public void createEvent(String token, Map<String,RequestBody> map) {
 
         executor.execute(new Runnable() {
             @Override
@@ -119,9 +120,9 @@ public class EventViewModel extends ViewModel {
                 Result<Void> result = eventRepository.participate(token,eventId);
 
                 if (result instanceof Result.Success) {
-                    List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
+                    String r = ((Result.Success<String>) result).getData();
                     // loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
-                    eventResult.postValue(new EventResult(new EventCreatedView(list)));
+                    eventResult.postValue(new EventResult(new EventCreatedView(r)));
                 } else {
                     eventResult.postValue(new EventResult(R.string.Failed_See_Event));
                 }
@@ -130,22 +131,63 @@ public class EventViewModel extends ViewModel {
         });
     }
 
-    public void CreateDataChanged(String name,Date startDay, Date finalDay,String startHour,String finalHour,String origin, String place) {
+    public void removeParticipation(String token, long eventId) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<Void> result = eventRepository.removeParticipation(token,eventId);
+
+                if (result instanceof Result.Success) {
+                    String r = "Done with succsess";
+                    // loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
+                    eventResult.postValue(new EventResult(new EventCreatedView(r)));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_Remove_Participation));
+                }
+
+            }
+        });
+    }
+
+    public void doRemoveEvent(String eventId, String token) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<Void> result = eventRepository.doRemoveEvent(eventId,token);
+
+                if (result instanceof Result.Success) {
+                    eventResult.postValue(new EventResult(new EventCreatedView("SUCCSEESS")));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_Remove_See_Event));
+                }
+
+            }
+        });
+    }
+
+    public void CreateDataChanged(String name,Date startDay, Date finalDay,String startHour,String finalHour,String numVolunteers,String goal, String description) {
         if (!isNameValid(name)) {
-            eventFormState.setValue(new EventFormState(R.string.invalid_name, null, null,null,null,null,null));
+            eventFormState.setValue(new EventFormState(R.string.invalid_name, null, null,null,null,null,null,null));
         } else if (!isStartDayValid(startDay)) {
-            eventFormState.setValue(new EventFormState(null, R.string.invalid_day, null,null,null,null,null));
+            eventFormState.setValue(new EventFormState(null, R.string.invalid_day, null,null,null,null,null,null));
         } else if (!isFinishDayValid(startDay,finalDay)) {
-            eventFormState.setValue(new EventFormState(null, null, R.string.invalid_day,null,null,null,null));
+            eventFormState.setValue(new EventFormState(null, null, R.string.invalid_day,null,null,null,null,null));
         } else if (!isHourValid(startHour)) {
-        eventFormState.setValue(new EventFormState(null, null, null,R.string.inavlid_hour,null,null,null));
+        eventFormState.setValue(new EventFormState(null, null, null,R.string.inavlid_hour,null,null,null,null));
     } else if (!isHourValid(finalHour)) {
-        eventFormState.setValue(new EventFormState(null, null,null,null,R.string.inavlid_hour,null,null));
-    } else if (!isNameValid(origin)) {
-        eventFormState.setValue(new EventFormState(null, null,null,null,null,R.string.invalid_name,null));
-    } else if (!isNameValid(place)) {
-        eventFormState.setValue(new EventFormState(null, null,null,null,null,null,R.string.invalid_name));
-        }else {
+            eventFormState.setValue(new EventFormState(null, null, null, null, R.string.inavlid_hour, null, null,null));
+        }else if (!isNameValid(numVolunteers)) {
+                eventFormState.setValue(new EventFormState(null, null, null,null,null,R.string.invalid_number,null,null));
+        }else if (!isNameValid(goal)) {
+            eventFormState.setValue(new EventFormState(null, null, null,null,null,null,R.string.required,null));
+        }else if (!isNameValid(description)) {
+            eventFormState.setValue(new EventFormState(null, null, null,null,null,null,null,R.string.required));
+
+        }else{
         eventFormState.setValue(new EventFormState(true));
         }
     }
@@ -161,6 +203,9 @@ public class EventViewModel extends ViewModel {
 
         Calendar cal =  Calendar.getInstance();
 
+        if(day == null)
+            return false;
+
        if(day.before( cal.getTime()))
             return false;
 
@@ -168,6 +213,9 @@ public class EventViewModel extends ViewModel {
     }
 
     private boolean isFinishDayValid(Date startDay, Date finalDay) {
+
+        if(finalDay == null)
+            return false;
 
         if(finalDay.before( startDay))
             return false;

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -19,7 +20,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +50,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +70,7 @@ import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 import retrofit2.http.HTTP;
 import retrofit2.http.Multipart;
+import retrofit2.http.Part;
 
 
 public class CreateEventPage extends AppCompatActivity implements StoragePics {
@@ -82,8 +90,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
 
     private String token,location;
-
-
+    
     private int timeHour,timeMinute;
 
     private  Calendar cal;
@@ -123,34 +130,46 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         //eventDateCreation.setPaintFlags(eventDateCreation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         //eventDue.setPaintFlags(eventDue.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        eventViewModel.getEventFormState().observe(this, new Observer<EventFormState>() {
+       /* eventViewModel.getEventFormState().observe(this, new Observer<EventFormState>() {
             @Override
             public void onChanged(@Nullable EventFormState createFormState) {
 
                 if (createFormState == null) {
                     Toast.makeText(CreateEventPage.this,"BRAAAHHHH ",Toast.LENGTH_LONG).show();
 
-                    return;
+                    return ;
                 }
                 createEventButton.setEnabled(createFormState.isDataValid());
-                if (createFormState.getOriginError() != null) {
-                    eventName.setError(getString(createFormState.getOriginError()));
+                if (createFormState.getName()!= null) {
+                    eventName.setError(getString(createFormState.getName()));
                 }
 
-                if (createFormState.getStartDateError() != null) {
-                    eventDateCreation.setError(getString(createFormState.getStartDateError()));
+                if (createFormState.getStartDate() != null) {
+                    eventDateCreation.setError(getString(createFormState.getStartDate()));
                 }
 
-                if (createFormState.getFinalDateError()!= null) {
-                    eventDue.setError(getString(createFormState.getFinalDateError()));
+                if (createFormState.getFinalDate()!= null) {
+                    eventDue.setError(getString(createFormState.getFinalDate()));
                 }
 
-                if (createFormState.getFinalDateError()!= null) {
-                    eventDue.setError(getString(createFormState.getFinalDateError()));
+                if (createFormState.getStartHour()!= null) {
+                    eventDue.setError(getString(createFormState.getStartHour()));
+                }
+
+                if (createFormState.getFinalHour()!= null) {
+                    eventDue.setError(getString(createFormState.getFinalHour()));
+                }
+
+                if (createFormState.getGoals()!= null) {
+                    eventDue.setError(getString(createFormState.getGoals()));
+                }
+
+                if (createFormState.getDescription()!= null) {
+                    eventDue.setError(getString(createFormState.getDescription()));
                 }
             }
         });
-
+*/
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
 
             @Override
@@ -173,6 +192,47 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                 finish();
             }
         });
+
+
+     /*   TextWatcher afterTextChangedListener = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // ignore
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ignore
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Date dateStart = null,endDate= null;
+                try {
+                    dateStart = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateCreation.getText().toString());
+                    endDate = new SimpleDateFormat("yyyy-MM-dd").parse( eventDue.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                eventViewModel.CreateDataChanged(eventName.getText().toString(),
+                        dateStart,endDate,eventStartHour.getText().toString(),
+                        eventFinalHour.getText().toString(),numVolunteers.getText().toString(),goal.getText().toString(),description.getText().toString());
+            }
+        };
+
+
+
+        eventName.addTextChangedListener(afterTextChangedListener);
+        eventDateCreation.addTextChangedListener(afterTextChangedListener);
+        eventDue.addTextChangedListener(afterTextChangedListener);
+        eventStartHour.addTextChangedListener(afterTextChangedListener);
+        eventFinalHour.addTextChangedListener(afterTextChangedListener);
+        numVolunteers.addTextChangedListener(afterTextChangedListener);
+        goal.addTextChangedListener(afterTextChangedListener);
+        description.addTextChangedListener(afterTextChangedListener);
+*/
 
 
         eventDateCreation.setOnClickListener(v -> {
@@ -253,94 +313,117 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             @Override
             public void onClick(View v) {
 
-                MultipartBody.Part requestImage = null;
 
-//                imageFile = new File( path); // *this* here is context, which can be Activity/Fragment
+                if (isDataValid()) {
 
-                //RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),imageFile);
-                //requestImage = MultipartBody.Part.createFormData("img", imageFile.getName(),requestFile);
+                    Gson gson = new Gson();
 
-                Gson gson = new Gson();
+                    EventData e = new EventData();
 
-                EventData e = new EventData();
-
-                // Create the Event object
-                Long v1 = new Long(30);
-                Long vol = v1.valueOf(numVolunteers.getText().toString());
+                    // Create the Event object
+                    Long v1 = new Long(30);
+                    Long vol = v1.valueOf(numVolunteers.getText().toString());
 
 
-                e.setName(eventName.getText().toString());
-                e.setDescription(description.getText().toString());
-                e.setGoals(goal.getText().toString());
-                e.setVolunteers(vol);
-                e.setStartTime(eventStartHour.getText().toString());
-                e.setEndTime(eventFinalHour.getText().toString());
-                e.setStartDate(eventDateCreation.getText().toString() );
-                e.setEndDate(eventDue.getText().toString());
-                e.setLocation(location);
+                    e.setName(eventName.getText().toString());
+                    e.setDescription(description.getText().toString());
+                    e.setGoals(goal.getText().toString());
+                    e.setVolunteers(vol);
+                    e.setStartTime(eventStartHour.getText().toString());
+                    e.setEndTime(eventFinalHour.getText().toString());
+                    e.setStartDate(eventDateCreation.getText().toString());
+                    e.setEndDate(eventDue.getText().toString());
+                    e.setLocation(location);
 
-                //Send to Server
+                    //Send to Server
                 /*let formData = new FormData();
                 formData.append("img_cover",fil);
                 formData.append("evd",evd);
                 */
 
-                String o = gson.toJson(e);
+                    String o = gson.toJson(e);
 
-               RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
+                     RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
 
-                Map<String, RequestBody> map = new HashMap<>();
+                    //MultipartBody.Part re = MultipartBody.Part.createFormData("evd", "evd", RequestBody.create(MediaType.parse("multipart/form-data"), o));
 
-                map.put("evd",re);
+                     Map<String, RequestBody> map = new HashMap<>();
 
-                //Image
+                      map.put("evd",re);
 
-                int size = bitmap.getRowBytes() * bitmap.getHeight();
+                    //Image
+
+                /*int size = bitmap.getRowBytes() * bitmap.getHeight();
                 ByteBuffer b = ByteBuffer.allocate(size);
                 bitmap.copyPixelsToBuffer(b);
-                byte[] bytes = new byte[size];
+                byte[] bytes = new byte[size]; */
 
 
-                File f = new File( CreateEventPage.this.getCacheDir(),"image.png");
-                try {
-                    f.createNewFile();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    File f = new File(CreateEventPage.this.getCacheDir(), "image.png");
+                    try {
+                        f.createNewFile();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+                    byte[] bitmapdata = bos.toByteArray();
+
+                    //write the bytes in file
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(f);
+                        fos.write(bitmapdata);
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+
+                    try {
+                        fos.flush();
+                        fos.close();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+
+
+                    //tryingggg
+
+                    //encode image to base64 string
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    // Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.id.imageUp);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageBytes = baos.toByteArray();
+                    String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                    //
+
+                    //RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), imageString);
+
+                   // RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), f);
+                    //map.put("img_cover",fbody);
+
+                   // MultipartBody.Part file = MultipartBody.Part.createFormData("img_cover", "img_cover", RequestBody.create(MediaType.parse("multipart/form-data"), f));
+
+                    eventViewModel.createEvent(token,map);
+
+                } else {
+                    Toast.makeText(CreateEventPage.this, "Invalid must fill everything!", Toast.LENGTH_SHORT).show();
                 }
-
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-                byte[] bitmapdata = bos.toByteArray();
-
-//write the bytes in file
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(f);
-                    fos.write(bitmapdata);
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
-                try {
-                    fos.flush();
-                    fos.close();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
-                RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), f);
-                map.put("img_cover",fbody);
-
-                eventViewModel.createEvent(token,map);
-
-
             }
         });
 
-    }
+}
 
+
+    public boolean isDataValid(){
+        if(eventName.getText() == null || description.getText() == null || goal.getText() == null){
+            return false;
+        }
+        return true;
+    }
     public void doCalendarSelection(DatePickerDialog.OnDateSetListener mDateSetListener){
 
         Calendar cal  = Calendar.getInstance();

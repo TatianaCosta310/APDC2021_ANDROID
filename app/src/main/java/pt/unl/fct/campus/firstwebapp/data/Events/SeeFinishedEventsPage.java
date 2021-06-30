@@ -102,6 +102,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
                             eventsList.add(event);
                         }
 
+
                         showEvents(eventsList);
                     }
 

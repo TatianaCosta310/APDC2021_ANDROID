@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Cookie;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
@@ -39,7 +40,7 @@ public class EventDataSource {
     }
 
 
-    public Result<EventData2> createEvent(String token, Map<String, RequestBody> map ) {
+    public Result<EventData2> createEvent(String token,Map<String,RequestBody> map) {
 
         Call<EventData2> userAuthenticatedCall = service.createEvent(token,map);
         try {
@@ -59,7 +60,7 @@ public class EventDataSource {
 
     public Result<List<JsonObject>> seeEvents(String value, String token) {
 
-        Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(value);
+        Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(value );
         try {
 
             Response<List<JsonObject>> response = userAuthenticatedCall.execute();
@@ -110,6 +111,24 @@ public class EventDataSource {
         }
     }
 
+
+    public Result<Void> removeParticipation(String token, long eventId) {
+
+        Call<Void> userAuthenticatedCall = service.removeParticipation(token,eventId);
+        try {
+
+            Response<Void> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceParticipate(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error To see Events", e));
+        }
+    }
+
     public Result<List<JsonObject>> seemyEvents(String value, String token) {
 
         Call<List<JsonObject>> userAuthenticatedCall = service.seeMyEvents(value);
@@ -126,4 +145,23 @@ public class EventDataSource {
             return new Result.Error(new IOException("Error To see Events", e));
         }
     }
+
+    public Result<Void> doRemoveEvent(String eventId, String token) {
+
+        Call<Void> userAuthenticatedCall = service.doRemoveEvent(eventId,token);
+        try {
+
+            Response<Void> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceRemoveEvent(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error To Remove Event", e));
+        }
+    }
+
+
 }

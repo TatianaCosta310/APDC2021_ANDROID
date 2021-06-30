@@ -31,6 +31,7 @@ public class ExecuteService extends Application {
 
                 LoginData data = new LoginData(ua.getUsername(), ua.getPassword());
                 data.setToken(token);
+                data.setProfilePicUrl(ua.getProfilePicUrl());
 
                 return new Result.Success<>(data);
             }
@@ -110,7 +111,16 @@ public class ExecuteService extends Application {
     public Result<Void> ExecuteServiceParticipate(Response<Void> response) {
         if (response.isSuccessful()) {
 
-            return new Result.Success<>("SUCCES");
+            return new Result.Success<>("SUCCESS");
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+    }
+
+    public Result<Void> ExecuteServiceRemoveEvent(Response<Void> response) {
+
+        if (response.isSuccessful()) {
+
+            return new Result.Success<>("SUCCESS");
         }
         return new Result.Error(new Exception(response.errorBody().toString()));
     }

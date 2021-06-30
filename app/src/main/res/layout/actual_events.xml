@@ -9,7 +9,7 @@
         android:id="@+id/imageEvent"
         android:layout_width="200dp"
         android:layout_height="200dp"
-
+        android:contentDescription="@string/imageevent"
         android:layout_centerHorizontal="true"
         app:srcCompat="@mipmap/ic_launcher_round"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="250dp"
         android:layout_marginEnd="24dp"
-        android:text="Created by"
+        android:text="@string/created_by"
         android:fontFamily="cursive"
         android:textSize="22sp"
         app:layout_constraintTop_toTopOf="parent"
@@ -202,7 +202,7 @@
         android:id="@+id/maxVolunt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="maxVolunt"
+        android:text="@string/maxvolunt"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
         android:layout_marginTop="710dp"
@@ -216,7 +216,7 @@
         android:textColor="@color/teal_700"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Interested"
+        android:text="@string/interested"
         android:layout_marginStart="20dp"
         android:textSize="18sp"
         android:fontFamily="cursive"
@@ -230,7 +230,7 @@
         android:id="@+id/interested"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Interested"
+        android:text="@string/interested"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
         android:layout_marginTop="760dp"
@@ -246,8 +246,8 @@
         android:layout_marginStart="120dp"
         android:layout_marginTop="540dp"
         android:fontFamily="cursive"
-        android:textSize="15dp"
-        android:text="Show On Map"
+        android:textSize="15sp"
+        android:text="@string/show_on_map"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Where" />
@@ -260,11 +260,26 @@
         android:layout_marginStart="120dp"
         android:layout_marginTop="800dp"
         android:fontFamily="cursive"
-        android:text="Participate"
-        android:textSize="15dp"
+        android:text="@string/participate"
+        android:textSize="15sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/interested" />
+
+    <Button
+        android:id="@+id/ButtonDoRemoveParticipate"
+        style="@style/text_box_style"
+        android:layout_width="110dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="860dp"
+        android:fontFamily="cursive"
+        android:text="@string/remove_participation"
+        android:textSize="15sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ButtonDoParticipate" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

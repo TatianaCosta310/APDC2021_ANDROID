@@ -6,13 +6,12 @@ public class LoginData {
     String email;
     String password;
     String token;
+    String profilePicUrl;
 
 
     public LoginData(String email, String password ){
         this.email = email;
         this.password = password;
-
-
 
     }
 
@@ -21,6 +20,7 @@ public class LoginData {
  public String getUsername(){
         return email;
     }
+
     public String getPassword() {
         return password;
     }
@@ -29,7 +29,18 @@ public class LoginData {
     public void setToken(String token){
         this.token = token;
     }
+
     public String getToken() {
         return token;
     }
+
+    public void setProfilePicUrl(String url){
+        profilePicUrl = url;
+
+    }
+
+    public String getProfilePicUrl(){
+        return profilePicUrl;
+    }
+
 }

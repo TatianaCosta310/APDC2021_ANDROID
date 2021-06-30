@@ -51,7 +51,7 @@ public class MyEvents  extends AppCompatActivity {
         setContentView(R.layout.listviewadapter);
 
         text = findViewById(R.id.textListEvents);
-        text.setText("Events");
+        text.setText(" My Events");
 
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
@@ -86,9 +86,6 @@ public class MyEvents  extends AppCompatActivity {
                     } else {
 
                         Gson gson = new Gson();
-                        // String c = list.get(0).toString();
-                        // vou obter dados dos eventos
-
 
                         for (int i = 0; i < list.size(); i++) {
                             event = gson.fromJson(list.get(i).toString(), EventData2.class);

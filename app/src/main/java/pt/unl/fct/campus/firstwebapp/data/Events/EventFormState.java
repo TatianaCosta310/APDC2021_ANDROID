@@ -19,43 +19,57 @@ public class EventFormState {
     @Nullable
     private Integer finalHour;
         @Nullable
-        private Integer origin;
+        private Integer numVolunteers;
 
         @Nullable
-        private Integer place;
+        private Integer goals;
+
+    @Nullable
+    private Integer description;
 
     @Nullable
     private Integer name;
 
     private boolean isDataValid;
 
-        EventFormState(@Nullable Integer name, @Nullable Integer startDate, @Nullable Integer finalDate, @Nullable Integer startHour, @Nullable Integer finalHour, @Nullable Integer origin,@Nullable Integer place) {
+        EventFormState(@Nullable Integer name, @Nullable Integer startDate, @Nullable Integer finalDate, @Nullable Integer startHour, @Nullable Integer finalHour, @Nullable Integer numVolunteers,@Nullable Integer goals,@Nullable Integer description) {
+
+            this.name = name;
             this.startDate = startDate;
             this.finalDate = finalDate;
             this.startHour = startHour;
             this.finalHour = finalHour;
-            this.origin = origin;
-            this.place = place;
+            this.numVolunteers = numVolunteers;
+            this.goals = goals;
+            this.description = description;
             this.isDataValid = false;
         }
 
     EventFormState(boolean isDataValid) {
+            this.name = name;
             this.startDate = null;
             this.finalDate = null;
             this.finalHour = null;
             this.startHour = null;
-            this.origin = null;
-            this.place = null;
+            this.numVolunteers = null;
+            this.goals = null;
+            this.description = null;
             this.isDataValid = isDataValid;
         }
 
+
+    @Nullable
+    Integer getName() {
+        return name;
+    }
+
         @Nullable
-        Integer getStartDateError() {
+        Integer getStartDate() {
             return startDate;
         }
 
         @Nullable
-        Integer getFinalDateError() {
+        Integer getFinalDate() {
             return finalDate;
         }
 
@@ -66,10 +80,13 @@ public class EventFormState {
     Integer getFinalHour(){return finalHour;}
 
         @Nullable
-        Integer getOriginError(){return origin;}
+        Integer getNumVolunteers(){return numVolunteers;}
 
         @Nullable
-        Integer getPlaceError(){return place;}
+        Integer getGoals(){return goals;}
+
+    @Nullable
+    Integer getDescription(){return description;}
 
         boolean isDataValid() {
             return isDataValid;

@@ -83,23 +83,27 @@ public class SeeEventsPage extends AppCompatActivity {
 
                     List<JsonObject> list = model.getEventsList();
 
-                    if (list.size() == 0) {
-                        //criar alerta a dizer que nao existem Eventos ainda terminados!
-                    } else {
 
-                        Gson gson = new Gson();
-                        // String c = list.get(0).toString();
-                        // vou obter dados dos eventos
+                    if(list != null) {
 
 
-                        for (int i = 0; i < list.size(); i++) {
-                            event = gson.fromJson(list.get(i).toString(), EventData2.class);
-                            eventsList.add(event);
+                        if (list.size() == 0) {
+                            //criar alerta a dizer que nao existem Eventos ainda terminados!
+                        } else {
+
+                            Gson gson = new Gson();
+                            // String c = list.get(0).toString();
+                            // vou obter dados dos eventos
+
+
+                            for (int i = 0; i < list.size(); i++) {
+                                event = gson.fromJson(list.get(i).toString(), EventData2.class);
+                                eventsList.add(event);
+                            }
+
+                            showEvents(eventsList);
                         }
-
-                        showEvents(eventsList);
                     }
-
                     setResult(Activity.RESULT_OK);
 
                 }
@@ -114,9 +118,11 @@ public class SeeEventsPage extends AppCompatActivity {
 
     public void showEvents(ArrayList<EventData2> events) {
 
-        listView = (ListView) findViewById(R.id.listViewEvents);
+        listView =  findViewById(R.id.listViewEvents);
+
 
         adapter = new EventsAdapter(this,this,events,R.layout.actual_events,token,oldIntent);
+
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

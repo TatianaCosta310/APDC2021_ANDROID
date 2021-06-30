@@ -12,11 +12,15 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.android.gms.common.ConnectionResult;
@@ -68,13 +72,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent oldIntent = getIntent();
         params = oldIntent.getExtras();
 
+
+
         next.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                params.putString("location",address.toString());
-                openNextPage();
+                if(address!= null) {
+                    params.putString("location", address.toString());
+                    openNextPage();
+                }else{
+                    Toast.makeText(MapsActivity.this,"Must have a location!",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -101,14 +112,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Double lat = params.getDouble("latitude");
         Double longitute = params.getDouble("longitude");
 
+
+
         if(lat != 0.0) {
 
-            next.setVisibility(View.GONE);
-            meetingPlace.setVisibility(View.GONE);
             mark = new LatLng(lat, longitute);
         }
 
-        mMap.addMarker(new MarkerOptions().position(mark).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(mark).title("Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(mark));
 
         init();

@@ -23,7 +23,7 @@
     <string name="welcome">"Welcome To Closing The Gap App !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_name">Not a valid name</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">Password must be >6 characters and  below 12 characters </string>
     <string name="must_match_password"> This password must be the same as the one above</string>
     <string name="prompt_no_account_yet"> "No account yet? Create an Account"</string>
     <string name="fill_next_optional"> "If you don't want to fill now, you can do it later, click on Next button"</string>
@@ -85,6 +85,17 @@
     <string name="Failed_See_Event">Failed To see Events</string>
     <string name="Goal">Goal</string>
     <string name="get_infos_failed">Failed To Get Infos</string>
+    <string name="Failed_Remove_See_Event">Failded To Remove Event</string>
+    <string name="Failed_Remove_Participation">Failed To Remove Participation</string>
+    <string name="remove_participation">Remove Participation</string>
+    <string name="participate">Participate</string>
+    <string name="show_on_map">Show On Map</string>
+    <string name="interested">Interested</string>
+    <string name="created_by">Created by</string>
+    <string name="maxvolunt">maxVolunt</string>
+    <string name="imageevent">imageEvent</string>
+    <string name="invalid_number">Invalid Number</string>
+    <string name="required">required</string>
 
 
 </resources>
