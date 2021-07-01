@@ -335,6 +335,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                     e.setEndDate(eventDue.getText().toString());
                     e.setLocation(location);
 
+
                     //Send to Server
                 /*let formData = new FormData();
                 formData.append("img_cover",fil);
@@ -343,7 +344,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                     String o = gson.toJson(e);
 
-                     RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
+                    RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
 
                     //MultipartBody.Part re = MultipartBody.Part.createFormData("evd", "evd", RequestBody.create(MediaType.parse("multipart/form-data"), o));
 
@@ -400,10 +401,10 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                     //
 
-                    //RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), imageString);
+                   // RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), imageString);
 
-                   // RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), f);
-                    //map.put("img_cover",fbody);
+                    RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), f);
+                    map.put("img_cover",fbody);
 
                    // MultipartBody.Part file = MultipartBody.Part.createFormData("img_cover", "img_cover", RequestBody.create(MediaType.parse("multipart/form-data"), f));
 

@@ -33,6 +33,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +43,8 @@ import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
+import pt.unl.fct.campus.firstwebapp.data.model.Location;
+import pt.unl.fct.campus.firstwebapp.data.model.LooClass;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
@@ -80,7 +83,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
 
                 if(address!= null) {
-                    params.putString("location", address.toString());
                     openNextPage();
                 }else{
                     Toast.makeText(MapsActivity.this,"Must have a location!",Toast.LENGTH_SHORT).show();
@@ -169,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                      address= getAddressFromLatLng(latLng);
 
 
-                //String a = address.toString();
+               // String a = address.getLocality();
 
                     if(address!=null) {
                         /*Log.d("Address : ", "" + address.toString());
@@ -306,8 +308,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent oldIntent = getIntent();
 
+        //String loc = String.format("{place_id:%s, loc:{ lat: %s, lng: %s }, name:%s}",34,address.getLatitude(),address.getLongitude(),
+               // address.getLocality());
+
+        Location loc = new Location("34",address.getLocality(),new LooClass(address.getLatitude(),address.getLongitude()));
+
+        Gson g = new Gson();
+
+        String c = g.toJson(loc);
+
         if(oldIntent != null) {
             params = oldIntent.getExtras();
+            params.putString("location", c);
 
             if(params != null)
                 intent.putExtras(params);
@@ -315,6 +327,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             params = new Bundle();
         }
 
+
+        String l = params.getString("location");
         startActivity(intent);
 
     }
