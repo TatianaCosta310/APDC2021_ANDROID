@@ -308,9 +308,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent oldIntent = getIntent();
 
-        //String loc = String.format("{place_id:%s, loc:{ lat: %s, lng: %s }, name:%s}",34,address.getLatitude(),address.getLongitude(),
-               // address.getLocality());
-
         Location loc = new Location("34",address.getLocality(),new LooClass(address.getLatitude(),address.getLongitude()));
 
         Gson g = new Gson();
