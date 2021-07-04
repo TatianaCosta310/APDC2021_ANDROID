@@ -29,9 +29,9 @@ public class ExecuteService extends Application {
 
                 String token = response.headers().get("Set-Cookie");
 
-                LoginData data = new LoginData(ua.getUsername(), ua.getPassword());
+                LoginData data = new LoginData(ua.getUsername(),ua.password);
                 data.setToken(token);
-                data.setProfilePicUrl(ua.getProfilePicUrl());
+                //data.setProfilePicUrl(ua.getProfilePicUrl());
 
                 return new Result.Success<>(data);
             }

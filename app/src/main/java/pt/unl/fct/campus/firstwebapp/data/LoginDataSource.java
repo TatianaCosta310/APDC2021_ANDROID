@@ -36,7 +36,10 @@ public class LoginDataSource extends Application {
 
     public Result<LoginData> login(String username, String password) {
 
-        Call<LoginData> userAuthenticatedCall = service.authenticateUser(new LoginData(username, password));
+        LoginData a = new LoginData(username,password);
+
+
+        Call<LoginData> userAuthenticatedCall = service.authenticateUser(a);
         try {
 
             Response<LoginData> response = userAuthenticatedCall.execute();
@@ -75,7 +78,10 @@ public class LoginDataSource extends Application {
 
     public Result<RegisterData> register(String name, String password, String email) {
 
-        Call<Void> registrate = service.register(new RegisterData(name, password, email));
+        RegisterData data = new RegisterData(name,password,email);
+
+
+        Call<Void> registrate = service.register(data);
 
 
         try {

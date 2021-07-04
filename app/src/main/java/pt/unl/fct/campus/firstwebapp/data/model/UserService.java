@@ -61,8 +61,6 @@ public interface UserService {
     @POST("rest/events/create")
     Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
 
- //   Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String, RequestBody> params);
-
     // da 401 whyy???
     @DELETE("rest/events/delete/{eventId}")
     Call<Void>  doRemoveEvent(@Path(value = "eventId") String eventId, @Header("Cookie") String token);

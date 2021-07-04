@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -36,8 +37,6 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
     private EventsAdapter adapter;
 
 
-    Button doParticipate;
-
     ListView listView;
 
     Bundle params;
@@ -55,8 +54,6 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
 
         text = findViewById(R.id.textListEvents);
-
-
 
         text.setText("Finished Events");
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))

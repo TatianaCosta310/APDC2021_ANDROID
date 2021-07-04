@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +23,8 @@ import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.EventsAdapter;
+
+import com.google.firebase.FirebaseApp;
 
 public class SeeEventsPage extends AppCompatActivity {
 
@@ -46,10 +47,12 @@ public class SeeEventsPage extends AppCompatActivity {
     Intent oldIntent;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listviewadapter);
+
 
         text = findViewById(R.id.textListEvents);
         text.setText("Events");
@@ -58,14 +61,13 @@ public class SeeEventsPage extends AppCompatActivity {
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
 
-         oldIntent = getIntent();
+        oldIntent = getIntent();
         params = oldIntent.getExtras();
 
-         token = params.getString("token");
+        token = params.getString("token");
 
 
-
-        eventViewModel.seeEvent(token, token,"actual");
+        eventViewModel.seeEvent(token, token, "actual");
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -84,7 +86,7 @@ public class SeeEventsPage extends AppCompatActivity {
                     List<JsonObject> list = model.getEventsList();
 
 
-                    if(list != null) {
+                    if (list != null) {
 
 
                         if (list.size() == 0) {
@@ -118,10 +120,10 @@ public class SeeEventsPage extends AppCompatActivity {
 
     public void showEvents(ArrayList<EventData2> events) {
 
-        listView =  findViewById(R.id.listViewEvents);
+        listView = findViewById(R.id.listViewEvents);
 
 
-        adapter = new EventsAdapter(this,this,events,R.layout.actual_events,token,oldIntent);
+        adapter = new EventsAdapter(this, this, events, R.layout.actual_events, token, oldIntent);
 
         listView.setAdapter(adapter);
 
@@ -129,7 +131,7 @@ public class SeeEventsPage extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(SeeEventsPage.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SeeEventsPage.this, "click to item: " + position, Toast.LENGTH_SHORT).show();
             }
         });
     }

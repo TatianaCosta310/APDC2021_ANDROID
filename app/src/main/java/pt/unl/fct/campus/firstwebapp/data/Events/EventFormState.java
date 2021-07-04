@@ -46,7 +46,7 @@ public class EventFormState {
         }
 
     EventFormState(boolean isDataValid) {
-            this.name = name;
+            this.name = null;
             this.startDate = null;
             this.finalDate = null;
             this.finalHour = null;

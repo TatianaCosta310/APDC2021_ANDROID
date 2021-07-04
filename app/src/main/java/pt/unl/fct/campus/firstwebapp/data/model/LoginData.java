@@ -17,7 +17,7 @@ public class LoginData {
 
 
 
- public String getUsername(){
+    public String getUsername(){
         return email;
     }
 

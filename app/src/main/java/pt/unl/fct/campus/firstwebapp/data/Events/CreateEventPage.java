@@ -1,30 +1,25 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Base64;
-import android.util.Log;
+
+import android.text.method.Touch;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,15 +36,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,19 +51,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.Request;
+
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
-import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
-import retrofit2.http.HTTP;
-import retrofit2.http.Multipart;
-import retrofit2.http.Part;
+
 
 
 public class CreateEventPage extends AppCompatActivity implements StoragePics {
@@ -87,6 +76,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
     private EventViewModel eventViewModel;
     private DatePickerDialog.OnDateSetListener mDateSetListenerStart,mDateSetListenerEnd;
+    private AlertDialog.Builder alerta;
 
 
     private String token,location;
@@ -104,6 +94,9 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
+
+        alerta = new AlertDialog.Builder(CreateEventPage.this);
+        alerta.setTitle("Atention!");
 
         map = new MapsActivity();
 
@@ -127,49 +120,14 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         token = params.getString("token");
         location = params.getString("location");
 
+         cal =  Calendar.getInstance();
+
+         bitmap = null;
+
         //eventDateCreation.setPaintFlags(eventDateCreation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         //eventDue.setPaintFlags(eventDue.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-       /* eventViewModel.getEventFormState().observe(this, new Observer<EventFormState>() {
-            @Override
-            public void onChanged(@Nullable EventFormState createFormState) {
 
-                if (createFormState == null) {
-                    Toast.makeText(CreateEventPage.this,"BRAAAHHHH ",Toast.LENGTH_LONG).show();
-
-                    return ;
-                }
-                createEventButton.setEnabled(createFormState.isDataValid());
-                if (createFormState.getName()!= null) {
-                    eventName.setError(getString(createFormState.getName()));
-                }
-
-                if (createFormState.getStartDate() != null) {
-                    eventDateCreation.setError(getString(createFormState.getStartDate()));
-                }
-
-                if (createFormState.getFinalDate()!= null) {
-                    eventDue.setError(getString(createFormState.getFinalDate()));
-                }
-
-                if (createFormState.getStartHour()!= null) {
-                    eventDue.setError(getString(createFormState.getStartHour()));
-                }
-
-                if (createFormState.getFinalHour()!= null) {
-                    eventDue.setError(getString(createFormState.getFinalHour()));
-                }
-
-                if (createFormState.getGoals()!= null) {
-                    eventDue.setError(getString(createFormState.getGoals()));
-                }
-
-                if (createFormState.getDescription()!= null) {
-                    eventDue.setError(getString(createFormState.getDescription()));
-                }
-            }
-        });
-*/
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
 
             @Override
@@ -194,47 +152,6 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         });
 
 
-     /*   TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                Date dateStart = null,endDate= null;
-                try {
-                    dateStart = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateCreation.getText().toString());
-                    endDate = new SimpleDateFormat("yyyy-MM-dd").parse( eventDue.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                eventViewModel.CreateDataChanged(eventName.getText().toString(),
-                        dateStart,endDate,eventStartHour.getText().toString(),
-                        eventFinalHour.getText().toString(),numVolunteers.getText().toString(),goal.getText().toString(),description.getText().toString());
-            }
-        };
-
-
-
-        eventName.addTextChangedListener(afterTextChangedListener);
-        eventDateCreation.addTextChangedListener(afterTextChangedListener);
-        eventDue.addTextChangedListener(afterTextChangedListener);
-        eventStartHour.addTextChangedListener(afterTextChangedListener);
-        eventFinalHour.addTextChangedListener(afterTextChangedListener);
-        numVolunteers.addTextChangedListener(afterTextChangedListener);
-        goal.addTextChangedListener(afterTextChangedListener);
-        description.addTextChangedListener(afterTextChangedListener);
-*/
-
-
         eventDateCreation.setOnClickListener(v -> {
 
            doCalendarSelection(mDateSetListenerStart);
@@ -242,11 +159,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             mDateSetListenerStart = (view, year, month, day) -> {
                 month = month +1;
 
-
                 String date = year + "-" + month + "-" + day;
                 eventDateCreation.setText(date);
             };
         });
+
 
         eventDue.setOnClickListener(v -> {
 
@@ -313,16 +230,35 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             @Override
             public void onClick(View v) {
 
+                if (!isDataValidText()) {
 
-                if (isDataValid()) {
+                 alerta.setMessage("Event name, goals and description must be filled !");
+                 alerta.create().show();
 
+                }else if(!isDataValidDate()){
+                    alerta.setMessage("Event date, is not valid!");
+                    alerta.create().show();
+
+                }else if(!isDataValidHour()) {
+                    alerta.setMessage("Event hour, is not valid!");
+                    alerta.create().show();
+
+                }else if(isNumVolunteersValid(numVolunteers.getText().toString())){
+                    alerta.setMessage("Number of volunteers, is not valid!");
+                    alerta.create().show();
+
+                }else if(bitmap == null){
+                    alerta.setMessage("Must have an image!");
+                    alerta.create().show();
+
+                }else{
                     Gson gson = new Gson();
 
                     EventData e = new EventData();
 
                     // Create the Event object
-                    Long v1 = new Long(30);
-                    Long vol = v1.valueOf(numVolunteers.getText().toString());
+                  //  Long v1 = new Long(30);
+                    Long vol = Long.valueOf(numVolunteers.getText().toString());
 
 
                     e.setName(eventName.getText().toString());
@@ -337,28 +273,15 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
 
                     //Send to Server
-                /*let formData = new FormData();
-                formData.append("img_cover",fil);
-                formData.append("evd",evd);
-                */
 
                     String o = gson.toJson(e);
 
                     RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
 
-                    //MultipartBody.Part re = MultipartBody.Part.createFormData("evd", "evd", RequestBody.create(MediaType.parse("multipart/form-data"), o));
 
                      Map<String, RequestBody> map = new HashMap<>();
 
                       map.put("evd",re);
-
-                    //Image
-
-                /*int size = bitmap.getRowBytes() * bitmap.getHeight();
-                ByteBuffer b = ByteBuffer.allocate(size);
-                bitmap.copyPixelsToBuffer(b);
-                byte[] bytes = new byte[size]; */
-
 
                     File f = new File(CreateEventPage.this.getCacheDir(), "image.png");
                     try {
@@ -389,45 +312,210 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                         ioException.printStackTrace();
                     }
 
-
-                    //tryingggg
-
                     //encode image to base64 string
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                   /* ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     // Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.id.imageUp);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
                     String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                    //
-
-                   // RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), imageString);
+                    */
 
                     RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), f);
                     map.put("img_cover",fbody);
 
-                   // MultipartBody.Part file = MultipartBody.Part.createFormData("img_cover", "img_cover", RequestBody.create(MediaType.parse("multipart/form-data"), f));
-
                     eventViewModel.createEvent(token,map);
 
-                } else {
-                    Toast.makeText(CreateEventPage.this, "Invalid must fill everything!", Toast.LENGTH_SHORT).show();
+                //} else {
+                  //  Toast.makeText(CreateEventPage.this, "Invalid must fill everything!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-}
+
+       /* eventViewModel.getEventFormState().observe(this, new Observer<EventFormState>() {
+            @Override
+            public void onChanged(@Nullable EventFormState eventFormState) {
+                if (eventFormState == null) {
+                    return;
+                }
+                createEventButton.setEnabled(eventFormState.isDataValid());
+                if (eventFormState.getName() != null) {
+                    eventName.setError(getString(eventFormState.getName()));
+                }
+                if (eventFormState.getDescription() != null) {
+                    description.setError(getString(eventFormState.getDescription()));
+                }
+
+                if (eventFormState.getGoals() != null) {
+                    goal.setError(getString(eventFormState.getGoals()));
+                }
+                if (eventFormState.getNumVolunteers() != null) {
+                    numVolunteers.setError(getString(eventFormState.getNumVolunteers()));
+                }
+                if (eventFormState.getStartDate() != null) {
+                    eventDateCreation.setError(getString(eventFormState.getStartDate()));
+                }
+
+                if (eventFormState.getFinalDate() != null) {
+                    eventDue.setError(getString(eventFormState.getFinalDate()));
+                }
+                if (eventFormState.getStartHour() != null) {
+                    eventStartHour.setError(getString(eventFormState.getStartHour()));
+                }
+                if (eventFormState.getFinalHour() != null) {
+                    eventFinalHour.setError(getString(eventFormState.getFinalHour()));
+                }
+            }
+        });
 
 
-    public boolean isDataValid(){
-        if(eventName.getText() == null || description.getText() == null || goal.getText() == null){
+        TextWatcher afterTextChangedListener = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // ignore
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ignore
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                Date startDate = null, endDate = null;
+                try {
+                     startDate =new SimpleDateFormat("yyyy-MM-dd").parse(eventDateCreation.getText().toString());
+                     endDate =new SimpleDateFormat("yyyy-MM-dd").parse(eventDue.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                eventViewModel.CreateDataChanged(eventName.getText().toString(),
+                        startDate, endDate,eventStartHour.getText().toString(),eventFinalHour.getText().toString(), numVolunteers.getText().toString(),
+                        goal.getText().toString(),description.getText().toString());
+            }
+        };
+
+
+        eventName.addTextChangedListener(afterTextChangedListener);
+        eventDateCreation.addTextChangedListener(afterTextChangedListener);
+        eventDue.addTextChangedListener(afterTextChangedListener);
+        eventStartHour.addTextChangedListener(afterTextChangedListener);
+        eventFinalHour.addTextChangedListener(afterTextChangedListener);
+
+        numVolunteers.addTextChangedListener(afterTextChangedListener);
+        goal.addTextChangedListener(afterTextChangedListener);
+        description.addTextChangedListener(afterTextChangedListener);
+*/
+    }
+
+    public boolean isDataValidText() {
+        if (isNameValid(eventName.getText().toString()) == false || isNameValid(goal.getText().toString()) == false
+                || isNameValid(description.getText().toString()) == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public boolean isDataValidDate() {
+        Date startDate = null, endDate = null;
+        try {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").parse(eventDateCreation.getText().toString());
+
+            endDate = new SimpleDateFormat("yyyy-MM-dd").parse(eventDue.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (isStartDayValid(startDate) == false || isFinishDayValid(startDate, endDate) == false) {
+            return false;
+        }
+
+        return  true;
+    }
+
+
+    public boolean isDataValidHour() {
+
+        if(isHourValid(eventStartHour.getText().toString()) == false || isHourValid(eventFinalHour.getText().toString()) == false){
             return false;
         }
         return true;
     }
-    public void doCalendarSelection(DatePickerDialog.OnDateSetListener mDateSetListener){
 
-        Calendar cal  = Calendar.getInstance();
+
+    private boolean isNumVolunteersValid(String num){
+
+        if(num.isEmpty() || num == null) {
+            return false;
+
+        }else if(Long.valueOf(num) == 0) {
+            return false;
+        }
+
+        return  true;
+    }
+
+    private boolean isNameValid(String name) {
+        if (name == null || name.isEmpty())
+            return false;
+
+        return true;
+    }
+
+    private boolean isStartDayValid(Date day) {
+
+
+        if(day == null)
+            return false;
+
+
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+
+        c1.setTime(day);
+        c2.setTime(cal.getTime());
+
+        int yearDiff = c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR);
+        int monthDiff = c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH);
+        int dayDiff = c1.get(Calendar.DAY_OF_MONTH) - c2.get(Calendar.DAY_OF_MONTH);
+
+
+        if(yearDiff < 0 || monthDiff < 0 || dayDiff < 0) {
+            return false;
+        }
+
+        return true ;
+    }
+
+    private boolean isFinishDayValid(Date startDay, Date finalDay) {
+
+        if(finalDay == null )
+            return false;
+
+        if(finalDay.before( startDay))
+            return false;
+
+        return true ;
+    }
+
+    private boolean isHourValid(String hour) {
+
+        String h = "Hour";
+
+        if(hour == null || hour.isEmpty() || hour.contains(h) )
+            return false;
+
+        return true ;
+    }
+
+
+    public void doCalendarSelection(DatePickerDialog.OnDateSetListener mDateSetListener){
 
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
@@ -472,8 +560,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                     if(cursor != null){
                         cursor.moveToFirst();
-                        int indexImage = cursor.getColumnIndex(imageProj[0]);
-                         bitmap = null;
+                       // int indexImage = cursor.getColumnIndex(imageProj[0]);
+                         //bitmap = null;
                          //path = cursor.getString(indexImage);
                         cursor.close();
 
@@ -525,91 +613,4 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-   public static class FileUtil {
-        /*
-         * Gets the file path of the given Uri.
-         */
-        @SuppressLint("NewApi")
-        public static String getPath(Uri uri, Context context) {
-            final boolean needToCheckUri = Build.VERSION.SDK_INT >= 19;
-            String selection = null;
-            String[] selectionArgs = null;
-            // Uri is different in versions after KITKAT (Android 4.4), we need to
-            // deal with different Uris.
-            if (needToCheckUri && DocumentsContract.isDocumentUri(context, uri)) {
-                if (isExternalStorageDocument(uri)) {
-                    final String docId = DocumentsContract.getDocumentId(uri);
-                    final String[] split = docId.split(":");
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                } else if (isDownloadsDocument(uri)) {
-                    final String id = DocumentsContract.getDocumentId(uri);
-                    if (id.startsWith("raw:")) {
-                        return id.replaceFirst("raw:", "");
-                    }
-                    uri = ContentUris.withAppendedId(
-                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-                } else if (isMediaDocument(uri)) {
-                    final String docId = DocumentsContract.getDocumentId(uri);
-                    final String[] split = docId.split(":");
-                    final String type = split[0];
-                    switch (type) {
-                        case "image":
-                            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                            break;
-                        case "video":
-                            uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                            break;
-                        case "audio":
-                            uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                            break;
-                    }
-                    selection = "_id=?";
-                    selectionArgs = new String[]{
-                            split[1]
-                    };
-                }
-            }
-            if ("content".equalsIgnoreCase(uri.getScheme())) {
-                String[] projection = {
-                        MediaStore.Images.Media.DATA
-                };
-                try (Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null)) {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        return cursor.getString(columnIndex);
-                    }
-                } catch (Exception e) {
-                    Log.e("on getPath", "Exception", e);
-                }
-            } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-                return uri.getPath();
-            }
-            return null;
-        }
-
-        /**
-         * @param uri The Uri to check.
-         * @return Whether the Uri authority is ExternalStorageProvider.
-         */
-
-        private static boolean isExternalStorageDocument(Uri uri) {
-            return "com.android.externalstorage.documents".equals(uri.getAuthority());
-        }
-
-        /**
-         * @param uri The Uri to check.
-         * @return Whether the Uri authority is DownloadsProvider.
-         */
-        private static boolean isDownloadsDocument(Uri uri) {
-            return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-        }
-
-        /**
-         * @param uri The Uri to check.
-         * @return Whether the Uri authority is MediaProvider.
-         */
-        private static boolean isMediaDocument(Uri uri) {
-            return "com.android.providers.media.documents".equals(uri.getAuthority());
-        }
-    }
 }

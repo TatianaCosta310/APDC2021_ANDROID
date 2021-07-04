@@ -1,6 +1,13 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -10,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -22,7 +30,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -34,18 +44,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.acl.Owner;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventResult;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModel;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModelFactory;
+import pt.unl.fct.campus.firstwebapp.data.Events.FileImageDownload;
+import pt.unl.fct.campus.firstwebapp.data.Events.FileImageDownloadClass;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
+
+//import com.google.cloud.storage.BlobId;
+//import com.google.cloud.storage.Storage;
+//import com.google.cloud.storage.StorageOptions;
+
+
+//import com.google.cloud.*;
+import java.nio.file.Paths;
 
 public class EventsAdapter extends BaseAdapter {
 
@@ -60,10 +83,12 @@ public class EventsAdapter extends BaseAdapter {
     Bundle params;
     Intent intent;
 
+    private FileImageDownloadClass fileImageDownload;
+
     Double lat;
     Double longitude;
 
-    public EventsAdapter(ViewModelStoreOwner owner,Activity context, ArrayList<EventData2> events, int layout, String token, Intent intent){
+    public EventsAdapter(ViewModelStoreOwner owner,Activity context, ArrayList<EventData2> events, int layout, String token, Intent intent ){
 
 
         this.context = context;
@@ -77,7 +102,12 @@ public class EventsAdapter extends BaseAdapter {
 
         this.intent = intent;
 
+
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        fileImageDownload = new FileImageDownloadClass();
+
+
     }
 
 
@@ -96,6 +126,7 @@ public class EventsAdapter extends BaseAdapter {
         return position;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -175,11 +206,47 @@ public class EventsAdapter extends BaseAdapter {
 
        if(image1 != null) {
 
-           //byte[] decodedString = Base64.decode(image1, Base64.URL_SAFE);
-           byte[] decodedString = Base64.decode(image1, Base64.DEFAULT);
-           Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+           File f = new File(context.getCacheDir(), "blob.png");
+           try {
+               f.createNewFile();
+           } catch (IOException ioException) {
+               ioException.printStackTrace();
+           }
 
-           viewHolder.image.setImageBitmap(decodedByte);
+
+/*
+           //String [] split = image1.split("/");
+
+           //String bucket = split[0] + "//" + split[2] + "/" + split[3];
+
+        //  FirebaseStorage storage = FirebaseStorage.getInstance(bucket);
+          // StorageReference storageRef = storage.getReference();
+           //StorageReference httpsReference = storage.getReferenceFromUrl(image1);
+
+
+           final long ONE_MEGABYTE = 1024 * 1024;
+           httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+               @Override
+               public void onSuccess(byte[] bytes) {
+                   // Data for "images/island.jpg" is returns, use this as needed
+                   String b = "b";
+               }
+           }).addOnFailureListener(new OnFailureListener() {
+               @Override
+               public void onFailure(@NonNull Exception exception) {
+                   // Handle any errors
+                   String b1 = "error";
+               }
+           });
+
+*/
+
+
+           //byte[] decodedString = Base64.decode(image1, Base64.URL_SAFE);
+          // byte[] decodedString = Base64.decode(image1, Base64.DEFAULT);
+           //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+           //viewHolder.image.setImageBitmap(decodedByte);
        }
 
 

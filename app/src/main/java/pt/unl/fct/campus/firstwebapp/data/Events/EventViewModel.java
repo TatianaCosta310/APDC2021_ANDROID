@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -172,10 +173,7 @@ public class EventViewModel extends ViewModel {
     public void CreateDataChanged(String name,Date startDay, Date finalDay,String startHour,String finalHour,String numVolunteers,String goal, String description) {
         if (!isNameValid(name)) {
             eventFormState.setValue(new EventFormState(R.string.invalid_name, null, null,null,null,null,null,null));
-        } else if (!isStartDayValid(startDay)) {
-            eventFormState.setValue(new EventFormState(null, R.string.invalid_day, null,null,null,null,null,null));
-        } else if (!isFinishDayValid(startDay,finalDay)) {
-            eventFormState.setValue(new EventFormState(null, null, R.string.invalid_day,null,null,null,null,null));
+
         } else if (!isHourValid(startHour)) {
         eventFormState.setValue(new EventFormState(null, null, null,R.string.inavlid_hour,null,null,null,null));
     } else if (!isHourValid(finalHour)) {
@@ -186,14 +184,17 @@ public class EventViewModel extends ViewModel {
             eventFormState.setValue(new EventFormState(null, null, null,null,null,null,R.string.required,null));
         }else if (!isNameValid(description)) {
             eventFormState.setValue(new EventFormState(null, null, null,null,null,null,null,R.string.required));
-
+        } else if (!isStartDayValid(startDay)) {
+            eventFormState.setValue(new EventFormState(null, R.string.invalid_day, null,null,null,null,null,null));
+        } else if (!isFinishDayValid(startDay,finalDay)) {
+            eventFormState.setValue(new EventFormState(null, null, R.string.invalid_day,null,null,null,null,null));
         }else{
         eventFormState.setValue(new EventFormState(true));
         }
     }
 
     private boolean isNameValid(String name) {
-        if (name == null)
+        if (name == null || name.isEmpty())
             return false;
 
         return true;
@@ -214,7 +215,7 @@ public class EventViewModel extends ViewModel {
 
     private boolean isFinishDayValid(Date startDay, Date finalDay) {
 
-        if(finalDay == null)
+        if(finalDay == null )
             return false;
 
         if(finalDay.before( startDay))
@@ -225,7 +226,9 @@ public class EventViewModel extends ViewModel {
 
     private boolean isHourValid(String hour) {
 
-        if(hour == null)
+        String h = "Hour";
+
+        if(hour == null || hour.isEmpty() || hour.contains(h) )
             return false;
 
         return true ;

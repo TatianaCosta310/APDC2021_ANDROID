@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -44,11 +45,13 @@ public class MyEvents  extends AppCompatActivity {
 
     Intent oldIntent;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.listviewadapter);
+
 
         text = findViewById(R.id.textListEvents);
         text.setText(" My Events");
