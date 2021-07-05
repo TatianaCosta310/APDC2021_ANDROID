@@ -55,7 +55,6 @@ public interface UserService {
     @POST("rest/login/op11")
     Call<Void> changePassword();
 
-
     //EVENTS ENDPOINTS
     @Multipart
     @POST("rest/events/create")
