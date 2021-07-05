@@ -61,6 +61,8 @@ public class EventRepository extends AppCompatActivity {
             result = dataSource.seeFinishedEvents(value, token);
         }else if(actual.equals("mine")){
             result = dataSource.seemyEvents(value, token);
+        }else if(actual.equals("participating")){
+            result = dataSource.seeParticipatingEvents(value,token);
         }
 
         return result;
@@ -88,6 +90,7 @@ public class EventRepository extends AppCompatActivity {
 
         return result;
     }
+
 
 
 }

@@ -1,6 +1,7 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -77,6 +78,7 @@ public class SeeEventsPage extends AppCompatActivity {
                 }
 
                 if (eventResult.getError() != null) {
+
                     //showLoginFailed(loginResult.getError());
                 }
                 if (eventResult.getSuccess() != null) {
@@ -90,7 +92,11 @@ public class SeeEventsPage extends AppCompatActivity {
 
 
                         if (list.size() == 0) {
-                            //criar alerta a dizer que nao existem Eventos ainda terminados!
+                            // alerta a dizer que nao existem Eventos ainda !
+                            AlertDialog.Builder alert = new AlertDialog.Builder(SeeEventsPage.this);
+                            alert.setTitle("no events");
+                            alert.setMessage("There aren't Events created yet ");
+
                         } else {
 
                             Gson gson = new Gson();
@@ -123,7 +129,7 @@ public class SeeEventsPage extends AppCompatActivity {
         listView = findViewById(R.id.listViewEvents);
 
 
-        adapter = new EventsAdapter(this, this, events, R.layout.actual_events, token, oldIntent);
+        adapter = new EventsAdapter(this,this ,this, events, R.layout.actual_events, token, oldIntent);
 
         listView.setAdapter(adapter);
 

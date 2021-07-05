@@ -101,7 +101,6 @@ public class EventViewModel extends ViewModel {
 
                 if (result instanceof Result.Success) {
                     List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
-                    // loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
                     eventResult.postValue(new EventResult(new EventCreatedView(list)));
                 } else {
                     eventResult.postValue(new EventResult(R.string.Failed_See_Event));
@@ -111,6 +110,25 @@ public class EventViewModel extends ViewModel {
         });
     }
 
+
+    public void getParticipatingEvents(String token, String token1, String participating) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<List<JsonObject>> result = eventRepository.seeEvents(token,token1,participating);
+
+                if (result instanceof Result.Success) {
+                    List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
+                    eventResult.postValue(new EventResult(new EventCreatedView(list)));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_See_Event));
+                }
+
+            }
+        });
+    }
 
     public void participate(String token, long eventId) {
 

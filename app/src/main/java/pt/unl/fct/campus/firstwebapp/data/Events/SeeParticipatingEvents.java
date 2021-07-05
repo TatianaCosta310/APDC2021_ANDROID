@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -26,7 +25,7 @@ import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.EventsAdapter;
 
-public class MyEvents  extends AppCompatActivity {
+public class SeeParticipatingEvents extends AppCompatActivity {
 
     private EventViewModel eventViewModel;
 
@@ -55,7 +54,7 @@ public class MyEvents  extends AppCompatActivity {
 
 
         text = findViewById(R.id.textListEvents);
-        text.setText(" My Events");
+        text.setText("Volunteering");
 
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
@@ -67,7 +66,7 @@ public class MyEvents  extends AppCompatActivity {
         token = params.getString("token");
 
 
-        eventViewModel.getMyEvents(token, token,"mine");
+        eventViewModel.getParticipatingEvents(token, token,"participating");
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -86,10 +85,10 @@ public class MyEvents  extends AppCompatActivity {
                     List<JsonObject> list = model.getEventsList();
 
                     if (list.size() == 0) {
-                        //alerta a dizer que nao existem Eventos criados pelo usuario!
-                        AlertDialog.Builder alert = new AlertDialog.Builder(MyEvents.this);
-                        alert.setTitle("no events");
-                        alert.setMessage("You didn't create events ");
+                        //alerta a dizer que nao existem Eventos em que o ususario participa!
+                        AlertDialog.Builder alert = new AlertDialog.Builder(SeeParticipatingEvents.this);
+                        alert.setTitle("no participation");
+                        alert.setMessage("You are not participating in any events ");
                     } else {
 
                         Gson gson = new Gson();
@@ -118,17 +117,16 @@ public class MyEvents  extends AppCompatActivity {
 
         listView = findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,this,this,events,R.layout.myevents,token,oldIntent);
+        adapter = new EventsAdapter(this,this,this,events,R.layout.participating_events,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(MyEvents.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SeeParticipatingEvents.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
 }
-

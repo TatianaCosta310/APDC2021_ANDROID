@@ -76,6 +76,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         params = oldIntent.getExtras();
 
 
+            if(address == null){
+                next.setVisibility(View.INVISIBLE);
+            }
 
         next.setOnClickListener(new View.OnClickListener() {
 
@@ -182,7 +185,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Log.d("More : ",""+address.getLocality()); */
 
                         mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in GeoPlace"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15f));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,20f));
                         hideKeyboard();
 
                        // geolocate();

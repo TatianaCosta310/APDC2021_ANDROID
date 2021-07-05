@@ -106,11 +106,13 @@ public class LoginDataSource extends Application {
 
             Response<Void> response = updateInfos.execute();
 
+
             ExecuteService executeService = new ExecuteService();
 
             return executeService.ExecuteServiceUpdateInfo(response);
 
         } catch (Exception e) {
+
             return new Result.Error(new IOException("Error Making Update", e));
         }
     }

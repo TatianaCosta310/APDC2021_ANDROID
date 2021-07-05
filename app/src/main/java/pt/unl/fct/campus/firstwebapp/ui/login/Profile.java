@@ -35,7 +35,7 @@ public class Profile extends AppCompatActivity implements StoragePics {
 
 
         final Button updatePorfile = findViewById(R.id.editProfileTxt);
-        final Button getMyEvents = findViewById(R.id.button4);
+        final Button getEventsLibrary = findViewById(R.id.button4);
         final ImageButton changeprofilePic=findViewById(R.id.buttoncamera);
 
         image = findViewById(R.id.person);
@@ -51,10 +51,10 @@ public class Profile extends AppCompatActivity implements StoragePics {
         });
 
 
-        getMyEvents.setOnClickListener(new View.OnClickListener() {
+        getEventsLibrary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMyEvents(bundleExtra);
+                getEventsLibary(bundleExtra);
             }
         });
 
@@ -67,9 +67,9 @@ public class Profile extends AppCompatActivity implements StoragePics {
         });
 }
 
-    private void getMyEvents(Bundle bundleExtra) {
+    private void getEventsLibary(Bundle bundleExtra) {
 
-        Intent intent = new Intent(this, MyEvents.class);
+        Intent intent = new Intent(this, EventsUserLibrary.class);
 
         Intent oldIntent = getIntent();
 

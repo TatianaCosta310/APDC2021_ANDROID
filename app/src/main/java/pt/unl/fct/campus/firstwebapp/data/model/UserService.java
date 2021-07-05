@@ -60,7 +60,7 @@ public interface UserService {
     @POST("rest/events/create")
     Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
 
-    // da 401 whyy???
+    // da 401 whyy???  supostamente nao autorizado?? hmmm
     @DELETE("rest/events/delete/{eventId}")
     Call<Void>  doRemoveEvent(@Path(value = "eventId") String eventId, @Header("Cookie") String token);
 
@@ -85,5 +85,10 @@ public interface UserService {
   //@FormUrlEncoded
   //@HTTP(method = "DELETE",path = "rest/events/rparticipation/{eventid}", hasBody = true)
     Call<Void> removeParticipation(@Header("Cookie") String token, @Path("eventid") long eventid);
+
+   @Headers({"Content-Type: application/json","Accept: application/json"})
+   @GET("rest/events/view/interested")
+   Call< List<JsonObject>> seeParticipatingEvents(@Header("Cookie") String token);
+
 
 }

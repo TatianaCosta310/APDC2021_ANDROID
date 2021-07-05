@@ -57,6 +57,8 @@
         <activity android:name=".data.Events.SeeFinishedEventsPage"/>
         <activity android:name=".data.Events.SeeEventsPage"/>
         <activity android:name=".data.Events.MyEvents"/>
+        <activity android:name=".ui.login.EventsUserLibrary"/>
+        <activity android:name=".data.Events.SeeParticipatingEvents"/>
 
     </application>
 

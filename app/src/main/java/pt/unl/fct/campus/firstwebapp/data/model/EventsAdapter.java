@@ -1,65 +1,40 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import android.app.Activity;
-import android.content.ClipData;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStore;
 import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.recyclerview.widget.RecyclerView;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.acl.Owner;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventResult;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModel;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModelFactory;
-import pt.unl.fct.campus.firstwebapp.data.Events.FileImageDownload;
-import pt.unl.fct.campus.firstwebapp.data.Events.FileImageDownloadClass;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
 //import com.google.cloud.storage.BlobId;
@@ -68,7 +43,7 @@ import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
 
 //import com.google.cloud.*;
-import java.nio.file.Paths;
+
 
 public class EventsAdapter extends BaseAdapter {
 
@@ -79,16 +54,18 @@ public class EventsAdapter extends BaseAdapter {
     private EventViewModel eventViewModel;
     int layout;
     String token;
-    ViewModelStoreOwner owner;
+    LifecycleOwner lifeCicleOwner;
+    ViewModelStoreOwner viewModelStoreOwner;
     Bundle params;
     Intent intent;
+    AlertDialog.Builder alert;
+    String participateButton;
 
-    private FileImageDownloadClass fileImageDownload;
 
     Double lat;
     Double longitude;
 
-    public EventsAdapter(ViewModelStoreOwner owner,Activity context, ArrayList<EventData2> events, int layout, String token, Intent intent ){
+    public EventsAdapter( LifecycleOwner lifeCicleOwner, ViewModelStoreOwner viewModelStoreOwner,Activity context, ArrayList<EventData2> events, int layout, String token, Intent intent ){
 
 
         this.context = context;
@@ -98,14 +75,19 @@ public class EventsAdapter extends BaseAdapter {
 
         this.token = token;
 
-        this.owner = owner;
+        this.lifeCicleOwner = lifeCicleOwner;
+
+        this.viewModelStoreOwner = viewModelStoreOwner;
 
         this.intent = intent;
 
+        alert = new AlertDialog.Builder(context);
+        alert.setTitle("error alerts");
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        fileImageDownload = new FileImageDownloadClass();
+
+        participateButton = "participate";
 
 
     }
@@ -149,7 +131,7 @@ public class EventsAdapter extends BaseAdapter {
        // viewHolder.itemName.setText(currentItem.getItemName());
         //viewHolder.itemDescription.setText(currentItem.getItemDescription());
 
-        eventViewModel = new ViewModelProvider(owner, new EventViewModelFactory(((LoginApp) context.getApplication()).getExecutorService()))
+        eventViewModel = new ViewModelProvider(viewModelStoreOwner, new EventViewModelFactory(((LoginApp) context.getApplication()).getExecutorService()))
                .get(EventViewModel.class);
 
 
@@ -255,19 +237,21 @@ public class EventsAdapter extends BaseAdapter {
             viewHolder.doParticipate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    participateButton = "participate";
                     eventViewModel.participate(token, event.getEventId());
                 }
             });
+        }
 
-
+        if( viewHolder.removeParticipation != null) {
             viewHolder.removeParticipation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    participateButton = "remove";
                     eventViewModel.removeParticipation(token, event.getEventId());
                     openPage();
                 }
             });
-
         }
 
         if(viewHolder.removeEvent != null) {
@@ -308,8 +292,30 @@ public class EventsAdapter extends BaseAdapter {
         });
 
 
+        eventViewModel.getLoginResult().observe(lifeCicleOwner, new Observer<EventResult>() {
 
-        return  itemView;
+            @Override
+            public void onChanged(EventResult eventResult) {
+                if (eventResult == null) {
+                    return;
+                }
+
+               /* if(eventResult.getError() == 409) {
+
+                        alert.setMessage("You are already Participating!");
+                }
+
+                if(eventResult.getError() == 403){
+                    alert.setMessage("Session expired");
+                }
+
+                 if (participateButton.equals("remove") && eventResult.getError() == 400){
+                    alert.setMessage("Maybe you are not participating");
+                }*/
+            }
+        });
+
+            return  itemView;
     }
 
 
@@ -371,13 +377,6 @@ private class ViewHolder {
         context.startActivity(intent1);
 
     }
-
-    public void showMessage( String errorString) {
-            Toast.makeText(context.getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
-            openPage();
-
-    }
-
 
     public void openPage(){
 

@@ -1,6 +1,7 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -86,7 +87,12 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
                     List<JsonObject> list = model.getEventsList();
 
                     if (list.size() == 0) {
-                        //criar alerta a dizer que nao existem Eventos ainda terminados!
+                        // alerta a dizer que nao existem Eventos ainda terminados!
+
+                        /*AlertDialog.Builder alert = new AlertDialog.Builder(SeeFinishedEventsPage.this);
+                        alert.setTitle("no events");
+                        alert.setMessage("There aren't finished Events  yet ");
+*/
                     } else {
 
                         Gson gson = new Gson();
@@ -119,7 +125,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,this,events,R.layout.finished_events,token,oldIntent);
+        adapter = new EventsAdapter(this,this,this,events,R.layout.finished_events,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

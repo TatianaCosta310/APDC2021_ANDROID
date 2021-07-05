@@ -85,6 +85,7 @@ public class LoginViewModel extends ViewModel {
             public void run() {
                 Result<RegisterData> result = loginRepository.register(name, password,email);
 
+
                 if (result instanceof Result.Success) {
                     loginResult.postValue(new LoginResult(new LoggedInUserView(name,"")));
                 } else {

@@ -11,11 +11,10 @@
         android:layout_height="200dp"
 
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/no_image"
+        android:layout_marginStart="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="22dp" />
+        app:srcCompat="@drawable/no_image" />
 
     <TextView
         android:id="@+id/textOwner1"

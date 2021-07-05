@@ -2,18 +2,13 @@ package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Cookie;
-import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
-import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
 import pt.unl.fct.campus.firstwebapp.data.model.UserService;
@@ -101,6 +96,7 @@ public class EventDataSource {
 
             Response<Void> response = userAuthenticatedCall.execute();
 
+
             ExecuteService executeService = new ExecuteService();
 
             return executeService.ExecuteServiceParticipate(response);
@@ -146,6 +142,23 @@ public class EventDataSource {
         }
     }
 
+    public Result<List<JsonObject>> seeParticipatingEvents(String value, String token) {
+
+        Call<List<JsonObject>> userAuthenticatedCall = service.seeParticipatingEvents(value);
+        try {
+
+            Response<List<JsonObject>> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceEvents(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error To see Events", e));
+        }
+    }
+
     public Result<Void> doRemoveEvent(String eventId, String token) {
 
         Call<Void> userAuthenticatedCall = service.doRemoveEvent(eventId,token);
@@ -162,6 +175,7 @@ public class EventDataSource {
             return new Result.Error(new IOException("Error To Remove Event", e));
         }
     }
+
 
 
 }
