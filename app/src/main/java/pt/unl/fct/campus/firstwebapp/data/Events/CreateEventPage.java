@@ -148,11 +148,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                    openIntent();
 
-                    setResult(Activity.RESULT_OK);
+                    //setResult(Activity.RESULT_OK);
                 }
 
 
-                finish();
+             //   finish();
             }
         });
 
