@@ -11,6 +11,7 @@ import pt.unl.fct.campus.firstwebapp.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,8 @@ import com.google.firebase.FirebaseApp;
 public class MainActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    TextView aboutUsText;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     final Button loginButton = findViewById(R.id.login);
     final Button signUpButton = findViewById(R.id.register);
     final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+
+
+        aboutUsText = findViewById(R.id.textAbout1);
+        aboutUsText.setPaintFlags(aboutUsText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
         signUpButton.setEnabled(true);
@@ -178,6 +185,10 @@ public class MainActivity extends AppCompatActivity {
          openPage(Main_Page.class,model);
     }
 
+
+    public void OpenAboutPage(View v) {
+        openPage(AboutUs.class,null);
+    }
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
