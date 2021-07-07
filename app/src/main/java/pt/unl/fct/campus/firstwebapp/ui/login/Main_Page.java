@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeFinishedEventsPage;
+import retrofit2.http.PartMap;
 
 public class Main_Page extends AppCompatActivity {
 
@@ -44,6 +47,7 @@ public class Main_Page extends AppCompatActivity {
     Button createEventButton,seeEventButton,seeFinishedEventsButton;
     Bundle params ;
     String profilePic;
+    TextView aboutUsText;
 
     private LoginViewModel loginViewModel;
 
@@ -72,6 +76,8 @@ public class Main_Page extends AppCompatActivity {
         seeFinishedEventsButton = findViewById(R.id.button3);
         image = findViewById(R.id.person);
 
+        aboutUsText = findViewById(R.id.textAbout);
+        aboutUsText.setPaintFlags(aboutUsText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         if(profilePic != null){
 
@@ -204,6 +210,10 @@ public class Main_Page extends AppCompatActivity {
         openProfilePage(MainActivity.class);
 
 
+    }
+
+    public void OpenAboutPage(View v){
+        openProfilePage(AboutUs.class);
     }
 
 

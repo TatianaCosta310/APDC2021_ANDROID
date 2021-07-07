@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<RelativeLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_weight="0.2">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_ativo" />
+
+    <TextView
+    style="@style/text_box_style"
+    android:id="@+id/textView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="cursive"
+    android:text="@string/About_Us"
+    android:textAlignment="center"
+    android:textSize="50sp" />
+
+
+<TextView
+    android:id="@+id/text1"
+    android:textColor="@color/teal_700"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="200dp"
+    android:fontFamily="cursive"
+    android:layout_marginTop="100dp"
+    android:text="Who We Are "
+    android:textAlignment="center"
+    android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/text11"
+        android:drawableLeft="@drawable/star_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:fontFamily="cursive"
+        android:layout_marginTop="160dp"
+        android:text="Who We Are "
+        android:textAlignment="center"
+        android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:textColor="@color/teal_700"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:fontFamily="cursive"
+        android:text="Our Goals "
+        android:layout_marginTop="230dp"
+        android:textAlignment="center"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/text22"
+        android:drawableLeft="@drawable/star_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:fontFamily="cursive"
+        android:layout_marginTop="280dp"
+        android:text="Our Goals "
+        android:textAlignment="center"
+        android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/text3"
+        android:textColor="@color/teal_700"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="340dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:text="How We Work "
+        android:textAlignment="center"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/text33"
+        android:drawableLeft="@drawable/star_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:fontFamily="cursive"
+        android:layout_marginTop="380dp"
+        android:text="How We Work "
+        android:textAlignment="center"
+        android:textSize="28sp" />
+
+
+    <TextView
+        android:id="@+id/text4"
+        android:textColor="@color/teal_700"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="440dp"
+        android:fontFamily="cursive"
+        android:text="What You Can Do "
+        android:textAlignment="center"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/text44"
+        android:drawableLeft="@drawable/star_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:fontFamily="cursive"
+        android:layout_marginTop="515dp"
+        android:text="What You Can Do "
+        android:textAlignment="center"
+        android:textSize="28sp" />
+</RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

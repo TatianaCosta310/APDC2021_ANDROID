@@ -70,6 +70,25 @@ public class EventViewModel extends ViewModel {
         });
     }
 
+    public void getEvent(long eventId, String token) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<JsonObject> result = eventRepository.getEvent( eventId,token);
+
+                if (result instanceof Result.Success) {
+
+                    JsonObject a = new JsonObject();
+                    eventResult.postValue(new EventResult(new EventCreatedView(a)));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_Create_Event));
+                }
+
+            }
+        });
+    }
+
 
     public void seeEvent(String value,String token,String actual) {
 

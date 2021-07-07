@@ -2,17 +2,11 @@ package pt.unl.fct.campus.firstwebapp.data.model;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
 
-import kotlin.ParameterName;
-import okhttp3.Cookie;
-import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.internal.http.HttpHeaders;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -96,5 +90,9 @@ public interface UserService {
    @GET("rest/events/view/interested")
    Call< List<JsonObject>> seeParticipatingEvents(@Header("Cookie") String token);
 
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @GET("rest/events/event/{eventId}")
+    Call< JsonObject> getEvent(@Path("eventId") long eventid,@Header("Cookie") String token);
 
 }

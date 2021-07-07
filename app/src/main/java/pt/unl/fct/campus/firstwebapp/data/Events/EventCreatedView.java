@@ -2,17 +2,13 @@ package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
-
 import java.util.List;
-
-import pt.unl.fct.campus.firstwebapp.data.model.EventData;
-import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 
 public class EventCreatedView {
 
     private List<JsonObject> list;
     private  String response;
+    private JsonObject jsonObject;
     //... other data fields that may be accessible to the Events
 
     EventCreatedView(List<JsonObject> list) {
@@ -25,9 +21,14 @@ public class EventCreatedView {
       this.response = response;
     }
 
+    EventCreatedView(JsonObject jsonObject){this.jsonObject =jsonObject; }
+
     List<JsonObject>  getEventsList() {
         return list;
     }
+
+    JsonObject getJsonObject(){return  jsonObject;}
+
     String getResponse(){return response;}
 }
 

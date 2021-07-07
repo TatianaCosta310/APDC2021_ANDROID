@@ -115,6 +115,18 @@ public class ExecuteService extends Application {
     }
 
 
+    public Result<JsonObject> ExecuteServiceGetEvent(Response<JsonObject> response) {
+
+        if (response.isSuccessful()) {
+            JsonObject ua = response.body();
+           // int size = ua.size();
+
+            return new Result.Success<>(ua);
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+    }
+
+
     public Result<Void> ExecuteServiceParticipate(Response<Void> response) {
         if (response.isSuccessful()) {
 
@@ -133,6 +145,7 @@ public class ExecuteService extends Application {
         }
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
+
 
 
 }

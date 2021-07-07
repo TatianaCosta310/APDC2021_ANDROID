@@ -53,6 +53,23 @@ public class EventDataSource {
 
     }
 
+    public Result<JsonObject> getEvent(long eventId, String token) {
+
+        Call<JsonObject> userAuthenticatedCall = service.getEvent(eventId,token);
+        try {
+
+            Response<JsonObject> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceGetEvent(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error Creating Event", e));
+        }
+    }
+
     public Result<List<JsonObject>> seeEvents(String value, String token) {
 
         Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(value );

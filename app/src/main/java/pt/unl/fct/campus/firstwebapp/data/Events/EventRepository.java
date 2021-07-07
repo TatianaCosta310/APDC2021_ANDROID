@@ -68,6 +68,13 @@ public class EventRepository extends AppCompatActivity {
         return result;
     }
 
+    public Result<JsonObject> getEvent(long eventId, String token) {
+
+        Result<JsonObject >  result = dataSource.getEvent(eventId,token);
+
+        return result;
+    }
+
     public Result<Void> participate(String token, long eventId) {
 
         Result<Void > result = dataSource.participate(token, eventId);
