@@ -59,6 +59,7 @@
         <activity android:name=".data.Events.MyEvents"/>
         <activity android:name=".ui.login.EventsUserLibrary"/>
         <activity android:name=".data.Events.SeeParticipatingEvents"/>
+        <activity android:name=".data.model.UploadImageFromPhone"/>
 
     </application>
 

@@ -76,9 +76,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         params = oldIntent.getExtras();
 
 
-            if(address == null){
-                next.setVisibility(View.INVISIBLE);
-            }
+           // if(address == null){
+             //   next.setVisibility(View.INVISIBLE);
+            //}
 
         next.setOnClickListener(new View.OnClickListener() {
 

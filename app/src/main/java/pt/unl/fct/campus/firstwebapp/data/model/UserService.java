@@ -44,8 +44,14 @@ public interface UserService {
    @POST("rest/login/op3")
    Call<Void> updateInfos(@Header("Cookie") String value,@Body AdditionalAttributes atributs);
 
+    @Headers({"Accept: application/json"})
+    @Multipart
+    @POST("rest/login/savep")
+    Call<String> updateProfilePicture(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
+
    @GET("rest/login/infos")
    Call<AdditionalAttributes> getInfos(@Header("Cookie") String value);
+
 
    @FormUrlEncoded
    @HTTP(method = "DELETE",path = "rest/login/op8", hasBody = true)

@@ -1,5 +1,9 @@
 package pt.unl.fct.campus.firstwebapp.data;
+import java.util.Map;
+
+import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
@@ -84,6 +88,13 @@ public class LoginRepository {
         return result;
     }
 
+    public Result<String> updateProfilePicture(String token, Map<String, RequestBody> map) {
+
+        Result<String> result = dataSource.updateProfilePicture(token,map);
+
+        return result;
+    }
+
     public Result<AdditionalAttributes> getInfos(String token) {
 
         Result<AdditionalAttributes> result = dataSource.getInfos(token);
@@ -101,6 +112,7 @@ public class LoginRepository {
 
         return result;
     }
+
 
 
 }

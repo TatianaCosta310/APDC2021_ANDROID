@@ -96,7 +96,6 @@ public class EventDataSource {
 
             Response<Void> response = userAuthenticatedCall.execute();
 
-
             ExecuteService executeService = new ExecuteService();
 
             return executeService.ExecuteServiceParticipate(response);

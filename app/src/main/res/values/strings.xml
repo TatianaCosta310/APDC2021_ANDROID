@@ -22,7 +22,9 @@
     <!-- Strings related to messages-->
     <string name="welcome">"Welcome To Closing The Gap App !"</string>
     <string name="invalid_username">Not a valid username</string>
+    <string name="user_already_exist">user already exist</string>
     <string name="invalid_name">Not a valid name</string>
+    <string name="prompt_wrong_Data"> Email or Password incorret!</string>
     <string name="invalid_password">Password must be >6 characters and  below 12 characters </string>
     <string name="must_match_password"> This password must be the same as the one above</string>
     <string name="prompt_no_account_yet"> "No account yet? Create an Account"</string>
@@ -96,6 +98,8 @@
     <string name="imageevent">imageEvent</string>
     <string name="invalid_number">Invalid Number</string>
     <string name="required">required</string>
+    <string name="session_expired">Session Expired, Please Login</string>
+    <string name="Failed_to_update_profile_pic">Failed to Updated profile picture</string>
 
 
 </resources>

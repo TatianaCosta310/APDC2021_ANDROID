@@ -1,31 +1,34 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
-public class RegisterData   {
+public class RegisterData {
 
-    String name;
-    String password;
-    String email;
-
-
-    public RegisterData(String name, String password, String email){
-
-        this.name = name;
-        this.password = password;
-        this.email = email;
+    private String name, password, email, profilePictureUrl;
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+    public RegisterData() {
     }
 
-
-    public String getUsername(){
+    public String getName() {
         return name;
     }
-
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getPassword() {
         return password;
     }
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
     public String getEmail() {
         return email;
     }
-
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 }

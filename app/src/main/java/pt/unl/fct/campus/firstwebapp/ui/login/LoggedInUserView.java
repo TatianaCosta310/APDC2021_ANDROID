@@ -7,11 +7,13 @@ class LoggedInUserView {
     private String displayName;
     private String token;
     private Object a;
+    private String profile_pic;
     //... other data fields that may be accessible to the UI
 
-    LoggedInUserView(String displayName,String token) {
+    LoggedInUserView(String displayName,String token,String profile_pic) {
         this.displayName = displayName;
         this.token = token;
+        this.profile_pic = profile_pic;
     }
 
     LoggedInUserView(Object a) {
@@ -24,6 +26,7 @@ class LoggedInUserView {
         return displayName;
     }
     String getToken(){return token;}
+    String getProfile_pic(){return  profile_pic;}
 
      Object getObject() {
         return a;

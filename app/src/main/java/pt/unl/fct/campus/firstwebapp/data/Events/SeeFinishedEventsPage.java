@@ -53,7 +53,6 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listviewadapter);
 
-
         text = findViewById(R.id.textListEvents);
 
         text.setText("Finished Events");
@@ -101,7 +100,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
 
                         for (int i = 0; i < list.size(); i++) {
-                            event = gson.fromJson(list.get(0).toString(), EventData2.class);
+                            event = gson.fromJson(list.get(i).toString(), EventData2.class);
                             eventsList.add(event);
                         }
 

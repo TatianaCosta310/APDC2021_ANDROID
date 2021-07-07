@@ -1,15 +1,25 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.ReadChannel;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+//import com.google.auth.oauth2.GoogleCredentials;
+//import com.google.cloud.ReadChannel;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +35,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+//import java.sql.Blob;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +53,10 @@ import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModel;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModelFactory;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
-//import com.google.cloud.storage.BlobId;
-//import com.google.cloud.storage.Storage;
-//import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.StorageOptions;
 
 
 //import com.google.cloud.*;
@@ -188,47 +205,50 @@ public class EventsAdapter extends BaseAdapter {
 
        if(image1 != null) {
 
-           File f = new File(context.getCacheDir(), "blob.png");
+           File f = new File(context.getCacheDir(), event.getName() + ".png");
            try {
                f.createNewFile();
            } catch (IOException ioException) {
                ioException.printStackTrace();
            }
 
+           String [] split = image1.split("/");
 
-/*
-           //String [] split = image1.split("/");
-
-           //String bucket = split[0] + "//" + split[2] + "/" + split[3];
-
-        //  FirebaseStorage storage = FirebaseStorage.getInstance(bucket);
-          // StorageReference storageRef = storage.getReference();
-           //StorageReference httpsReference = storage.getReferenceFromUrl(image1);
+           Storage storage  = StorageOptions.newBuilder()
+                         .setProjectId("daniel1624401699897")
+                       // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
+                         .build()
+                         .getService();
 
 
-           final long ONE_MEGABYTE = 1024 * 1024;
-           httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+           Thread thread = new Thread(new Runnable() {
+
+
                @Override
-               public void onSuccess(byte[] bytes) {
-                   // Data for "images/island.jpg" is returns, use this as needed
-                   String b = "b";
-               }
-           }).addOnFailureListener(new OnFailureListener() {
-               @Override
-               public void onFailure(@NonNull Exception exception) {
-                   // Handle any errors
-                   String b1 = "error";
+               public void run() {
+
+                   try  {
+                       Blob blob = storage.get(BlobId.of("daniel1624401699897", split[4]));
+                       blob.downloadTo(Paths.get(f.toString()));
+
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
                }
            });
 
-*/
+           thread.start();
 
+           byte[] decodedString  = new byte[0];
+           try {
+               decodedString = Files.readAllBytes(f.toPath());
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
 
-           //byte[] decodedString = Base64.decode(image1, Base64.URL_SAFE);
-          // byte[] decodedString = Base64.decode(image1, Base64.DEFAULT);
-           //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+           Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-           //viewHolder.image.setImageBitmap(decodedByte);
+           viewHolder.image.setImageBitmap(decodedByte);
        }
 
 

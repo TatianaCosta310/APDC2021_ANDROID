@@ -58,6 +58,7 @@ import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
+import pt.unl.fct.campus.firstwebapp.data.model.UploadImageFromPhone;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
 
@@ -86,6 +87,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
     private  Calendar cal;
 
     MapsActivity map;
+
+    UploadImageFromPhone uploadImageFromPhone;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,9 +123,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         token = params.getString("token");
         location = params.getString("location");
 
-         cal =  Calendar.getInstance();
+
 
          bitmap = null;
+
+         uploadImageFromPhone = new UploadImageFromPhone();
 
         //eventDateCreation.setPaintFlags(eventDateCreation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         //eventDue.setPaintFlags(eventDue.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -235,7 +240,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                  alerta.setMessage("Event name, goals and description must be filled !");
                  alerta.create().show();
 
-                }else if(!isDataValidDate()){
+               }else if(!isDataValidDate()){
                     alerta.setMessage("Event date, is not valid!");
                     alerta.create().show();
 
@@ -243,7 +248,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                     alerta.setMessage("Event hour, is not valid!");
                     alerta.create().show();
 
-                }else if(isNumVolunteersValid(numVolunteers.getText().toString())){
+                }else if(!isNumVolunteersValid(numVolunteers.getText().toString())){
                     alerta.setMessage("Number of volunteers, is not valid!");
                     alerta.create().show();
 
@@ -252,6 +257,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                     alerta.create().show();
 
                 }else{
+
+                    Bitmap b = bitmap;
                     Gson gson = new Gson();
 
                     EventData e = new EventData();
@@ -277,7 +284,6 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                     String o = gson.toJson(e);
 
                     RequestBody re = RequestBody.create(MediaType.parse("multipart/form-data"), o);
-
 
                      Map<String, RequestBody> map = new HashMap<>();
 
@@ -312,104 +318,15 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                         ioException.printStackTrace();
                     }
 
-                    //encode image to base64 string
-                   /* ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    // Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.id.imageUp);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageBytes = baos.toByteArray();
-                    String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-                    */
-
                     RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), f);
                     map.put("img_cover",fbody);
 
                     eventViewModel.createEvent(token,map);
 
-                //} else {
-                  //  Toast.makeText(CreateEventPage.this, "Invalid must fill everything!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-
-       /* eventViewModel.getEventFormState().observe(this, new Observer<EventFormState>() {
-            @Override
-            public void onChanged(@Nullable EventFormState eventFormState) {
-                if (eventFormState == null) {
-                    return;
-                }
-                createEventButton.setEnabled(eventFormState.isDataValid());
-                if (eventFormState.getName() != null) {
-                    eventName.setError(getString(eventFormState.getName()));
-                }
-                if (eventFormState.getDescription() != null) {
-                    description.setError(getString(eventFormState.getDescription()));
-                }
-
-                if (eventFormState.getGoals() != null) {
-                    goal.setError(getString(eventFormState.getGoals()));
-                }
-                if (eventFormState.getNumVolunteers() != null) {
-                    numVolunteers.setError(getString(eventFormState.getNumVolunteers()));
-                }
-                if (eventFormState.getStartDate() != null) {
-                    eventDateCreation.setError(getString(eventFormState.getStartDate()));
-                }
-
-                if (eventFormState.getFinalDate() != null) {
-                    eventDue.setError(getString(eventFormState.getFinalDate()));
-                }
-                if (eventFormState.getStartHour() != null) {
-                    eventStartHour.setError(getString(eventFormState.getStartHour()));
-                }
-                if (eventFormState.getFinalHour() != null) {
-                    eventFinalHour.setError(getString(eventFormState.getFinalHour()));
-                }
-            }
-        });
-
-
-        TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                Date startDate = null, endDate = null;
-                try {
-                     startDate =new SimpleDateFormat("yyyy-MM-dd").parse(eventDateCreation.getText().toString());
-                     endDate =new SimpleDateFormat("yyyy-MM-dd").parse(eventDue.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
-                eventViewModel.CreateDataChanged(eventName.getText().toString(),
-                        startDate, endDate,eventStartHour.getText().toString(),eventFinalHour.getText().toString(), numVolunteers.getText().toString(),
-                        goal.getText().toString(),description.getText().toString());
-            }
-        };
-
-
-        eventName.addTextChangedListener(afterTextChangedListener);
-        eventDateCreation.addTextChangedListener(afterTextChangedListener);
-        eventDue.addTextChangedListener(afterTextChangedListener);
-        eventStartHour.addTextChangedListener(afterTextChangedListener);
-        eventFinalHour.addTextChangedListener(afterTextChangedListener);
-
-        numVolunteers.addTextChangedListener(afterTextChangedListener);
-        goal.addTextChangedListener(afterTextChangedListener);
-        description.addTextChangedListener(afterTextChangedListener);
-*/
     }
 
     public boolean isDataValidText() {
@@ -470,6 +387,7 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
     private boolean isStartDayValid(Date day) {
 
+        cal =  Calendar.getInstance();
 
         if(day == null)
             return false;
@@ -517,6 +435,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
     public void doCalendarSelection(DatePickerDialog.OnDateSetListener mDateSetListener){
 
+        cal =  Calendar.getInstance();
+
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -532,6 +452,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
 
     }
+
+
 
     public void Upload(View v) {
 
@@ -577,11 +499,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                     }
                 }
-
             }
         }
 
     }
+
 
     public void verifyPermission(Activity activity) {
 
@@ -592,7 +514,6 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
         }
     }
-
 
     public void  openIntent(){
 

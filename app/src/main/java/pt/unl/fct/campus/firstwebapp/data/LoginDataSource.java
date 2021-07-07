@@ -2,7 +2,9 @@ package pt.unl.fct.campus.firstwebapp.data;
 
 import android.app.Application;
 
+import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
@@ -14,6 +16,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -45,6 +48,14 @@ public class LoginDataSource extends Application {
             Response<LoginData> response = userAuthenticatedCall.execute();
 
             ExecuteService executeService = new ExecuteService();
+
+
+            if (!response.isSuccessful()){
+                int errorCode=response.code();
+
+                if(errorCode==401)
+                    return new Result.Error(new Exception("401"));
+            }
 
             return executeService.ExecuteService(response);
 
@@ -78,8 +89,10 @@ public class LoginDataSource extends Application {
 
     public Result<RegisterData> register(String name, String password, String email) {
 
-        RegisterData data = new RegisterData(name,password,email);
-
+        RegisterData data = new RegisterData();
+        data.setEmail(email);
+        data.setName(name);
+        data.setPassword(password);
 
         Call<Void> registrate = service.register(data);
 
@@ -89,6 +102,14 @@ public class LoginDataSource extends Application {
             Response<Void> response = registrate.execute();
 
             ExecuteService executeService = new ExecuteService();
+
+            if(!response.isSuccessful()){
+                int code=response.code();
+
+                if (code==409)
+                    return new Result.Error(new Exception("409"));
+            }
+
 
             return executeService.ExecuteServiceRegister(response);
 
@@ -109,6 +130,12 @@ public class LoginDataSource extends Application {
 
             ExecuteService executeService = new ExecuteService();
 
+            int errorCode=response.code();
+
+            if(errorCode==401)
+                return new Result.Error(new Exception("401"));
+
+
             return executeService.ExecuteServiceUpdateInfo(response);
 
         } catch (Exception e) {
@@ -117,6 +144,23 @@ public class LoginDataSource extends Application {
         }
     }
 
+
+    public Result<String> updateProfilePicture(String token, Map<String, RequestBody> map) {
+
+        Call<String> userAuthenticatedCall = service.updateProfilePicture(token,map);
+        try {
+
+            Response<String> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceupdateProfilePicture(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error Creating Event", e));
+        }
+    }
 
     public Result<AdditionalAttributes> getInfos(String token) {
 
@@ -128,6 +172,10 @@ public class LoginDataSource extends Application {
             Response<AdditionalAttributes> response = updateInfos.execute();
 
             ExecuteService executeService = new ExecuteService();
+
+            int errorCode=response.code();
+            if(errorCode==404)
+                return new Result.Error(new Exception("404"));
 
             return executeService.ExecuteServiceGetInfo(response);
 
@@ -156,6 +204,7 @@ public class LoginDataSource extends Application {
             return new Result.Error(new IOException("Error Removing Account", e));
         }
     }
+
 
 
 }

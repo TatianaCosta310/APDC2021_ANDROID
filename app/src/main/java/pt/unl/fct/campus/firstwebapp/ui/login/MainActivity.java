@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+
 public class MainActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
+
+
 
     loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
             .get(LoginViewModel.class);
@@ -152,11 +156,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(model != null){
 
-            String b = model.getDisplayName();
-            String a = model.getToken();
 
             Bundle params = new Bundle();
             params.putString("token", model.getToken());
+            params.putString("profile_pic",model.getProfile_pic());
 
             intent.putExtras(params);
         }

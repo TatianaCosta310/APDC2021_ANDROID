@@ -31,7 +31,8 @@ public class ExecuteService extends Application {
 
                 LoginData data = new LoginData(ua.getUsername(),ua.password);
                 data.setToken(token);
-                //data.setProfilePicUrl(ua.getProfilePicUrl());
+                data.setProfilePicUrl(ua.getProfilePicUrl()); // da null :/
+                
 
                 return new Result.Success<>(data);
             }
@@ -57,6 +58,12 @@ public class ExecuteService extends Application {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
+    public Result<String> ExecuteServiceupdateProfilePicture(Response<String> response) {
+        if (response.isSuccessful()) {
+            return new Result.Success<>("Success");
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+    }
 
     public Result<AdditionalAttributes> ExecuteServiceGetInfo(Response<AdditionalAttributes> response) {
 
@@ -126,4 +133,6 @@ public class ExecuteService extends Application {
         }
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
+
+
 }
