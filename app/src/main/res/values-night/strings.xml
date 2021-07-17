@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Your_name_is">Your name is</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="invalide_code">Invalide Code</string>
+</resources>

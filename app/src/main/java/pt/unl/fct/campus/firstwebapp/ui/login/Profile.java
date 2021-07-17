@@ -59,12 +59,12 @@ public class Profile extends AppCompatActivity implements StoragePics {
 
         final Button updatePorfile = findViewById(R.id.editProfileTxt);
         final Button getEventsLibrary = findViewById(R.id.button4);
-        final ImageButton changeprofilePic=findViewById(R.id.buttoncamera);
 
         image = findViewById(R.id.imageProfilePic);
         imagePicButton = findViewById(R.id.button5);
 
 
+        image.setVisibility(View.INVISIBLE);
         imagePicButton.setVisibility(View.INVISIBLE);
 
         Intent oldIntent = getIntent();
@@ -163,9 +163,10 @@ public class Profile extends AppCompatActivity implements StoragePics {
 
                     LoggedInUserView model = loginResult.getSuccess();
                     showMessage("Profile Pic Updated");
-                    // atribs =  (AdditionalAttributes) model.getObject();
 
-                    //putInfos(atribs);
+                    image.setVisibility(View.INVISIBLE);
+                    imagePicButton.setVisibility(View.INVISIBLE);
+
                 }
 
 
@@ -242,6 +243,7 @@ public class Profile extends AppCompatActivity implements StoragePics {
                             e.printStackTrace();
                         }
 
+                        image.setVisibility(View.VISIBLE);
                         image.setImageBitmap(bitmap);
 
                     }

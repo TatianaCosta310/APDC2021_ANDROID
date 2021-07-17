@@ -28,6 +28,11 @@ import pt.unl.fct.campus.firstwebapp.R;
 public class Register  extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    private Bundle params;
+     EditText usernameEditText;
+     EditText passwordEditText;
+     EditText confirmPasswordEditText;
+     EditText emailEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,13 +42,15 @@ public class Register  extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = findViewById(R.id.username2);
-        final EditText passwordEditText = findViewById(R.id.password21);
-        final EditText confirmPasswordEditText = findViewById(R.id.password23);
-        final EditText emailEditText = findViewById(R.id.email);
+       usernameEditText = findViewById(R.id.username2);
+         passwordEditText = findViewById(R.id.password21);
+         confirmPasswordEditText = findViewById(R.id.password23);
+       emailEditText = findViewById(R.id.email);
 
         final Button nextOptionsButton = findViewById(R.id.next);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading2);
+
+        params = new Bundle();
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -71,7 +78,7 @@ public class Register  extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+       loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
                 if (loginResult == null) {
@@ -85,18 +92,10 @@ public class Register  extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     openNextOptionalPage();
-
-                    /*updateUiWithUser(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString(),
-                            confirmPasswordEditText.getText().toString(),
-                            emailEditText.getText().toString());*/
-
-
+                    setResult(Activity.RESULT_OK);
                 }
-                setResult(Activity.RESULT_OK);
 
-                //Complete and destroy login activity once successful
-                //finish();
+
             }
         });
 
@@ -124,7 +123,7 @@ public class Register  extends AppCompatActivity {
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         confirmPasswordEditText.addTextChangedListener(afterTextChangedListener);
 
-        confirmPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+     /*   confirmPasswordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -136,13 +135,16 @@ public class Register  extends AppCompatActivity {
                 return false;
             }
         });
-
+*/
         nextOptionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openNextOptionalPage();
 
-                loginViewModel.registrate(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString(), emailEditText.getText().toString());
+
+                loginViewModel.sendVerificationCode(emailEditText.getText().toString());
+              //  loginViewModel.registrate(usernameEditText.getText().toString(),
+                //        passwordEditText.getText().toString(), emailEditText.getText().toString());
 
             }
         });
@@ -151,7 +153,13 @@ public class Register  extends AppCompatActivity {
 
     public void  openNextOptionalPage( ){
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Register2VerificationCode.class);
+
+        params.putString("username", usernameEditText.getText().toString());
+        params.putString("email", emailEditText.getText().toString());
+        params.putString("password", passwordEditText.getText().toString());
+
+        intent.putExtras(params);
 
         startActivity(intent);
 

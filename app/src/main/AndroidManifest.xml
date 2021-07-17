@@ -41,6 +41,7 @@
         <!-- android:value="@string/google_maps_key" /> -->
         <activity android:name=".ui.login.Main_Page" />
         <activity android:name=".ui.login.Register" />
+        <activity android:name=".ui.login.Register2VerificationCode"/>
         <activity android:name=".ui.login.RegisterOptional2" />
         <activity android:name=".ui.login.Profile" />
         <activity

@@ -1,21 +1,39 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
+import android.webkit.CookieManager;
+import android.webkit.ValueCallback;
+import android.webkit.WebView;
+
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.common.api.Api;
 import com.google.gson.JsonObject;
 
 
 import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieStore;
+import java.net.HttpCookie;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Cookie;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.UserService;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Url;
 
 public class EventDataSource {
 
@@ -44,6 +62,14 @@ public class EventDataSource {
 
             ExecuteService executeService = new ExecuteService();
 
+            if (!response.isSuccessful()){
+                int errorCode=response.code();
+
+                if(errorCode==401)
+                    return new Result.Error(new Exception("401"));
+            }
+
+
             return executeService.ExecuteServiceCreateEvent(response);
 
         } catch (Exception e) {
@@ -70,9 +96,17 @@ public class EventDataSource {
         }
     }
 
-    public Result<List<JsonObject>> seeEvents(String value, String token) {
+    public Result<List<JsonObject>> seeEvents(String value, String token, UpcomingEventsArgs upcomingEventsArgs)  {
 
-        Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(value );
+        Cookie cookie = new Cookie.Builder()
+                .value(token)
+                .name("Cookie")
+                .domain("appspot.com")
+                .path("/")
+                .build();
+
+
+        Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(value,  upcomingEventsArgs);
         try {
 
             Response<List<JsonObject>> response = userAuthenticatedCall.execute();

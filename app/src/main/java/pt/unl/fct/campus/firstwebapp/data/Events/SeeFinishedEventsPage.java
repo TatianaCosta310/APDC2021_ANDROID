@@ -1,12 +1,10 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -48,10 +45,15 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
     Intent oldIntent;
 
+    Bundle savedInstanceState;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        this.savedInstanceState = savedInstanceState;
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listviewadapter);
+        /*setContentView(R.layout.listviewadapter);
 
         text = findViewById(R.id.textListEvents);
 
@@ -91,7 +93,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
                         /*AlertDialog.Builder alert = new AlertDialog.Builder(SeeFinishedEventsPage.this);
                         alert.setTitle("no events");
                         alert.setMessage("There aren't finished Events  yet ");
-*/
+
                     } else {
 
                         Gson gson = new Gson();
@@ -124,7 +126,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,this,this,events,R.layout.finished_events,token,oldIntent);
+        adapter = new EventsAdapter( savedInstanceState,false,this,this,this,events,R.layout.finished_events,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -133,7 +135,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
                 Toast.makeText(SeeFinishedEventsPage.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     }

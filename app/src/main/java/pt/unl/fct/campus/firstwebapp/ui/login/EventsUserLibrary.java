@@ -32,8 +32,7 @@ public class EventsUserLibrary extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     AdditionalAttributes atribs;
-
-
+    Bundle bundleExtra;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +40,21 @@ public class EventsUserLibrary extends AppCompatActivity {
 
         setContentView(R.layout.events_library);
 
-        Intent oldIntent = getIntent();
-        Bundle bundleExtra = oldIntent.getExtras();
 
-        String token = bundleExtra.getString("token");
+        String token = null;
+
+        Intent oldIntent = getIntent();
+         bundleExtra = new Bundle();
+
+        if(oldIntent != null) {
+            bundleExtra = oldIntent.getExtras();
+
+            if(bundleExtra != null)
+            token = bundleExtra.getString("token");
+        }
+
+
+
 
         participateNum = findViewById(R.id.textViewParticipatingNumber);
         creatednum = findViewById(R.id.textViewCreatedNumber);
@@ -72,7 +82,7 @@ public class EventsUserLibrary extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
 
-        loginViewModel.getInfos(token);
+        //loginViewModel.getInfos(token,userid); have to get userId as long value????
 
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
 

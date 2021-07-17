@@ -72,10 +72,17 @@ public class LoginRepository {
         return result;
     }
 
-    public Result<RegisterData> register(String name, String password,String email) {
+    public Result<RegisterData> register(RegisterData data, String verification_code) {
 
 
-        Result<RegisterData> result = dataSource.register(name, password,email);
+        Result<RegisterData> result = dataSource.register(data,verification_code);
+
+        return result;
+    }
+
+    public Result<RegisterData> sendVerificationCode(String email) {
+
+        Result<RegisterData> result = dataSource.sendVerificationCode(email);
 
         return result;
     }
@@ -95,20 +102,20 @@ public class LoginRepository {
         return result;
     }
 
-    public Result<AdditionalAttributes> getInfos(String token) {
+    public Result<AdditionalAttributes> getInfos(String token,String userid) {
 
-        Result<AdditionalAttributes> result = dataSource.getInfos(token);
+        Result<AdditionalAttributes> result = dataSource.getInfos(token,userid);
 
         return result;
     }
 
-    public Result<LoginData> removeAccount(String token,String password) {
+    public Result<String> removeAccount(String token,String password) {
 
 
-        Result<LoginData> result = dataSource.removeAccount(token,password);
-        if (result instanceof Result.Success) {
+        Result<String> result = dataSource.removeAccount(token,password);
+      /*  if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoginData>) result).getData());
-        }
+        }*/
 
         return result;
     }

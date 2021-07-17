@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/textShowEvent"
+        style="@style/text_box_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="Event name"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColorHighlight="#4d4d4d"
+        android:textSize="34sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/imageEvent"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="92dp"
-        android:contentDescription="@string/imageevent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
         app:srcCompat="@drawable/no_image" />
 
     <TextView
@@ -22,9 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/created_by"
+        android:text="Created by"
         android:textSize="22sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="275dp"
         android:layout_marginEnd="24dp"
         android:text="Owner"
         android:textSize="16sp"
@@ -43,31 +56,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textOwner1" />
 
-    <TextView
-        android:id="@+id/textName1"
-        android:textColor="@color/teal_700"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="305dp"
-        android:layout_marginEnd="24dp"
-        android:text="Event Name"
-        android:textSize="22sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textOwner"/>
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="330dp"
-        android:layout_marginEnd="24dp"
-        android:text="name"
-        android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textName1"/>
 
     <TextView
         android:id="@+id/textDescription1"
@@ -78,7 +66,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="24dp"
         android:textSize="22sp"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textName1" />
@@ -91,7 +79,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="24dp"
         android:textSize="16sp"
-        android:layout_marginTop="390dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDescription1" />
@@ -106,7 +94,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="24dp"
         android:textSize="18sp"
-        android:layout_marginTop="480dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDescription"/>
@@ -119,11 +107,25 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="24dp"
         android:textSize="16sp"
-        android:layout_marginTop="515dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Where1"/>
 
+
+    <Button
+        android:id="@+id/ButtonShowOnMap"
+        style="@style/text_box_style"
+        android:layout_width="130dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:text="Show On Map"
+        android:onClick="showOnMap"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Where1" />
 
     <TextView
         android:id="@+id/When1"
@@ -133,7 +135,7 @@
         android:text="When"
         android:layout_marginStart="20dp"
         android:textSize="18sp"
-        android:layout_marginTop="570dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ButtonShowOnMap"/>
@@ -145,7 +147,7 @@
         android:text="When"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
-        android:layout_marginTop="600dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ButtonShowOnMap"/>
@@ -159,7 +161,7 @@
         android:text="Until"
         android:layout_marginStart="20dp"
         android:textSize="18sp"
-        android:layout_marginTop="630dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/When"/>
@@ -172,7 +174,7 @@
         android:text="Until"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
-        android:layout_marginTop="650dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Until1"/>
@@ -185,7 +187,7 @@
         android:text="Max Volunteers"
         android:layout_marginStart="20dp"
         android:textSize="18sp"
-        android:layout_marginTop="690dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Until"/>
@@ -194,10 +196,10 @@
         android:id="@+id/maxVolunt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/maxvolunt"
+        android:text="maxVolunt"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
-        android:layout_marginTop="710dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maxVolunt1"/>
@@ -208,10 +210,10 @@
         android:textColor="@color/teal_700"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/interested"
+        android:text="Interested"
         android:layout_marginStart="20dp"
         android:textSize="18sp"
-        android:layout_marginTop="740dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maxVolunt"/>
@@ -221,26 +223,13 @@
         android:id="@+id/interested"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/interested"
+        android:text="Interested"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maxVolunt"/>
-
-    <Button
-        android:id="@+id/ButtonShowOnMap"
-        style="@style/text_box_style"
-        android:layout_width="130dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="540dp"
-        android:textSize="15dp"
-        android:text="@string/show_on_map"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Where" />
 
     <Button
         android:id="@+id/ButtonDoParticipate"
@@ -248,7 +237,7 @@
         android:layout_width="130dp"
         android:layout_height="38dp"
         android:layout_marginStart="120dp"
-        android:layout_marginTop="800dp"
+        android:layout_marginTop="20dp"
         android:text="@string/participate"
         android:textSize="15dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -256,9 +245,69 @@
         app:layout_constraintTop_toBottomOf="@id/interested" />
 
 
+    <TextView
+        android:id="@+id/textShowComments"
+        style="@style/text_box_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="Comments"
+        android:textAlignment="center"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColorHighlight="#4d4d4d"
+        android:textSize="34sp"
+        android:textStyle="bold" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/CommentText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:inputType="text"
+        android:hint=" Write Comment"/>
 
 
+    <Button
+        android:id="@+id/ButtonAddComments"
+        style="@style/text_box_style"
+        android:layout_width="160dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="20dp"
+        android:onClick="AddComment"
+        android:text="Add Comment"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/CommentText"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAlignment="center"/>
 
+
+    <Button
+        android:id="@+id/ButtonShowOnComments"
+        style="@style/text_box_style"
+        android:layout_width="180dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:text="Load Comments"
+        android:onClick="Comments"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ButtonAddComments" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</LinearLayout>
+</ScrollView>

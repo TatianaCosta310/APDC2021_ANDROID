@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,14 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
 
 public class EventViewModel extends ViewModel {
@@ -79,10 +76,18 @@ public class EventViewModel extends ViewModel {
 
                 if (result instanceof Result.Success) {
 
-                    JsonObject a = new JsonObject();
+                    JsonObject a = ((Result.Success<JsonObject>) result).getData();
+
+
                     eventResult.postValue(new EventResult(new EventCreatedView(a)));
                 } else {
-                    eventResult.postValue(new EventResult(R.string.Failed_Create_Event));
+
+                    String error = result.toString();
+
+                    if (error.equals("Error[exception=java.lang.Exception: 401]"))
+                        eventResult.postValue(new EventResult(R.string.session_invalid));
+
+                   else eventResult.postValue(new EventResult(R.string.Failed_Create_Event));
                 }
 
             }
@@ -90,13 +95,18 @@ public class EventViewModel extends ViewModel {
     }
 
 
-    public void seeEvent(String value,String token,String actual) {
+    public void seeEvent(String value, String token, String actual, UpcomingEventsArgs upcomingEventsArgs) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
 
-                Result<List<JsonObject>> result = eventRepository.seeEvents(value,token,actual);
+                Result<List<JsonObject>> result = null;
+                try {
+                    result = eventRepository.seeEvents(value,token,actual,upcomingEventsArgs);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
 
                 if (result instanceof Result.Success) {
                     List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
@@ -112,7 +122,7 @@ public class EventViewModel extends ViewModel {
 
     public void getMyEvents(String token, String token1, String b) {
 
-        executor.execute(new Runnable() {
+       /* executor.execute(new Runnable() {
             @Override
             public void run() {
 
@@ -126,17 +136,17 @@ public class EventViewModel extends ViewModel {
                 }
 
             }
-        });
+        });*/
     }
 
 
     public void getParticipatingEvents(String token, String token1, String participating) {
 
-        executor.execute(new Runnable() {
+         /* executor.execute(new Runnable() {
             @Override
             public void run() {
 
-                Result<List<JsonObject>> result = eventRepository.seeEvents(token,token1,participating);
+              Result<List<JsonObject>> result = eventRepository.seeEvents(token,token1,participating);
 
                 if (result instanceof Result.Success) {
                     List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
@@ -146,7 +156,7 @@ public class EventViewModel extends ViewModel {
                 }
 
             }
-        });
+        });*/
     }
 
     public void participate(String token, long eventId) {

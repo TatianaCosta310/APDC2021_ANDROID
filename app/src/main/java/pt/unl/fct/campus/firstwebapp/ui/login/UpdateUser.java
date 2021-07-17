@@ -62,7 +62,7 @@ public class UpdateUser extends AppCompatActivity {
             token = bundleExtra.getString("token");
         }
 
-        loginViewModel.getInfos(token);
+        //loginViewModel.getInfos(token,userid); have to get userId as long value????
 
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
 

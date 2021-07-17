@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
 public class EventRepository extends AppCompatActivity {
 
@@ -50,13 +52,13 @@ public class EventRepository extends AppCompatActivity {
         return result;
     }
 
-    public Result<List<JsonObject>> seeEvents(String value, String token,String actual) {
+    public Result<List<JsonObject>> seeEvents(String value, String token, String actual, UpcomingEventsArgs upcomingEventsArgs) throws MalformedURLException {
 
 
         Result<List<JsonObject> > result = null;
 
         if(actual.equals("actual")){
-            result = dataSource.seeEvents(value, token);
+            result = dataSource.seeEvents(value, token, upcomingEventsArgs);
         }else if(actual.equals("finished")){
             result = dataSource.seeFinishedEvents(value, token);
         }else if(actual.equals("mine")){

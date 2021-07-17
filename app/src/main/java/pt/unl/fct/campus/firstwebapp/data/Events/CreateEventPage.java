@@ -95,6 +95,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
 
+
+
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
 
@@ -123,41 +125,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         token = params.getString("token");
         location = params.getString("location");
 
-
-
          bitmap = null;
 
          uploadImageFromPhone = new UploadImageFromPhone();
 
-        //eventDateCreation.setPaintFlags(eventDateCreation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        //eventDue.setPaintFlags(eventDue.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-
-        eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
-
-            @Override
-            public void onChanged(@Nullable EventResult eventResult) {
-                if (eventResult == null) {
-                    return;
-                }
-
-                if (eventResult.getError() != null) {
-                    showCreateFailed(eventResult.getError());
-                }
-                if (eventResult.getSuccess() != null) {
-
-                   openIntent();
-
-                    //setResult(Activity.RESULT_OK);
-                }
-
-
-             //   finish();
-            }
-        });
-
-
-        eventDateCreation.setOnClickListener(v -> {
+         eventDateCreation.setOnClickListener(v -> {
 
            doCalendarSelection(mDateSetListenerStart);
 
@@ -230,7 +202,6 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         });
 
 
-
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,13 +229,11 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
                 }else{
 
-                    Bitmap b = bitmap;
                     Gson gson = new Gson();
 
                     EventData e = new EventData();
 
                     // Create the Event object
-                  //  Long v1 = new Long(30);
                     Long vol = Long.valueOf(numVolunteers.getText().toString());
 
 
@@ -327,6 +296,26 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
             }
         });
 
+        eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
+
+            @Override
+            public void onChanged(@Nullable EventResult eventResult) {
+                if (eventResult == null) {
+                    return;
+                }
+
+                if (eventResult.getError() != null) {
+                    showCreateFailed(eventResult.getError());
+                }
+                if (eventResult.getSuccess() != null) {
+
+                    openIntent();
+
+                }
+
+            }
+        });
+
     }
 
     public boolean isDataValidText() {
@@ -371,9 +360,10 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
         if(num.isEmpty() || num == null) {
             return false;
 
-        }else if(Long.valueOf(num) == 0) {
+        }else if( num.charAt(0) == '0' ||Long.valueOf(num) == 0) {
             return false;
         }
+
 
         return  true;
     }
@@ -398,6 +388,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
 
         c1.setTime(day);
         c2.setTime(cal.getTime());
+
+
 
         int yearDiff = c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR);
         int monthDiff = c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH);
@@ -516,6 +508,10 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
     }
 
     public void  openIntent(){
+
+
+        alerta.setMessage("Event Created whith Success!");
+        alerta.create().show();
 
         Intent intent = new Intent(this , Main_Page.class);
 

@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.FirebaseApp;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -46,12 +45,15 @@ public class MyEvents  extends AppCompatActivity {
 
     Intent oldIntent;
 
+    Bundle savedInstanceState;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        this.savedInstanceState = savedInstanceState;
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.listviewadapter);
+     /*   setContentView(R.layout.listviewadapter);
 
 
         text = findViewById(R.id.textListEvents);
@@ -85,7 +87,8 @@ public class MyEvents  extends AppCompatActivity {
 
                     List<JsonObject> list = model.getEventsList();
 
-                    if (list.size() == 0) {
+
+                  if (list.size() == 0) {
                         //alerta a dizer que nao existem Eventos criados pelo usuario!
                         AlertDialog.Builder alert = new AlertDialog.Builder(MyEvents.this);
                         alert.setTitle("no events");
@@ -118,7 +121,7 @@ public class MyEvents  extends AppCompatActivity {
 
         listView = findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,this,this,events,R.layout.myevents,token,oldIntent);
+        adapter = new EventsAdapter( savedInstanceState,false,this,this,this,events,R.layout.myevents,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,7 +130,7 @@ public class MyEvents  extends AppCompatActivity {
 
                 Toast.makeText(MyEvents.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
 }

@@ -15,16 +15,20 @@ class LoginFormState {
     @Nullable
     private Integer passwordError;
 
-    private boolean isDataValid;
+    private boolean isDataValid,isCodeValid;
 
     @Nullable
     private Integer confirmPassError;
 
-    LoginFormState(@Nullable Integer usernameError, @Nullable Integer passwordError, @Nullable Integer confirmPassError,@Nullable Integer name) {
+    @Nullable
+    private Integer verification_code;
+
+    LoginFormState(@Nullable Integer usernameError, @Nullable Integer passwordError, @Nullable Integer confirmPassError,@Nullable Integer name,@Nullable Integer verification_code) {
         this.usernameError = usernameError;
         this.passwordError = passwordError;
         this.confirmPassError = confirmPassError;
         this.name = name;
+        this.verification_code = verification_code;
         this.isDataValid = false;
     }
 
@@ -34,6 +38,12 @@ class LoginFormState {
         this.confirmPassError = null;
         this.name = null;
         this.isDataValid = isDataValid;
+    }
+
+    LoginFormState(boolean isCodeValid, String a) {
+
+        this.verification_code = null;
+        this.isCodeValid = isCodeValid;
     }
 
     @Nullable
@@ -52,7 +62,14 @@ class LoginFormState {
     @Nullable
     Integer getname(){return name;}
 
+    @Nullable
+    Integer getVerification_code(){return verification_code;}
+
     boolean isDataValid() {
         return isDataValid;
+    }
+
+    boolean isCodeValid() {
+        return isCodeValid;
     }
 }

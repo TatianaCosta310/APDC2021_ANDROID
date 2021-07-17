@@ -1,8 +1,16 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
+
 public class RegisterData {
 
-    private String name, password, email, profilePictureUrl;
+    private String name, password, email, profilePictureUrl, vcode;
+
+    public String getVcode() {
+        return vcode;
+    }
+    public void setVcode(String vcode) {
+        this.vcode = vcode;
+    }
     public String getProfilePictureUrl() {
         return profilePictureUrl;
     }
@@ -11,7 +19,6 @@ public class RegisterData {
     }
     public RegisterData() {
     }
-
     public String getName() {
         return name;
     }

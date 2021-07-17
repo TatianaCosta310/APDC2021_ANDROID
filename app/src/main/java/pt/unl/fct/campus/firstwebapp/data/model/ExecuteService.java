@@ -29,9 +29,9 @@ public class ExecuteService extends Application {
 
                 String token = response.headers().get("Set-Cookie");
 
-                LoginData data = new LoginData(ua.getUsername(),ua.password);
+                LoginData data = new LoginData(ua.getEmail(),ua.password);
                 data.setToken(token);
-                data.setProfilePicUrl(ua.getProfilePicUrl()); // da null :/
+                data.setProfilePictureURL(ua.getProfilePictureURL());
                 
 
                 return new Result.Success<>(data);
@@ -84,7 +84,7 @@ public class ExecuteService extends Application {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
-    public Result<LoginData> ExecuteServiceLRemoveAccount(Response<Void> response) {
+    public Result<String> ExecuteServiceLRemoveAccount(Response<Void> response) {
 
         if (response.isSuccessful()) {
             return new Result.Success<>("Success, Account Removed");

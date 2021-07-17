@@ -3,9 +3,12 @@ package pt.unl.fct.campus.firstwebapp.data.model;
 import com.google.gson.JsonObject;
 
 
+import java.net.CookieHandler;
+import java.net.HttpCookie;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Cookie;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,7 +36,11 @@ public interface UserService {
    Call<Void> logoutUser();
 
    @POST("rest/login/op1")
-   Call<Void> register(@Body RegisterData data);
+   Call<Void> register(@Body RegisterData data,@Header("vrfcck") String serverVcode);
+
+    @Headers({"Content-Type: application/json","Accept: application/json"})
+    @GET("rest/login/vcd/{email}")
+    Call<Void> verification_code(@Path("email") String email, @Query("n") String newUser);
 
    @POST("rest/login/op3")
    Call<Void> updateInfos(@Header("Cookie") String value,@Body AdditionalAttributes atributs);
@@ -43,8 +50,8 @@ public interface UserService {
     @POST("rest/login/savep")
     Call<String> updateProfilePicture(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
 
-   @GET("rest/login/infos")
-   Call<AdditionalAttributes> getInfos(@Header("Cookie") String value);
+   @GET("rest/login/infos/{userid}")
+   Call<AdditionalAttributes> getInfos(@Header("Cookie") String value,@Path(value = "userid") String userid);
 
 
    @FormUrlEncoded
@@ -64,9 +71,10 @@ public interface UserService {
     @DELETE("rest/events/delete/{eventId}")
     Call<Void>  doRemoveEvent(@Path(value = "eventId") String eventId, @Header("Cookie") String token);
 
-    @Headers({"Content-Type: application/json","Accept: application/json"})
-    @GET("rest/events/view")
-    Call<List<JsonObject>> seeEvents(@Header("Cookie") String value);
+
+    @POST("rest/events/view")
+    Call<List<JsonObject>> seeEvents(@Header("crsck") String value,
+                                     @Body UpcomingEventsArgs upcomingEventsArgs);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/view/finished")
@@ -94,5 +102,6 @@ public interface UserService {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/event/{eventId}")
     Call< JsonObject> getEvent(@Path("eventId") long eventid,@Header("Cookie") String token);
+
 
 }

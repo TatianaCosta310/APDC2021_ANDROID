@@ -17,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="32dp"
-        android:fontFamily="cursive"
         android:paddingVertical="70dp"
         android:text="@string/action_update_user"
         android:textAlignment="center"

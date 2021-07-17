@@ -24,7 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -162,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
 
         if(model != null){
-
 
             Bundle params = new Bundle();
             params.putString("token", model.getToken());

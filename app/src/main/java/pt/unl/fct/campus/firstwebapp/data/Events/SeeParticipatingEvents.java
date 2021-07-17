@@ -45,12 +45,16 @@ public class SeeParticipatingEvents extends AppCompatActivity {
 
     Intent oldIntent;
 
+    Bundle savedInstanceState;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        this.savedInstanceState = savedInstanceState;
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.listviewadapter);
+     /*   setContentView(R.layout.listviewadapter);
 
 
         text = findViewById(R.id.textListEvents);
@@ -117,7 +121,7 @@ public class SeeParticipatingEvents extends AppCompatActivity {
 
         listView = findViewById(R.id.listViewEvents);
 
-        adapter = new EventsAdapter(this,this,this,events,R.layout.participating_events,token,oldIntent);
+        adapter = new EventsAdapter( savedInstanceState,null,this,this,this,events,R.layout.participating_events,token,oldIntent);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,7 +130,7 @@ public class SeeParticipatingEvents extends AppCompatActivity {
 
                 Toast.makeText(SeeParticipatingEvents.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
 }

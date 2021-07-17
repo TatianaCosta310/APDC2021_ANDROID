@@ -34,12 +34,13 @@ import java.nio.file.Paths;
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeFinishedEventsPage;
 import retrofit2.http.PartMap;
 
-public class Main_Page extends AppCompatActivity {
+public class Main_Page extends AppCompatActivity implements Constantes {
 
 
     ImageButton openOptionsMenu;
@@ -83,50 +84,54 @@ public class Main_Page extends AppCompatActivity {
 
 
             String[] split = profilePic.split("/");
-            String imageName = split[4];
 
-            File f = new File(Main_Page.this.getCacheDir(), imageName + ".png");
-            try {
-                f.createNewFile();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            if(split.length == 4) {
+                String imageName = split[4];
 
-
-            Storage storage = StorageOptions.newBuilder()
-                    .setProjectId("daniel1624401699897")
-                    // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
-                    .build()
-                    .getService();
-
-            Thread thread = new Thread(new Runnable() {
-
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public void run() {
-
-                    try {
-                        Blob blob = storage.get(BlobId.of("daniel1624401699897", imageName));
-                        blob.downloadTo(Paths.get(f.toString()));
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                File f = new File(Main_Page.this.getCacheDir(), imageName + ".png");
+                try {
+                    f.createNewFile();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                 }
-            });
 
-            thread.start();
+                Storage storage = StorageOptions.newBuilder()
+                        .setProjectId(BLOB_PIC_ID_PROJECT)
+                        // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
+                        .build()
+                        .getService();
 
-            byte[] decodedString = new byte[0];
-            try {
-                decodedString = Files.readAllBytes(f.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
+                Thread thread = new Thread(new Runnable() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run() {
+
+                        try {
+                            Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
+                            blob.downloadTo(Paths.get(f.toString()));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                thread.start();
+
+
+                byte[] decodedString = new byte[0];
+                try {
+                    decodedString = Files.readAllBytes(f.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                image.setImageBitmap(decodedByte);
             }
 
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-            image.setImageBitmap(decodedByte);
         }
 
     loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
@@ -169,7 +174,9 @@ public class Main_Page extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                openProfilePage(MapsActivity.class);
+
+               params.putString("Page","CreateEvents");
+               openProfilePage(MapsActivity.class);
         }
         });
 
@@ -178,7 +185,8 @@ public class Main_Page extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                openProfilePage(SeeEventsPage.class);
+                params.putString("Page","SeeEvents");
+                openProfilePage(MapsActivity.class);
             }
         });
 
@@ -196,6 +204,7 @@ public class Main_Page extends AppCompatActivity {
         Intent intent = new Intent(this , c);
 
         if(params != null){
+            params.remove("Next_Null");
             intent.putExtras(params);
     } else {
         params = new Bundle();

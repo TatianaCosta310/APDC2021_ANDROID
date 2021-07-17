@@ -102,6 +102,10 @@
     <string name="Failed_to_update_profile_pic">Failed to Updated profile picture</string>
     <string name="About_Us">About us</string>
     <string name="Logo_Text">The Gap is Closable</string>
+    <string name="session_invalid">Session Invalid</string>
+    <string name="Your_name_is">Your name is</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="invalide_code">Invalide Code</string>
 
 
 </resources>

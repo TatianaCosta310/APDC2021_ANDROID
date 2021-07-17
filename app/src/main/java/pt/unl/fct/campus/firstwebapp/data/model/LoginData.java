@@ -3,26 +3,24 @@ package pt.unl.fct.campus.firstwebapp.data.model;
 
 public class LoginData {
 
-    String email;
-    String password;
-    String token;
-    String profilePicUrl;
+    String name, email, profilePictureURL,password,token;
 
+    public String getProfilePictureURL() {
+        return profilePictureURL;
+    }
 
-    public LoginData(String email, String password ){
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
+    }
+
+    public LoginData(String email,String password) {
         this.email = email;
         this.password = password;
 
     }
 
+    public LoginData() {
 
-
-    public String getUsername(){
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
 
@@ -30,17 +28,23 @@ public class LoginData {
         this.token = token;
     }
 
-    public String getToken() {
+    public String getToken(){
         return token;
     }
 
-    public void setProfilePicUrl(String url){
-        profilePicUrl = url;
-
+    public String getName() {
+        return name;
     }
 
-    public String getProfilePicUrl(){
-        return profilePicUrl;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

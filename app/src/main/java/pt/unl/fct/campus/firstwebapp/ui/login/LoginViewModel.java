@@ -60,7 +60,7 @@ public class LoginViewModel extends ViewModel {
 
                 if (result instanceof Result.Success) {
                     LoginData data = ((Result.Success<LoginData>) result).getData();
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken(),data.getProfilePicUrl())));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getEmail(),data.getToken(),data.getProfilePictureURL())));
                 } else {
 
                     String error = result.toString();
@@ -92,16 +92,16 @@ public class LoginViewModel extends ViewModel {
     }
 
 
-    public void registrate(String name, String password, String email) {
+    public void registrate(RegisterData data, String verification_code) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<RegisterData> result = loginRepository.register(name, password,email);
+                Result<RegisterData> result = loginRepository.register(data, verification_code);
 
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(name,"","")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getName(),"","")));
                 } else {
 
                     String error = result.toString();
@@ -117,6 +117,33 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
+    public void sendVerificationCode(String email) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<RegisterData> result = loginRepository.sendVerificationCode(email);
+
+
+                if (result instanceof Result.Success) {
+                    LoggedInUserView loggedInUserView = new LoggedInUserView();
+
+                    loggedInUserView.setvCode(((Result.Success<String>) result).getData());
+                    loginResult.postValue(new LoginResult(loggedInUserView));
+                } else {
+
+                    String error = result.toString();
+
+                    if (error.equals("Error[exception=java.lang.Exception: 409]"))
+                        loginResult.postValue(new LoginResult(R.string.user_already_exist));
+
+                    else loginResult.postValue(new LoginResult(R.string.register_failed));
+
+                }
+
+            }
+        });
+    }
 
     public void updateInfo( String cookie,AdditionalAttributes atribs) {
 
@@ -158,12 +185,12 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
-    public void getInfos(String token) {
+    public void getInfos(String token,String userid) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<AdditionalAttributes> result = loginRepository.getInfos(token);
+                Result<AdditionalAttributes> result = loginRepository.getInfos(token,userid);
 
                 if (result instanceof Result.Success) {
                     AdditionalAttributes data = ((Result.Success<AdditionalAttributes>) result).getData();
@@ -181,7 +208,7 @@ public class LoginViewModel extends ViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<LoginData> result = loginRepository.removeAccount(token,password);
+                Result<String> result = loginRepository.removeAccount(token,password);
 
                 if (result instanceof Result.Success) {
                     loginResult.postValue(new LoginResult(new LoggedInUserView("","","")));
@@ -195,16 +222,32 @@ public class LoginViewModel extends ViewModel {
 
     public void loginDataChanged(String username, String password, String confirmPassword,String name) {
         if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null, null,null));
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null, null,null,null));
         } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password, null,null));
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password, null,null,null));
         } else if (confirmPassword != null && !isConfirmPasswordValid(password, confirmPassword)) {
-            loginFormState.setValue(new LoginFormState(null, null, R.string.must_match_password,null));
+            loginFormState.setValue(new LoginFormState(null, null, R.string.must_match_password,null,null));
         }else if(name!= null && !isValidName(name)){
-            new LoginFormState(null, null, null,R.string.invalid_name);
+            new LoginFormState(null, null, null,R.string.invalid_name,null);
         }else {
             loginFormState.setValue(new LoginFormState(true));
         }
+    }
+
+    public void verificationCodeChanged(String verification_code) {
+        if (!iscodeValid(verification_code)) {
+            loginFormState.setValue(new LoginFormState(null, null, null, null,R.string.invalide_code));
+        }else {
+        loginFormState.setValue(new LoginFormState(true,"a"));
+    }
+    }
+
+    private boolean iscodeValid(String verification_code) {
+
+        if(verification_code == null || verification_code.isEmpty() || verification_code.length() > 7 || verification_code.length() < 7){
+            return false;
+        }
+        return true;
     }
 
     private boolean isValidName(String name) {

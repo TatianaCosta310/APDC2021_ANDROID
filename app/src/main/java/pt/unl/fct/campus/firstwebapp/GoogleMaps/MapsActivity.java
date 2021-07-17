@@ -39,10 +39,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
+import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
 import pt.unl.fct.campus.firstwebapp.data.model.Location;
 import pt.unl.fct.campus.firstwebapp.data.model.LooClass;
 
@@ -53,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button next;
     Bundle params;
     Address address;
+    String next_null;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -68,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+
         meetingPlace = findViewById(R.id.eventPlace2);
         next = findViewById(R.id.ButtonFinishMap);
         getPermission();
@@ -76,9 +80,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         params = oldIntent.getExtras();
 
 
-           // if(address == null){
-             //   next.setVisibility(View.INVISIBLE);
-            //}
+            if(address == null){
+                next.setVisibility(View.INVISIBLE);
+            }
 
         next.setOnClickListener(new View.OnClickListener() {
 
@@ -86,7 +90,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
 
                 if(address!= null) {
-                    openNextPage();
+
+                    if(params.getString("Page").equals("SeeEvents"))
+                        openNextPage(SeeEventsPage.class);
+
+                    if(params.getString("Page").equals("CreateEvents"))
+                    openNextPage( CreateEventPage.class);
                 }else{
                     Toast.makeText(MapsActivity.this,"Must have a location!",Toast.LENGTH_SHORT).show();
                 }
@@ -110,19 +119,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-
+        // Add a marker in Sydney and move the camera initially
         LatLng mark = new LatLng(-34, 151);
 
         Double lat = params.getDouble("latitude");
         Double longitute = params.getDouble("longitude");
 
+        next_null = params.getString("Next_Null");
 
 
-        if(lat != 0.0) {
+        if (lat != 0.0) {
 
             mark = new LatLng(lat, longitute);
-        }
+
+            if (next_null != null)
+                next.setVisibility(View.INVISIBLE);
+
+        } else if (next_null == null){
+            next.setVisibility(View.VISIBLE);
+    }
 
         mMap.addMarker(new MarkerOptions().position(mark).title("Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(mark));
@@ -166,26 +181,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         meetingPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // Log.d("Address : ",autoCompleteTextView.getText().toString());
+
                 LatLng latLng = getLatLngFromAddress(meetingPlace.getText().toString());
+
                 if(latLng!=null) {
-                   // Log.d("Lat Lng : ", " " + latLng.latitude + " " + latLng.longitude);
 
                      address= getAddressFromLatLng(latLng);
 
-
-               // String a = address.getLocality();
-
                     if(address!=null) {
-                        /*Log.d("Address : ", "" + address.toString());
-                        Log.d("Address Line : ",""+address.getAddressLine(0));
-                        Log.d("Phone : ",""+address.getPhone());
-                        Log.d("Pin Code : ",""+address.getPostalCode());
-                        Log.d("Feature : ",""+address.getFeatureName());
-                        Log.d("More : ",""+address.getLocality()); */
 
-                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in GeoPlace"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,20f));
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(address.getLocality()));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15f));
+
+
+
                         hideKeyboard();
 
                        // geolocate();
@@ -304,10 +313,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void openNextPage(){
+    public void openNextPage(Class page){
 
-        Intent intent = new Intent(this , CreateEventPage.class);
-
+        Intent intent = new Intent(this ,page);
 
         Intent oldIntent = getIntent();
 
@@ -320,6 +328,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(oldIntent != null) {
             params = oldIntent.getExtras();
             params.putString("location", c);
+            params.putString("POSTAL_CODE", address.getPostalCode() );
+            params.putString("COUNTRY_NAME",address.getCountryName());
+            params.putString("LOCALITY",address.getLocality());
 
             if(params != null)
                 intent.putExtras(params);
@@ -327,8 +338,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             params = new Bundle();
         }
 
-
-        String l = params.getString("location");
         startActivity(intent);
 
     }

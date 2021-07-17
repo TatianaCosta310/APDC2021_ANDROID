@@ -27,7 +27,7 @@ public class EventCreatedView {
         return list;
     }
 
-    JsonObject getJsonObject(){return  jsonObject;}
+    public JsonObject getJsonObject(){return  jsonObject;}
 
     String getResponse(){return response;}
 }

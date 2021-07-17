@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="116dp"
         android:layout_marginTop="68dp"
-        android:fontFamily="cursive"
         android:padding="2dp"
         android:text="Finished Events"
         android:textAlignment="center"

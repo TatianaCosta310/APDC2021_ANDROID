@@ -5,44 +5,45 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
-import pt.unl.fct.campus.firstwebapp.data.model.EventsAdapter;
+import pt.unl.fct.campus.firstwebapp.data.model.RecyclerViewAdapter;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
-import com.google.firebase.FirebaseApp;
 
-public class SeeEventsPage extends AppCompatActivity {
+public class SeeEventsPage extends AppCompatActivity implements Constantes {
 
-    private EventViewModel eventViewModel, getEventViewModel;
+    private EventViewModel eventViewModel;
 
     private ArrayList<EventData2> eventsList = new ArrayList<>();
 
     private List<JsonObject> list;
 
-    private EventsAdapter adapter;
+    //private EventsAdapter adapter;
 
     EventData2 event = null;
 
-    ListView listView;
+    //ListView listView;
 
     Bundle params;
 
@@ -54,32 +55,71 @@ public class SeeEventsPage extends AppCompatActivity {
 
     Gson gson;
 
+    Boolean getEvent;
+
+    Button changePlaceButton;
+
+    int i,page = 1,limit = 10;
+
+   // Bundle savedInstanceState;
+
+    //-------\\ ---GridViewCard---||
+
+    ProgressBar progressBar;
+    NestedScrollView nestedScrollView;
+    RecyclerView recyclerView;
+    RecyclerViewAdapter recyclerViewAdapter;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+       // this.savedInstanceState = savedInstanceState;
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listviewadapter);
+      // setContentView(R.layout.listviewadapter);
+        setContentView(R.layout.list_pagination);
 
+        //recyclerViewAdapter = new RecyclerViewAdapter(SeeEventsPage.this,eventsList);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //recyclerView.setAdapter(recyclerViewAdapter);
 
-        text = findViewById(R.id.textListEvents);
-        text.setText("Events");
-
-        gson = new Gson();
-
-        eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
-                .get(EventViewModel.class);
-
-        getEventViewModel = new ViewModelProvider(SeeEventsPage.this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
-                .get(EventViewModel.class);
-
+        i = 0;
 
         oldIntent = getIntent();
         params = oldIntent.getExtras();
+
+        String location = params.getString("location");
+        String postal_code = params.getString("POSTAL_CODE");
+        String country_name = params.getString("COUNTRY_NAME");
+        String locality = params.getString("LOCALITY");
+
+
+        UpcomingEventsArgs upcomingEventsArgs = new UpcomingEventsArgs();
+
+        upcomingEventsArgs.setCountry_name(country_name);
+        upcomingEventsArgs.setLocality(locality);
+        upcomingEventsArgs.setPostal_code(postal_code);
+
+
+        changePlaceButton = findViewById(R.id.PlaceId);
+
+        text = findViewById(R.id.textListEvents);
+        text.setText("Events In " + locality );
+
+        gson = new Gson();
+        getEvent = false;
+
+        eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(EventViewModel.class);
 
         token = params.getString("token");
 
         list = new ArrayList<>();
 
-        eventViewModel.seeEvent(token, token, "actual");
+        nestedScrollView = findViewById(R.id.nested_scroll_view);
+
+        eventViewModel.seeEvent(token, token, "actual",upcomingEventsArgs);
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -94,10 +134,17 @@ public class SeeEventsPage extends AppCompatActivity {
                 }
                 if (eventResult.getSuccess() != null) {
 
-                    EventCreatedView model = eventResult.getSuccess();
+                        if(getEvent == false) {
+                            EventCreatedView model = eventResult.getSuccess();
 
-                    addElements(model.getEventsList());
+                            addElements(model.getEventsList());
 
+                       } else {
+
+                            EventCreatedView model = eventResult.getSuccess();
+                            event = gson.fromJson(model.getJsonObject(), EventData2.class);
+                            eventsList.add(event);
+                        }
 
                     if (list != null) {
                         if (list.size() == 0) {
@@ -108,66 +155,84 @@ public class SeeEventsPage extends AppCompatActivity {
 
                         } else {
 
+                            if(i == 0)
+                                doSomething();
 
-                            for (int i = 0; i < list.size(); i++) {
+                            if(i <= list.size() - 1) {
+
                                 //vai buscar os eventos completos (dados todos)
                                 event = gson.fromJson(list.get(i).toString(), EventData2.class);
-                                eventsList.add(event);
-                               // getEventViewModel.getEvent(event.getEventId(), token);
+
+                                eventViewModel.getEvent(event.getEventId(), token);
+
+                                i++;
+
+                            }else if(i == list.size()){
+                                showEvents(eventsList);
+                              }
                             }
                         }
                     }
 
-
-                    showEvents(eventsList);
                     setResult(Activity.RESULT_OK);
-                    //Complete and destroy  activity once successful
-                    //finish();
-
-      /*  getEventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
-
-            @Override
-            public void onChanged(EventResult eventResult) {
-                if (eventResult == null) {
-                    return;
-                }
-
-                if (eventResult.getError() != null) {
-
-                    //showLoginFailed(loginResult.getError());
-                }
-
-                if (eventResult.getSuccess() != null) {
-
-                    EventCreatedView model2 = eventResult.getSuccess();
-                    EventData2 eventData2 = gson.fromJson(model2.getJsonObject().toString(), EventData2.class);
-                    eventsList.add(eventData2);
-                }
-
-
-            }
-        });
-
-*/
-
-
-                        }
 
                 }
             });
 
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if(scrollY == v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
+                    page++;
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        changePlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(SeeEventsPage.this , MapsActivity.class);
+
+                Intent oldIntent = getIntent();
+
+                if(oldIntent != null) {
+                    params = oldIntent.getExtras();
+                    params.putString("Page", "SeeEvents");
+
+                    if(params != null)
+                        intent.putExtras(params);
+                } else {
+                    params = new Bundle();
+                }
+
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+        private void doSomething (){
+
+            getEvent = true;
+
+            eventViewModel = new ViewModelProvider(SeeEventsPage.this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                                .get(EventViewModel.class);
         }
 
     public void addElements(List<JsonObject> m){
         for (JsonObject o : m)
             list.add(o);
+
     }
         public void showEvents (ArrayList < EventData2 > events){
 
-            listView = findViewById(R.id.listViewEvents);
+          /*  listView = findViewById(R.id.listViewEvents);
 
-
-            adapter = new EventsAdapter(this, this, this, events, R.layout.actual_events, token, oldIntent);
+            adapter = new EventsAdapter(savedInstanceState,true,this, this, this, events, R.layout.actual_events, token, oldIntent);
 
             listView.setAdapter(adapter);
 
@@ -177,7 +242,12 @@ public class SeeEventsPage extends AppCompatActivity {
 
                     Toast.makeText(SeeEventsPage.this, "click to item: " + position, Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
+
+
+            recyclerViewAdapter = new RecyclerViewAdapter(SeeEventsPage.this,events,params);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(recyclerViewAdapter);
         }
 
     }

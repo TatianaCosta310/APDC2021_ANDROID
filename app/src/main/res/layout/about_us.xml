@@ -16,10 +16,9 @@ android:layout_weight="0.2">
         android:layout_height="wrap_content"
         android:layout_marginTop="235dp"
         android:layout_marginStart="20dp"
-        android:fontFamily="cursive"
         android:text="@string/Logo_Text"
         android:textColor="@color/teal_700"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginBottom="25dp" />
@@ -41,10 +40,9 @@ android:layout_weight="0.2">
     android:id="@+id/textView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fontFamily="cursive"
     android:text="@string/About_Us"
     android:textAlignment="center"
-    android:textSize="50sp" />
+    android:textSize="40sp" />
 
 
 <TextView
@@ -53,11 +51,10 @@ android:layout_weight="0.2">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="200dp"
-    android:fontFamily="cursive"
     android:layout_marginTop="100dp"
     android:text="Who We Are "
     android:textAlignment="center"
-    android:textSize="28sp" />
+    android:textSize="23sp" />
 
     <TextView
         android:id="@+id/text11"
@@ -77,11 +74,10 @@ android:layout_weight="0.2">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
-        android:fontFamily="cursive"
         android:text="Our Goals "
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="260dp"
         android:textAlignment="center"
-        android:textSize="34sp" />
+        android:textSize="23sp" />
 
     <TextView
         android:id="@+id/text22"
@@ -90,7 +86,7 @@ android:layout_weight="0.2">
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
         android:fontFamily="cursive"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="300dp"
         android:text="Our Goals "
         android:textAlignment="center"
         android:textSize="28sp" />
@@ -99,13 +95,12 @@ android:layout_weight="0.2">
         android:id="@+id/text3"
         android:textColor="@color/teal_700"
         android:layout_marginStart="200dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="380dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="cursive"
         android:text="How We Work "
         android:textAlignment="center"
-        android:textSize="34sp" />
+        android:textSize="23sp" />
 
     <TextView
         android:id="@+id/text33"
@@ -114,7 +109,7 @@ android:layout_weight="0.2">
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
         android:fontFamily="cursive"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="420dp"
         android:text="How We Work "
         android:textAlignment="center"
         android:textSize="28sp" />
@@ -126,11 +121,10 @@ android:layout_weight="0.2">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
-        android:layout_marginTop="440dp"
-        android:fontFamily="cursive"
+        android:layout_marginTop="480dp"
         android:text="What You Can Do "
         android:textAlignment="center"
-        android:textSize="34sp" />
+        android:textSize="23sp" />
 
     <TextView
         android:id="@+id/text44"
@@ -139,7 +133,7 @@ android:layout_weight="0.2">
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
         android:fontFamily="cursive"
-        android:layout_marginTop="515dp"
+        android:layout_marginTop="525dp"
         android:text="What You Can Do "
         android:textAlignment="center"
         android:textSize="28sp" />
