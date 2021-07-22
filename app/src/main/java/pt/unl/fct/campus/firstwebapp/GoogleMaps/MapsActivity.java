@@ -47,6 +47,7 @@ import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
 import pt.unl.fct.campus.firstwebapp.data.model.Location;
 import pt.unl.fct.campus.firstwebapp.data.model.LooClass;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
@@ -319,17 +320,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent oldIntent = getIntent();
 
-        Location loc = new Location("34",address.getLocality(),new LooClass(address.getLatitude(),address.getLongitude()));
+       /* Location loc = new Location("34",address.getLocality(),new LooClass(address.getLatitude(),address.getLongitude()));
 
         Gson g = new Gson();
 
         String c = g.toJson(loc);
+*/
 
         if(oldIntent != null) {
             params = oldIntent.getExtras();
-            params.putString("location", c);
-            params.putString("POSTAL_CODE", address.getPostalCode() );
-            params.putString("COUNTRY_NAME",address.getCountryName());
+           // params.putString("location", c);
+            params.putDouble("Latitude",address.getLatitude());
+            params.putDouble("Longitude", address.getLongitude());
+           // params.putString("POSTAL_CODE", address.getPostalCode() );
+            //params.putString("COUNTRY_NAME",address.getCountryName());
             params.putString("LOCALITY",address.getLocality());
 
             if(params != null)

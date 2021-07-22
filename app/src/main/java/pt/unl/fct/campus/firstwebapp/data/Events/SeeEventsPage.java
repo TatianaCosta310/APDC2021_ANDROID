@@ -1,20 +1,16 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -26,8 +22,8 @@ import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Constantes;
+import pt.unl.fct.campus.firstwebapp.data.model.CustomListAdapter;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
-import pt.unl.fct.campus.firstwebapp.data.model.RecyclerViewAdapter;
 import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
 
@@ -43,13 +39,13 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
 
     EventData2 event = null;
 
-    //ListView listView;
+    ListView listView;
 
     Bundle params;
 
     TextView text;
 
-    String token;
+    String token,tokenEvent;
 
     Intent oldIntent;
 
@@ -61,51 +57,38 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
 
     int i,page = 1,limit = 10;
 
-   // Bundle savedInstanceState;
-
-    //-------\\ ---GridViewCard---||
-
-    ProgressBar progressBar;
-    NestedScrollView nestedScrollView;
-    RecyclerView recyclerView;
-    RecyclerViewAdapter recyclerViewAdapter;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-       // this.savedInstanceState = savedInstanceState;
-
         super.onCreate(savedInstanceState);
-      // setContentView(R.layout.listviewadapter);
-        setContentView(R.layout.list_pagination);
+        setContentView(R.layout.listviewadapter);
 
-        //recyclerViewAdapter = new RecyclerViewAdapter(SeeEventsPage.this,eventsList);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //recyclerView.setAdapter(recyclerViewAdapter);
+        listView =  findViewById(R.id.listView);
+
+        ArrayList<EventData2> listCard = new ArrayList<>();
+        CustomListAdapter adapter = new CustomListAdapter(SeeEventsPage.this, R.layout.card_view, listCard);
 
         i = 0;
 
         oldIntent = getIntent();
         params = oldIntent.getExtras();
 
-        String location = params.getString("location");
-        String postal_code = params.getString("POSTAL_CODE");
-        String country_name = params.getString("COUNTRY_NAME");
+        Double lat = params.getDouble("Latitude");
+        Double lng = params.getDouble("Longitude");
+       // String postal_code = params.getString("POSTAL_CODE");
+        //String country_name = params.getString("COUNTRY_NAME");
         String locality = params.getString("LOCALITY");
 
 
-        UpcomingEventsArgs upcomingEventsArgs = new UpcomingEventsArgs();
+       UpcomingEventsArgs upcomingEventsArgs = new UpcomingEventsArgs();
 
-        upcomingEventsArgs.setCountry_name(country_name);
-        upcomingEventsArgs.setLocality(locality);
-        upcomingEventsArgs.setPostal_code(postal_code);
-
+        upcomingEventsArgs.setLat(lat);
+        upcomingEventsArgs.setLng(lng);
 
         changePlaceButton = findViewById(R.id.PlaceId);
 
-        text = findViewById(R.id.textListEvents);
-        text.setText("Events In " + locality );
+       text = findViewById(R.id.textListEvents);
+       text.setText("Events near/in " + locality );
 
         gson = new Gson();
         getEvent = false;
@@ -117,7 +100,7 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
 
         list = new ArrayList<>();
 
-        nestedScrollView = findViewById(R.id.nested_scroll_view);
+        //nestedScrollView = findViewById(R.id.nested_scroll_view);
 
         eventViewModel.seeEvent(token, token, "actual",upcomingEventsArgs);
 
@@ -136,14 +119,15 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
 
                         if(getEvent == false) {
                             EventCreatedView model = eventResult.getSuccess();
-
+                            tokenEvent = model.getToken();
                             addElements(model.getEventsList());
 
                        } else {
 
                             EventCreatedView model = eventResult.getSuccess();
+
                             event = gson.fromJson(model.getJsonObject(), EventData2.class);
-                            eventsList.add(event);
+                            listCard.add(event);
                         }
 
                     if (list != null) {
@@ -155,40 +139,47 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
 
                         } else {
 
+                            EventLocationResponse  eventData2;
+
                             if(i == 0)
                                 doSomething();
 
                             if(i <= list.size() - 1) {
 
                                 //vai buscar os eventos completos (dados todos)
-                                event = gson.fromJson(list.get(i).toString(), EventData2.class);
+                                eventData2 = gson.fromJson(list.get(i).toString(), EventLocationResponse .class);
 
-                                eventViewModel.getEvent(event.getEventId(), token);
+                                eventViewModel.getEvent(eventData2.getEventId(), token);
 
                                 i++;
 
                             }else if(i == list.size()){
-                                showEvents(eventsList);
-                              }
+
+
+                                listView.setAdapter(adapter);
+
+                            }
+
                             }
                         }
                     }
 
-                    setResult(Activity.RESULT_OK);
 
                 }
             });
 
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-                if(scrollY == v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
-                    page++;
-                    progressBar.setVisibility(View.VISIBLE);
-                }
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                EventData2 val = adapter.getItem(position);
+
+                openFullEventPage(val);
+
             }
         });
+
 
         changePlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,27 +219,26 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
             list.add(o);
 
     }
-        public void showEvents (ArrayList < EventData2 > events){
 
-          /*  listView = findViewById(R.id.listViewEvents);
+    public void  openFullEventPage(EventData2 event) {
+        Intent intent = new Intent(getApplicationContext(), SeeFullEventPage.class);
 
-            adapter = new EventsAdapter(savedInstanceState,true,this, this, this, events, R.layout.actual_events, token, oldIntent);
+        Intent oldIntent = getIntent();
 
-            listView.setAdapter(adapter);
+        if (oldIntent != null) {
+            params = oldIntent.getExtras();
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (params != null)
 
-                    Toast.makeText(SeeEventsPage.this, "click to item: " + position, Toast.LENGTH_SHORT).show();
-                }
-            });*/
-
-
-            recyclerViewAdapter = new RecyclerViewAdapter(SeeEventsPage.this,events,params);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(recyclerViewAdapter);
+                params.putString("tokenEvent",tokenEvent);
+                params.putString("Event", gson.toJson(event));
+            intent.putExtras(params);
+        } else {
+            params = new Bundle();
         }
+
+       startActivity(intent);
+    }
 
     }
 

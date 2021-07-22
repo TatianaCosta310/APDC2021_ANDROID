@@ -37,13 +37,20 @@ public class RegisterOptional2 extends AppCompatActivity {
         bundleExtra = oldIntent.getExtras();
 
 
-        String address = bundleExtra.getString("mainAdress");
+     /*   String address = bundleExtra.getString("mainAdress");
         String c_address = bundleExtra.getString("optionalAdress");
         String fixNumber = bundleExtra.getString("fixNumber");
 
         String mobileNumber = bundleExtra.getString("mobileNumber");
 
         String locality = bundleExtra.getString("locality");
+*/
+
+        String about = bundleExtra.getString("about");
+        String quote = bundleExtra.getString("quote");
+        String facebook = bundleExtra.getString("facebook");
+        String instagram = bundleExtra.getString("instagram");
+        String twitter = bundleExtra.getString("twitter");
 
         String cookie = bundleExtra.getString("token");
 
@@ -64,13 +71,20 @@ public class RegisterOptional2 extends AppCompatActivity {
 
                 AdditionalAttributes atribs = new AdditionalAttributes();
 
-                atribs.setAddress(address);
+                atribs.setBio(about);
+                atribs.setQuote(quote);
+                atribs.setFacebook(facebook);
+                atribs.setInstagram(instagram);
+                atribs.setTwitter(twitter);
+
+
+                /*atribs.setAddress(address);
                 atribs.setMore_address(c_address);
                 atribs.setCellphone(mobileNumber);
                 atribs.setTelephone(fixNumber);
                 atribs.setLocality(locality);
                 atribs.setPerfil(userType);
-
+*/
                 loginViewModel.updateInfo(cookie,atribs);
 
 

@@ -1,15 +1,20 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
+import com.google.firebase.encoders.annotations.Encodable;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 
 import java.net.CookieHandler;
 import java.net.HttpCookie;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.Cookie;
 import okhttp3.RequestBody;
+import pt.unl.fct.campus.firstwebapp.data.Events.EventCreatedView;
+import pt.unl.fct.campus.firstwebapp.data.Events.EventLocationResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -65,24 +70,26 @@ public interface UserService {
     //EVENTS ENDPOINTS
     @Multipart
     @POST("rest/events/create")
-    Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
+    Call<EventData2> createEvent(@Header("token") String value,@PartMap Map<String,RequestBody> map);
 
     // da 401 whyy???  supostamente nao autorizado?? hmmm
     @DELETE("rest/events/delete/{eventId}")
     Call<Void>  doRemoveEvent(@Path(value = "eventId") String eventId, @Header("Cookie") String token);
 
 
+    //@Headers({"Content-Type:application/json",  "Accept-Charset: utf-8"})
     @POST("rest/events/view")
-    Call<List<JsonObject>> seeEvents(@Header("crsck") String value,
-                                     @Body UpcomingEventsArgs upcomingEventsArgs);
+    Call<List<JsonObject>> seeEvents(@Header("crsck") String value, @Header("Cookie") String token,
+                                          @Body UpcomingEventsArgs args,
+                                          @Header("Accept-Charset") String enc, @Header("Content-Type") String charset);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/view/finished")
-    Call< List<JsonObject>> seeFinishedEvents(@Header("Cookie") String value);
+    Call< List<JsonObject> >seeFinishedEvents(@Header("fnesck") String value, @Header("Cookie") String token);
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/view/myevents")
-    Call< List<JsonObject>> seeMyEvents(@Header("Cookie") String value);
+    Call< String[]> seeMyEvents(@Header("Cookie") String value, @Query("userid") String userid, @Query("cursor") String cursor);
 
     @FormUrlEncoded
     @HTTP(method = "POST",path = "rest/events/participate", hasBody = true)
@@ -90,8 +97,6 @@ public interface UserService {
 
    @Headers({"Content-Type: application/x-www-form-urlencoded"})
     @DELETE("rest/events/rparticipation/{eventid}")
-  //@FormUrlEncoded
-  //@HTTP(method = "DELETE",path = "rest/events/rparticipation/{eventid}", hasBody = true)
     Call<Void> removeParticipation(@Header("Cookie") String token, @Path("eventid") long eventid);
 
    @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -101,7 +106,18 @@ public interface UserService {
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
     @GET("rest/events/event/{eventId}")
-    Call< JsonObject> getEvent(@Path("eventId") long eventid,@Header("Cookie") String token);
+    Call<JsonObject> getEvent(@Path("eventId") long eventid, @Header("Cookie") String token);
 
+
+    //Events Comments Endpoints
+
+    @POST("rest/comments/create")
+    Call<JsonObject> postComment(@Header("token") String value, @Body CommentObject comment);
+
+    @DELETE("rest/comments/remove/{commentId}")
+    Call<LoginData> deleteComment(@Header("token") String token, @Path("commentId") long commentId);
+
+    @GET("rest/comments/load/{eventid}")
+    Call<JsonObject> loadComments(@Header("token") String value, @Path("eventid") long eventId,@Query("c") String cursor);
 
 }

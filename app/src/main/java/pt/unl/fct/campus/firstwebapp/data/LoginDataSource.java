@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 
-public class LoginDataSource extends Application {
+public class LoginDataSource extends Application implements Constantes {
 
     private UserService service;
 
@@ -36,11 +36,11 @@ public class LoginDataSource extends Application {
          okHttpClient = new OkHttpClient.Builder ()
                 .addInterceptor ((Interceptor) new AddCookiesInterceptor())
                 .addInterceptor ((Interceptor) new ReceivedCookiesInterceptor())
-
-
                 .connectTimeout (30, TimeUnit.SECONDS) .build ();
+
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://apdc-project-310922.ew.r.appspot.com/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client (okHttpClient)
                 .build();

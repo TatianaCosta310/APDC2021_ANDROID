@@ -244,9 +244,12 @@ public class LoginViewModel extends ViewModel {
 
     private boolean iscodeValid(String verification_code) {
 
-        if(verification_code == null || verification_code.isEmpty() || verification_code.length() > 7 || verification_code.length() < 7){
+        if(verification_code == null ){
+            return false;
+        }else if(verification_code.isEmpty() || verification_code.length() > 7 || verification_code.length() < 7 || verification_code.charAt(0) != '0'){
             return false;
         }
+
         return true;
     }
 
@@ -270,7 +273,9 @@ public class LoginViewModel extends ViewModel {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
 
-            return password != null && password.trim().length() > 6 && password.trim().length() < 12 ;
+            return password != null && password.trim().length() > 6 && password.trim().length() < 12
+                        && password.matches(".*[a-zA-Z]+.*");
+                      //  && password.matches(".*[0-9]+.*"); //retirar maximo de length
     }
 
     private boolean isConfirmPasswordValid(String password, String confirmPassword) {

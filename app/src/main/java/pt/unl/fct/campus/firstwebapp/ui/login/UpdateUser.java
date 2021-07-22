@@ -1,52 +1,83 @@
 package pt.unl.fct.campus.firstwebapp.ui.login;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.data.Events.EventCreatedView;
+import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginResult;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModel;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModelFactory;
-import pt.unl.fct.campus.firstwebapp.ui.login.RegisterOptional2;
 
-public class UpdateUser extends AppCompatActivity {
+
+public class UpdateUser extends AppCompatActivity implements Constantes {
 
     private LoginViewModel loginViewModel;
-    String token;
+    String token,profilePic;
     Bundle bundleExtra;
     AdditionalAttributes atribs;
+    ImageView image;
 
-    private EditText mainAdress;
+    private EditText quote;
+    private EditText about;
+    private EditText facebook;
+    private EditText instagram;
+    private EditText twitter;
+
+  /*  private EditText mainAdress;
     private EditText optionalAdress;
     private EditText fixNumber;
     private EditText mobileNumber;
     private EditText locality;
-
+*/
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update);
 
-        mainAdress = findViewById(R.id.new_address);
+
+        quote = findViewById(R.id.QUOTE);
+        about = findViewById(R.id.About);
+        instagram = findViewById(R.id.Social_networks_Instagram);
+        facebook = findViewById(R.id.Social_networks_Facebook);
+        twitter = findViewById(R.id.Social_networks_Twitter);
+
+        image = findViewById(R.id.person2);
+
+
+       /* mainAdress = findViewById(R.id.new_address);
         optionalAdress = findViewById(R.id.new_address2);
         fixNumber = findViewById(R.id.new_fixNumber);
         mobileNumber = findViewById(R.id.new_mobileNumber);
         locality = findViewById(R.id.local);
 
+*/
         final Button update=findViewById(R.id.update);
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
@@ -60,9 +91,62 @@ public class UpdateUser extends AppCompatActivity {
         if(oldIntent != null) {
             bundleExtra = oldIntent.getExtras();
             token = bundleExtra.getString("token");
+            profilePic = bundleExtra.getString("profile_pic");
         }
 
-        //loginViewModel.getInfos(token,userid); have to get userId as long value????
+
+        if(profilePic!= null){
+            String[] split = profilePic.split("/");
+
+            if(split.length == 5) {
+                String imageName = split[4];
+
+                File f = new File(UpdateUser.this.getCacheDir(), imageName + ".png");
+                try {
+                    f.createNewFile();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+                Storage storage = StorageOptions.newBuilder()
+                        .setProjectId(BLOB_PIC_ID_PROJECT)
+                        // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
+                        .build()
+                        .getService();
+
+                Thread thread = new Thread(new Runnable() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run() {
+
+                        try {
+                            Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
+                            blob.downloadTo(Paths.get(f.toString()));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                thread.start();
+
+                byte[] decodedString = new byte[0];
+                try {
+                    decodedString = Files.readAllBytes(f.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                image.setImageBitmap(decodedByte);
+            }
+
+        }
+
+        loginViewModel.getInfos(token,token); // have to get userId as long value????
 
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
 
@@ -93,11 +177,18 @@ public class UpdateUser extends AppCompatActivity {
             @Override
             public void onClick (View v){
 
-                bundleExtra.putString("mainAdress",mainAdress.getText().toString());
+              /*  bundleExtra.putString("mainAdress",mainAdress.getText().toString());
                 bundleExtra.putString("optionalAdress",optionalAdress.getText().toString());
                 bundleExtra.putString("fixNumber",fixNumber.getText().toString());
                 bundleExtra.putString("mobileNumber",mobileNumber.getText().toString());
                 bundleExtra.putString("locality",locality.getText().toString());
+*/
+
+                bundleExtra.putString("quote",quote.getText().toString());
+                bundleExtra.putString("about",about.getText().toString());
+                bundleExtra.putString("facebook",facebook.getText().toString());
+                bundleExtra.putString("instagram",instagram.getText().toString());
+                bundleExtra.putString("twitter",twitter.getText().toString());
 
                 openNextPage(bundleExtra);
 
@@ -108,7 +199,37 @@ public class UpdateUser extends AppCompatActivity {
 
     private void putInfos(AdditionalAttributes atribs) {
 
-        if(atribs.getAddress() != null){
+
+        if(!atribs.getQuote().equals("")){
+            quote.setText(atribs.getQuote());
+        }
+
+        if(!atribs.getBio().equals("")){
+            about.setText(atribs.getBio());
+
+        }
+
+        if(!atribs.getInstagram().equals("")){
+            instagram.setText(atribs.getInstagram());
+            instagram.setPaintFlags(instagram.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        }
+
+        if(!atribs.getFacebook().equals("")){
+            facebook.setText(atribs.getFacebook());
+            facebook.setPaintFlags(facebook.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+
+        }
+
+        if(!atribs.getTwitter().equals("")){
+            twitter.setText(atribs.getTwitter());
+            twitter.setPaintFlags(twitter.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+
+        }
+
+        /*if(atribs.getAddress() != null){
             mainAdress.setText(atribs.getAddress());
         }
 
@@ -126,7 +247,7 @@ public class UpdateUser extends AppCompatActivity {
 
         if(atribs.getTelephone() != null){
             fixNumber.setText(atribs.getTelephone());
-        }
+        }*/
     }
 
     private void showGetInfosFailed(@StringRes Integer error) {

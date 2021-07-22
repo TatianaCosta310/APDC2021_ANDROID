@@ -1,10 +1,12 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,10 +21,13 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.CustomListAdapter;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.EventsAdapter;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
 public class SeeFinishedEventsPage extends AppCompatActivity {
 
@@ -30,10 +35,11 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
     private ArrayList<EventData2> eventsList = new ArrayList<>();
 
+    private List<JsonObject> list;
+
+    //private EventsAdapter adapter;
+
     EventData2 event = null;
-
-    private EventsAdapter adapter;
-
 
     ListView listView;
 
@@ -45,31 +51,59 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
     Intent oldIntent;
 
-    Bundle savedInstanceState;
+    Gson gson;
+
+    Boolean getEvent;
+
+    Button changePlaceButton;
+
+    int i,page = 1,limit = 10;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        this.savedInstanceState = savedInstanceState;
-
         super.onCreate(savedInstanceState);
-        /*setContentView(R.layout.listviewadapter);
+        setContentView(R.layout.listviewadapter);
+
+        listView =  findViewById(R.id.listView);
+
+        ArrayList<EventData2> listCard = new ArrayList<>();
+        CustomListAdapter adapter = new CustomListAdapter(SeeFinishedEventsPage.this, R.layout.card_view, listCard);
+
+        i = 0;
+
+        oldIntent = getIntent();
+        params = oldIntent.getExtras();
+
+        Double lat = params.getDouble("Latitude");
+        Double lng = params.getDouble("Longitude");
+        // String postal_code = params.getString("POSTAL_CODE");
+        //String country_name = params.getString("COUNTRY_NAME");
+        String locality = params.getString("LOCALITY");
+
+
+        UpcomingEventsArgs upcomingEventsArgs = new UpcomingEventsArgs();
+
+        upcomingEventsArgs.setLat(lat);
+        upcomingEventsArgs.setLng(lng);
+
+        changePlaceButton = findViewById(R.id.PlaceId);
 
         text = findViewById(R.id.textListEvents);
+        text.setText("Events near/in " + locality );
 
-        text.setText("Finished Events");
+        gson = new Gson();
+        getEvent = false;
+
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
 
-         oldIntent = getIntent();
-         params = oldIntent.getExtras();
+        token = params.getString("token");
 
-         token = params.getString("token");
-
-        eventViewModel.seeEvent(token, token,"finished");
+        list = new ArrayList<>();
 
 
-
+        eventViewModel.seeEvent(token, token, "finished",upcomingEventsArgs);
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -79,64 +113,131 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
                 }
 
                 if (eventResult.getError() != null) {
+
                     //showLoginFailed(loginResult.getError());
                 }
                 if (eventResult.getSuccess() != null) {
 
-                    EventCreatedView model = eventResult.getSuccess();
+                    if(getEvent == false) {
+                        EventCreatedView model = eventResult.getSuccess();
 
-                    List<JsonObject> list = model.getEventsList();
-
-                    if (list.size() == 0) {
-                        // alerta a dizer que nao existem Eventos ainda terminados!
-
-                        /*AlertDialog.Builder alert = new AlertDialog.Builder(SeeFinishedEventsPage.this);
-                        alert.setTitle("no events");
-                        alert.setMessage("There aren't finished Events  yet ");
+                        addElements(model.getEventsList());
 
                     } else {
 
-                        Gson gson = new Gson();
-                        // String c = list.get(0).toString();
-                        // vou obter dados dos eventos
-
-
-                        for (int i = 0; i < list.size(); i++) {
-                            event = gson.fromJson(list.get(i).toString(), EventData2.class);
-                            eventsList.add(event);
-                        }
-
-
-                        showEvents(eventsList);
+                        EventCreatedView model = eventResult.getSuccess();
+                        event = gson.fromJson(model.getJsonObject(), EventData2.class);
+                        listCard.add(event);
                     }
 
-                    setResult(Activity.RESULT_OK);
+                    if (list != null) {
+                        if (list.size() == 0) {
+                            // alerta a dizer que nao existem Eventos ainda !
+                            AlertDialog.Builder alert = new AlertDialog.Builder(SeeFinishedEventsPage.this);
+                            alert.setTitle("no events");
+                            alert.setMessage("There aren't Events created yet ");
 
+                        } else {
+
+                            EventLocationResponse  eventData2;
+
+                            if(i == 0)
+                                doSomething();
+
+                            if(i <= list.size() - 1) {
+
+                                //vai buscar os eventos completos (dados todos)
+                                eventData2 = gson.fromJson(list.get(i).toString(), EventLocationResponse .class);
+
+                                eventViewModel.getEvent(eventData2.getEventId(), token);
+
+                                i++;
+
+                            }else if(i == list.size()){
+
+
+                                listView.setAdapter(adapter);
+
+                            }
+
+                        }
+                    }
                 }
 
 
-                //Complete and destroy  activity once successful
-                //finish();
             }
         });
-    }
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-    public void showEvents(ArrayList<EventData2> events) {
-
-        listView = (ListView) findViewById(R.id.listViewEvents);
-
-        adapter = new EventsAdapter( savedInstanceState,false,this,this,this,events,R.layout.finished_events,token,oldIntent);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(SeeFinishedEventsPage.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
+                EventData2 val = adapter.getItem(position);
+
+                openFullEventPage(val);
+
             }
-        });*/
-    }
+        });
+
+
+        changePlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(SeeFinishedEventsPage.this , MapsActivity.class);
+
+                Intent oldIntent = getIntent();
+
+                if(oldIntent != null) {
+                    params = oldIntent.getExtras();
+                    params.putString("Page", "SeeEventsFinished");
+
+                    if(params != null)
+                        intent.putExtras(params);
+                } else {
+                    params = new Bundle();
+                }
+
+                startActivity(intent);
+
+            }
+        });
 
     }
+
+    private void doSomething (){
+
+        getEvent = true;
+
+        eventViewModel = new ViewModelProvider(SeeFinishedEventsPage.this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(EventViewModel.class);
+    }
+
+    public void addElements(List<JsonObject> m){
+        for (JsonObject o : m)
+            list.add(o);
+
+    }
+
+    public void  openFullEventPage(EventData2 event) {
+        Intent intent = new Intent(getApplicationContext(), SeeFullEventPage.class);
+
+        Intent oldIntent = getIntent();
+
+        if (oldIntent != null) {
+            params = oldIntent.getExtras();
+
+            if (params != null)
+
+                params.putString("Event", gson.toJson(event));
+            intent.putExtras(params);
+        } else {
+            params = new Bundle();
+        }
+
+        startActivity(intent);
+    }
+
+}
 

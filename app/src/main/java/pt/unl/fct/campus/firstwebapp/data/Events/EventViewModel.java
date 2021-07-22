@@ -1,5 +1,7 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
+import android.widget.EditText;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -20,6 +22,7 @@ import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.CommentObject;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
@@ -78,7 +81,6 @@ public class EventViewModel extends ViewModel {
 
                     JsonObject a = ((Result.Success<JsonObject>) result).getData();
 
-
                     eventResult.postValue(new EventResult(new EventCreatedView(a)));
                 } else {
 
@@ -101,7 +103,7 @@ public class EventViewModel extends ViewModel {
             @Override
             public void run() {
 
-                Result<List<JsonObject>> result = null;
+                Result<EventCreatedView> result = null;
                 try {
                     result = eventRepository.seeEvents(value,token,actual,upcomingEventsArgs);
                 } catch (MalformedURLException e) {
@@ -109,9 +111,9 @@ public class EventViewModel extends ViewModel {
                 }
 
                 if (result instanceof Result.Success) {
-                    List<JsonObject> list = ((Result.Success<List<JsonObject>>) result).getData();
+                   // ArrayList<JsonObject> j = ((Result.Success<ArrayList<JsonObject>>) result).getData();
                     // loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername(),data.getToken())));
-                    eventResult.postValue(new EventResult(new EventCreatedView(list)));
+                    eventResult.postValue(new EventResult(((Result.Success<EventCreatedView>) result).getData()));
                 } else {
                     eventResult.postValue(new EventResult(R.string.Failed_See_Event));
                 }
@@ -217,70 +219,39 @@ public class EventViewModel extends ViewModel {
         });
     }
 
-    public void CreateDataChanged(String name,Date startDay, Date finalDay,String startHour,String finalHour,String numVolunteers,String goal, String description) {
-        if (!isNameValid(name)) {
-            eventFormState.setValue(new EventFormState(R.string.invalid_name, null, null,null,null,null,null,null));
+    public void postComment(String token, CommentObject commentText) {
 
-        } else if (!isHourValid(startHour)) {
-        eventFormState.setValue(new EventFormState(null, null, null,R.string.inavlid_hour,null,null,null,null));
-    } else if (!isHourValid(finalHour)) {
-            eventFormState.setValue(new EventFormState(null, null, null, null, R.string.inavlid_hour, null, null,null));
-        }else if (!isNameValid(numVolunteers)) {
-                eventFormState.setValue(new EventFormState(null, null, null,null,null,R.string.invalid_number,null,null));
-        }else if (!isNameValid(goal)) {
-            eventFormState.setValue(new EventFormState(null, null, null,null,null,null,R.string.required,null));
-        }else if (!isNameValid(description)) {
-            eventFormState.setValue(new EventFormState(null, null, null,null,null,null,null,R.string.required));
-        } else if (!isStartDayValid(startDay)) {
-            eventFormState.setValue(new EventFormState(null, R.string.invalid_day, null,null,null,null,null,null));
-        } else if (!isFinishDayValid(startDay,finalDay)) {
-            eventFormState.setValue(new EventFormState(null, null, R.string.invalid_day,null,null,null,null,null));
-        }else{
-        eventFormState.setValue(new EventFormState(true));
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<JsonObject> result = eventRepository.postCommet(token,commentText);
+
+                if (result instanceof Result.Success) {
+                    eventResult.postValue(new EventResult(new EventCreatedView(((Result.Success<JsonObject>) result).getData())));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_To_Post_Comment));
+                }
+
+            }
+        });
     }
 
-    private boolean isNameValid(String name) {
-        if (name == null || name.isEmpty())
-            return false;
+    public void loadComments(String token, long eventId, String o) {
 
-        return true;
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<JsonObject> result = eventRepository.loadComments(token,eventId,o);
+
+                if (result instanceof Result.Success) {
+                    eventResult.postValue(new EventResult(new EventCreatedView(((Result.Success<JsonObject>) result).getData())));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_To_Load_Comment));
+                }
+
+            }
+        });
     }
-
-    private boolean isStartDayValid(Date day) {
-
-        Calendar cal =  Calendar.getInstance();
-
-        if(day == null)
-            return false;
-
-       if(day.before( cal.getTime()))
-            return false;
-
-            return true ;
-    }
-
-    private boolean isFinishDayValid(Date startDay, Date finalDay) {
-
-        if(finalDay == null )
-            return false;
-
-        if(finalDay.before( startDay))
-            return false;
-
-        return true ;
-    }
-
-    private boolean isHourValid(String hour) {
-
-        String h = "Hour";
-
-        if(hour == null || hour.isEmpty() || hour.contains(h) )
-            return false;
-
-        return true ;
-    }
-
-
-
 }

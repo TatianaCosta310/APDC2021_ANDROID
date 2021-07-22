@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Result;
+import pt.unl.fct.campus.firstwebapp.data.model.CommentObject;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
@@ -52,10 +54,10 @@ public class EventRepository extends AppCompatActivity {
         return result;
     }
 
-    public Result<List<JsonObject>> seeEvents(String value, String token, String actual, UpcomingEventsArgs upcomingEventsArgs) throws MalformedURLException {
+    public Result<EventCreatedView> seeEvents(String value, String token, String actual, UpcomingEventsArgs upcomingEventsArgs) throws MalformedURLException {
 
 
-        Result<List<JsonObject> > result = null;
+        Result<EventCreatedView> result = null;
 
         if(actual.equals("actual")){
             result = dataSource.seeEvents(value, token, upcomingEventsArgs);
@@ -101,6 +103,17 @@ public class EventRepository extends AppCompatActivity {
     }
 
 
+    public Result<JsonObject> postCommet(String token, CommentObject commentText) {
 
+        Result<JsonObject > result = dataSource.postCommet(token,commentText);
+
+        return result;
+    }
+
+    public Result<JsonObject> loadComments(String token, long eventId, String o) {
+        Result<JsonObject > result = dataSource.loadComments(token,eventId,o);
+
+        return result;
+    }
 }
 

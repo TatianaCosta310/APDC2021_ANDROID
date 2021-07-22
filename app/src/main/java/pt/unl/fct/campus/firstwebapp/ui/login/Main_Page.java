@@ -49,28 +49,27 @@ public class Main_Page extends AppCompatActivity implements Constantes {
     Bundle params ;
     String profilePic;
     TextView aboutUsText;
+    Bitmap decodedByte;
 
     private LoginViewModel loginViewModel;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main1);
 
+        decodedByte = null;
         params = new Bundle();
 
         Intent oldIntent = getIntent();
 
-        if(oldIntent != null)
+        if (oldIntent != null){
             params = oldIntent.getExtras();
-
-
-        if(params != null)
             profilePic = params.getString("profile_pic");
-
+    }
         openOptionsMenu = findViewById(R.id.imageButton);
         createEventButton = findViewById(R.id.button);
         seeEventButton = findViewById(R.id.button2);
@@ -80,12 +79,11 @@ public class Main_Page extends AppCompatActivity implements Constantes {
         aboutUsText = findViewById(R.id.textAbout);
         aboutUsText.setPaintFlags(aboutUsText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        if(profilePic != null){
-
+        if(profilePic != null) {
 
             String[] split = profilePic.split("/");
 
-            if(split.length == 4) {
+            if (split.length == 5) {
                 String imageName = split[4];
 
                 File f = new File(Main_Page.this.getCacheDir(), imageName + ".png");
@@ -127,9 +125,10 @@ public class Main_Page extends AppCompatActivity implements Constantes {
                     e.printStackTrace();
                 }
 
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 image.setImageBitmap(decodedByte);
+
             }
 
         }
@@ -149,7 +148,6 @@ public class Main_Page extends AppCompatActivity implements Constantes {
                         switch (item.getItemId()){
                             case R.id.profile:
                                 openProfilePage(Profile.class);
-                              // startActivity(new Intent(Main_Page.this,Profile.class));
                                 //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/")));
                                 return true;
                             case R.id.settings:

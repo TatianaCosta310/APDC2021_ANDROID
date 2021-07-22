@@ -7,7 +7,9 @@ import android.webkit.WebView;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.api.Api;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.net.HttpCookie;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +27,9 @@ import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.Result;
+import pt.unl.fct.campus.firstwebapp.data.model.CommentObject;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
 import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
@@ -35,7 +40,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Url;
 
-public class EventDataSource {
+public class EventDataSource implements Constantes {
 
     private UserService service;
 
@@ -43,7 +48,7 @@ public class EventDataSource {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://apdc-project-310922.ew.r.appspot.com/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -96,17 +101,18 @@ public class EventDataSource {
         }
     }
 
-    public Result<List<JsonObject>> seeEvents(String value, String token, UpcomingEventsArgs upcomingEventsArgs)  {
+    public Result<EventCreatedView> seeEvents(String value, String token, UpcomingEventsArgs upcomingEventsArgs)  {
 
-        Cookie cookie = new Cookie.Builder()
+        /*Cookie cookie = new Cookie.Builder()
                 .value(token)
-                .name("Cookie")
-                .domain("appspot.com")
+                .name("token")
+                .domain("apdc-project-310922.ew.r.appspot.com")
                 .path("/")
                 .build();
+*/
 
-
-        Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(value,  upcomingEventsArgs);
+        ;
+        Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(null, token, upcomingEventsArgs ,ACCEPT_CHARSET,HEADER_CONTENT_TYPE_JSON);
         try {
 
             Response<List<JsonObject>> response = userAuthenticatedCall.execute();
@@ -122,10 +128,17 @@ public class EventDataSource {
     }
 
 
-    public Result<List<JsonObject>> seeFinishedEvents(String value, String token) {
+    public Result<EventCreatedView> seeFinishedEvents(String value, String token) {
 
+        Cookie cookie = new Cookie.Builder()
+                .value(token)
+                .name("Cookie")
+                //.domain("appspot.com")
+                .domain("apdc-project-310922.ew.r.appspot.com")
+                .path("/")
+                .build();
 
-        Call<List<JsonObject>> userAuthenticatedCall = service.seeFinishedEvents(value);
+        Call<List<JsonObject>> userAuthenticatedCall = service.seeFinishedEvents(value,value);
         try {
 
             Response<List<JsonObject>> response = userAuthenticatedCall.execute();
@@ -175,16 +188,16 @@ public class EventDataSource {
         }
     }
 
-    public Result<List<JsonObject>> seemyEvents(String value, String token) {
+    public Result<EventCreatedView> seemyEvents(String value, String token) {
 
-        Call<List<JsonObject>> userAuthenticatedCall = service.seeMyEvents(value);
+        Call<String[]> userAuthenticatedCall = service.seeMyEvents(value,value,"");
         try {
 
-            Response<List<JsonObject>> response = userAuthenticatedCall.execute();
+            Response<String[]> response = userAuthenticatedCall.execute();
 
             ExecuteService executeService = new ExecuteService();
 
-            return executeService.ExecuteServiceEvents(response);
+            return executeService.ExecuteServiceMyEvents(response);
 
         } catch (Exception e) {
 
@@ -192,7 +205,7 @@ public class EventDataSource {
         }
     }
 
-    public Result<List<JsonObject>> seeParticipatingEvents(String value, String token) {
+    public Result<EventCreatedView> seeParticipatingEvents(String value, String token) {
 
         Call<List<JsonObject>> userAuthenticatedCall = service.seeParticipatingEvents(value);
         try {
@@ -227,5 +240,37 @@ public class EventDataSource {
     }
 
 
+    public Result<JsonObject> postCommet(String token, CommentObject commentText) {
 
+        Call<JsonObject > userAuthenticatedCall = service.postComment(token,commentText);
+        try {
+
+            Response<JsonObject> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return null;//executeService.ExecuteServiceGetEvent(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error To see Events", e));
+        }
+    }
+
+    public Result<JsonObject> loadComments(String token, long eventId, String o) {
+
+        Call<JsonObject > userAuthenticatedCall = service.loadComments(token,eventId,token);
+        try {
+
+            Response<JsonObject> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return null;//executeService.ExecuteServiceGetEvent(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error To see Events", e));
+        }
+    }
 }

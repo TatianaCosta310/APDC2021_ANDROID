@@ -1,115 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container7"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".ui.login.UpdateUser">
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:id="@+id/container7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".ui.login.UpdateUser"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/UpdText"
+            style="@style/text_box_style"
+            android:layout_width="383dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/about"
+            android:textAlignment="center"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/UpdTextName"
+            style="@style/text_box_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profile"
+            android:layout_marginTop="100dp"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/UpdText" />
 
 
-    <TextView
-        android:id="@+id/UpdText"
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/person2"
+        android:scaleType="centerCrop"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="150dp"
+        android:drawingCacheQuality="high"
+        android:src="@drawable/person"
+        app:civ_border_color="@color/teal_700"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+
+        android:id="@+id/QUOTE"
+        style="text_box_style2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
-        android:paddingVertical="70dp"
-        android:text="@string/action_update_user"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="220dp"
+        android:background="@drawable/textboxshape"
+        android:hint="@string/prompt_quote"
+        android:inputType="text"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:selectAllOnFocus="true"
+        android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/new_address"
+        <EditText
+
+            android:id="@+id/About"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="330dp"
+            android:background="@drawable/textboxshape"
+            android:hint="@string/prompt_about"
+            android:inputType="text"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:selectAllOnFocus="true"
+            app:layout_constraintBottom_toBottomOf="@id/QUOTE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/Social"
+            style="@style/text_box_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="400dp"
+            android:text="@string/Social_Networks"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+
+        android:id="@+id/Social_networks_Instagram"
+        android:background="@drawable/textboxshape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="500dp"
         android:layout_marginEnd="24dp"
-        android:hint="@string/prompt_newAddress"
+        android:hint="Instagram"
+        android:padding="@dimen/activity_horizontal_margin"
         android:inputType="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/Social"/>
+
     <EditText
-        android:id="@+id/new_address2"
+
+        android:id="@+id/Social_networks_Facebook"
+        android:background="@drawable/textboxshape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="580dp"
         android:layout_marginEnd="24dp"
-        android:hint="@string/prompt_newAddress2"
+        android:hint="Facebook"
+        android:padding="@dimen/activity_horizontal_margin"
         android:inputType="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_address" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/Social_networks_Instagram"/>
 
     <EditText
-        android:id="@+id/local"
+        android:id="@+id/Social_networks_Twitter"
+        android:background="@drawable/textboxshape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="660dp"
         android:layout_marginEnd="24dp"
-        android:hint="Locality"
+        android:hint="Twitter"
+        android:padding="@dimen/activity_horizontal_margin"
         android:inputType="text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_address2" />
-
-    <EditText
-        android:id="@+id/new_fixNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="@string/prompt_newFixNumber"
-        android:inputType="text|number"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/local" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/Social_networks_Facebook"/>
 
 
-    <EditText
-        android:id="@+id/new_mobileNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:hint="@string/prompt_newMobileNumber"
-        android:inputType="text|number"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_fixNumber" />
+        <Button
+            android:id="@+id/update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="124dp"
+            android:layout_marginTop="750dp"
+            android:backgroundTint="@color/turquoise_500"
+            android:enabled="true"
+            android:text="@string/update_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.154"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Social_networks_Twitter" />
 
-    <Button
-        android:id="@+id/update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="50dp"
-        android:backgroundTint="@color/turquoise_500"
-        android:enabled="true"
-        android:text="@string/update_user"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.154"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_mobileNumber" />
+        <!--  <EditText
+              android:id="@+id/new_address"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="24dp"
+              android:layout_marginTop="310dp"
+              android:layout_marginEnd="24dp"
+              android:hint="@string/prompt_newAddress"
+              android:inputType="text"
+              android:selectAllOnFocus="true"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />
+          <EditText
+              android:id="@+id/new_address2"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="24dp"
+              android:layout_marginTop="5dp"
+              android:layout_marginEnd="24dp"
+              android:hint="@string/prompt_newAddress2"
+              android:inputType="text"
+              android:selectAllOnFocus="true"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/new_address" />
+
+          <EditText
+              android:id="@+id/local"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="24dp"
+              android:layout_marginTop="5dp"
+              android:layout_marginEnd="24dp"
+              android:hint="Locality"
+              android:inputType="text"
+              android:selectAllOnFocus="true"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/new_address2" />
+
+          <EditText
+              android:id="@+id/new_fixNumber"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="24dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginEnd="24dp"
+              android:hint="@string/prompt_newFixNumber"
+              android:inputType="text|number"
+              android:selectAllOnFocus="true"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/local" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+          <EditText
+              android:id="@+id/new_mobileNumber"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="24dp"
+              android:layout_marginTop="8dp"
+              android:layout_marginEnd="24dp"
+              android:hint="@string/prompt_newMobileNumber"
+              android:inputType="text|number"
+              android:selectAllOnFocus="true"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintHorizontal_bias="0.0"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/new_fixNumber" />
+
+      -->
+
+
+
+    </RelativeLayout>
+</ScrollView>

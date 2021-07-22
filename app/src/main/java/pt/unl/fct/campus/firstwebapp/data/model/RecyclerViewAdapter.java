@@ -50,10 +50,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull  ViewHolder holder, int position) {
              event = events.get(position);
 
-            Glide.with(activity).load(event.getImg_cover())
+           /* Glide.with(activity).load(event.getImg_cover())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imageView);
-
+*/
             holder.textView.setText(event.getName());
     }
 

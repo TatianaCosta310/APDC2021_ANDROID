@@ -98,7 +98,6 @@ public class Register2VerificationCode  extends AppCompatActivity {
                 data.setPassword(password);
                 data.setVcode(verificationCode.getText().toString());
 
-
                 loginViewModel.registrate(data, verificationCode.getText().toString());
 
             }

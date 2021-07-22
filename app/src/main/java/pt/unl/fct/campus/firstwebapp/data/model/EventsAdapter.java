@@ -345,7 +345,7 @@ public class EventsAdapter extends BaseAdapter {
 
     public ViewHolder(View view) {
          owner = view.findViewById(R.id.textOwner);
-         name = view.findViewById(R.id.textName);
+//         name = view.findViewById(R.id.textName);
          description = view.findViewById(R.id.textDescription);
          where = view.findViewById(R.id.Where);
          when = view.findViewById(R.id.When);
@@ -357,10 +357,10 @@ public class EventsAdapter extends BaseAdapter {
          showOnMap = view.findViewById(R.id.ButtonShowOnMap);
          doParticipate = view.findViewById(R.id.ButtonDoParticipate);
          removeEvent = view.findViewById(R.id.ButtonRemoveEvent);
-         removeParticipation = view.findViewById(R.id.ButtonDoRemoveParticipate);
+       //  removeParticipation = view.findViewById(R.id.ButtonDoRemoveParticipate);
 
 
-         image = view.findViewById(R.id.imageEvent);
+      //   image = view.findViewById(R.id.imageEvent);
 
 
 

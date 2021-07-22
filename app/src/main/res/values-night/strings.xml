@@ -1,6 +1,118 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Closing The Gap</string>
+    <!-- Strings related to login and Register -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_userName">UserName</string>
+    <string name="prompt_userName_or_Email">UserName/Email </string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_password_confirmation"> Confirm Password</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">"Login"</string>
+    <string name="address_principal"> "Main Address"</string>
+    <string name="address_second"> "Complementary Address"</string>
+    <string name="locality"> "Locality"</string>
+    <string name="fix_number"> "Fix Number"</string>
+    <string name="mobile_phone"> "Mobile Phone Number"</string>
+
+    <!-- Strings related to page User name -->
+    <string name="action_sign_up_register"> Sign up or Register</string>
+    <string name="action_login"> Login </string>
+    <string name="optional"> "Optional"</string>
+
+    <!-- Strings related to messages-->
+    <string name="welcome">"Welcome To Closing The Gap App !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="user_already_exist">user already exist</string>
+    <string name="invalid_name">Not a valid name</string>
+    <string name="prompt_wrong_Data"> Email or Password incorret!</string>
+    <string name="invalid_password">Password must be >6 characters, contain at lest one letter and one digit </string>
+    <string name="must_match_password"> This password must be the same as the one above</string>
+    <string name="prompt_no_account_yet"> "No account yet? Create an Account"</string>
+    <string name="fill_next_optional"> "If you don't want to fill now, you can do it later, click on Next button"</string>
+    <string name="click_next_button">"If you are a regular user, just click on the Finish button"</string>
+
+    <!-- Strings related to Buttons Names -->
+    <string name="nextButton"> "Next"</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_up_short">Sign up</string>
+    <string name="action_finish">Finish</string>
+
+    <!-- Strings related to User Type -->
+    <string name="user_type"> "User Type"</string>
+    <string name="user_short"> "User "</string>
+    <string name="volunteer"> "volunteer "</string>
+    <string name="organization"> " organization "</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Strings related to User Type -->
+    <string name="action_see_profile"> "My Profile"</string>
+    <string name="editProfile">Update Profile</string>
+    <string name="action_update_user">Update Your Profile</string>
+    <string name="prompt_newAddress">New Address</string>
+    <string name="prompt_newAddress2">New Complementary Address</string>
+    <string name="prompt_newFixNumber">New Fix Number</string>
+    <string name="prompt_newMobileNumber">New Mobile Number</string>
+    <string name="update_user">Update</string>
+    <string name="register_failed">Register Failed</string>
+    <string name="logout_failed">Logout Failed</string>
+    <string name="update_failed">Update Info Failed</string>
+
+
+    <!-- Strings options for Settings page-->
+    <string name="option_Settings"> ListView</string>
+    <string name="remove_failed">Remove Account Failed</string>
+
+    <!-- Strings options for Events page-->
+    <string name="CreateEvent">Create Event</string>
+    <string name="EventName">Event Name</string>
+    <string name="StartDate">Start Day</string>
+    <string name="DueDate">Duo Date</string>
+    <string name="Description">Description</string>
+    <string name="Numvolunteer">Number of Volunteers</string>
+    <string name="OriginPlace">Origin Place</string>
+
+    <string-array name="options_List">
+        <item> Change Password </item>
+        <item> Remove Account </item>
+        <item> Help </item>
+
+    </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="Failed_Create_Event">Failed To create Event</string>
+    <string name="invalid_day">Invalid Day</string>
+    <string name="inavlid_hour">Invalid hour</string>
+    <string name="StartHour">Start Hour</string>
+    <string name="FinalHour">Final Hour</string>
+    <string name="Failed_See_Event">Failed To see Events</string>
+    <string name="Goal">Goal</string>
+    <string name="get_infos_failed">Failed To Get Infos</string>
+    <string name="Failed_Remove_See_Event">Failded To Remove Event</string>
+    <string name="Failed_Remove_Participation">Failed To Remove Participation</string>
+    <string name="remove_participation">Remove Participation</string>
+    <string name="participate">Participate</string>
+    <string name="show_on_map">Show On Map</string>
+    <string name="interested">Interested</string>
+    <string name="created_by">Created by</string>
+    <string name="maxvolunt">maxVolunt</string>
+    <string name="imageevent">imageEvent</string>
+    <string name="invalid_number">Invalid Number</string>
+    <string name="required">required</string>
+    <string name="session_expired">Session Expired, Please Login</string>
+    <string name="Failed_to_update_profile_pic">Failed to Updated profile picture</string>
+    <string name="About_Us">About us</string>
+    <string name="Logo_Text">The Gap is Closable</string>
+    <string name="session_invalid">Session Invalid</string>
     <string name="Your_name_is">Your name is</string>
     <string name="verification_code">Verification Code</string>
     <string name="invalide_code">Invalide Code</string>
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="prompt_quote">QUOTE</string>
+    <string name="prompt_about">About</string>
+    <string name="Social_Networks">Social Networks</string>
+    <string name="Failed_To_Post_Comment">Failed To Post Comment</string>
+    <string name="Failed_To_Load_Comment">Failed To Load Commnents</string>
+
+
 </resources>

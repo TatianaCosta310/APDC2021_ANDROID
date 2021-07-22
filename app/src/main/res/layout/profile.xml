@@ -36,7 +36,7 @@
         android:layout_marginEnd="48dp"
         android:backgroundTint="@color/turquoise_500"
         android:enabled="true"
-        android:text="Upadate/See Profile "
+        android:text="See Profile "
         style="@style/text_box_style"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"

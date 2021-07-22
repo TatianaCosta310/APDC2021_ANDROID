@@ -35,9 +35,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
-import pt.unl.fct.campus.firstwebapp.data.Events.MyEvents;
-import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
 
 public class Profile extends AppCompatActivity implements StoragePics {
@@ -133,7 +130,6 @@ public class Profile extends AppCompatActivity implements StoragePics {
 
                     map.put("profilePicture",fbody);
 
-
                     loginViewModel.updateProfilePicture(token,map);
 
                 }else{
@@ -157,12 +153,15 @@ public class Profile extends AppCompatActivity implements StoragePics {
                 }
 
                 if (loginResult.getError() != null) {
-                    showMessage(loginResult.getError().toString());
+                    showMessage(loginResult.getError().toString(),null);
                 }
                 if (loginResult.getSuccess() != null) {
 
                     LoggedInUserView model = loginResult.getSuccess();
-                    showMessage("Profile Pic Updated");
+
+                    String url = model.getProfile_pic();
+                    bundleExtra.putString("profile_pic",url);
+                    showMessage("Profile Pic Updated", bundleExtra);
 
                     image.setVisibility(View.INVISIBLE);
                     imagePicButton.setVisibility(View.INVISIBLE);
@@ -174,8 +173,27 @@ public class Profile extends AppCompatActivity implements StoragePics {
         });
 }
 
-    private void showMessage(String errorString) {
+
+
+    private void showMessage(String errorString,Bundle bundle) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+
+        if(bundle != null)
+        openMainPage(bundle);
+    }
+
+    private void openMainPage(Bundle bundleExtra) {
+
+        Intent intent = new Intent(this, Main_Page.class);
+
+       // Intent oldIntent = getIntent();
+
+        //if(oldIntent != null) {
+          //  bundleExtra = oldIntent.getExtras();
+            intent.putExtras(bundleExtra);
+        //}
+
+        startActivity(intent);
     }
 
 
@@ -197,12 +215,12 @@ public class Profile extends AppCompatActivity implements StoragePics {
     private void updateUser(Bundle bundleExtra) {
         Intent intent = new Intent(this, UpdateUser.class);
 
-        Intent oldIntent = getIntent();
+       // Intent oldIntent = getIntent();
 
-        if(oldIntent != null) {
-            bundleExtra = oldIntent.getExtras();
+        //if(oldIntent != null) {
+          //  bundleExtra = oldIntent.getExtras();
             intent.putExtras(bundleExtra);
-        }
+        //}
 
         startActivity(intent);
     }

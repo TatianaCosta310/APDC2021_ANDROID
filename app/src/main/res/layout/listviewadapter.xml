@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".data.Events.SeeFinishedEventsPage"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <TextView
         android:id="@+id/textListEvents"
         style="@style/text_box_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="68dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:padding="2dp"
         android:text="Finished Events"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColorHighlight="#4d4d4d"
         android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
+
+
+    <Button
+        android:id="@+id/PlaceId"
+        style="@style/text_box_style"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text=" Choose another Place "
+        android:textSize="20dp"/>
 
     <ListView
-        android:id="@+id/listViewEvents"
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="84dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textListEvents" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView"/>
+</LinearLayout>

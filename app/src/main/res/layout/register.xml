@@ -19,7 +19,6 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="30sp"
-        android:fontFamily="cursive"
         android:paddingVertical="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
