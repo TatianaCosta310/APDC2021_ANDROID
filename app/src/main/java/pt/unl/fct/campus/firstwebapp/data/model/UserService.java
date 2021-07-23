@@ -70,7 +70,7 @@ public interface UserService {
     //EVENTS ENDPOINTS
     @Multipart
     @POST("rest/events/create")
-    Call<EventData2> createEvent(@Header("token") String value,@PartMap Map<String,RequestBody> map);
+    Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
 
     // da 401 whyy???  supostamente nao autorizado?? hmmm
     @DELETE("rest/events/delete/{eventId}")
@@ -101,7 +101,9 @@ public interface UserService {
 
    @Headers({"Content-Type: application/json","Accept: application/json"})
    @GET("rest/events/view/interested")
-   Call< List<JsonObject>> seeParticipatingEvents(@Header("Cookie") String token);
+   Call< String[]> seeParticipatingEvents(@Query("userid") String user,
+                                                  @Query("cursor") String cursor,
+                                                  @Header("Cookie") String token);
 
 
     @Headers({"Content-Type: application/json","Accept: application/json"})
@@ -112,12 +114,12 @@ public interface UserService {
     //Events Comments Endpoints
 
     @POST("rest/comments/create")
-    Call<JsonObject> postComment(@Header("token") String value, @Body CommentObject comment);
+    Call<JsonObject> postComment(@Header("Cookie") String value, @Body CommentObject comment);
 
     @DELETE("rest/comments/remove/{commentId}")
     Call<LoginData> deleteComment(@Header("token") String token, @Path("commentId") long commentId);
 
     @GET("rest/comments/load/{eventid}")
-    Call<JsonObject> loadComments(@Header("token") String value, @Path("eventid") long eventId,@Query("c") String cursor);
+    Call<JsonObject> loadComments(@Header("Cookie") String value, @Path("eventid") long eventId,@Query("c") String cursor);
 
 }

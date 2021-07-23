@@ -205,16 +205,16 @@ public class EventDataSource implements Constantes {
         }
     }
 
-    public Result<EventCreatedView> seeParticipatingEvents(String value, String token) {
+    public Result<EventCreatedView> seeParticipatingEvents(String userid,String cursor, String token) {
 
-        Call<List<JsonObject>> userAuthenticatedCall = service.seeParticipatingEvents(value);
+        Call<String[]> userAuthenticatedCall = service.seeParticipatingEvents(userid,cursor,token);
         try {
 
-            Response<List<JsonObject>> response = userAuthenticatedCall.execute();
+            Response<String[]> response = userAuthenticatedCall.execute();
 
             ExecuteService executeService = new ExecuteService();
 
-            return executeService.ExecuteServiceEvents(response);
+            return executeService.ExecuteServiceMyEvents(response);
 
         } catch (Exception e) {
 
@@ -249,7 +249,7 @@ public class EventDataSource implements Constantes {
 
             ExecuteService executeService = new ExecuteService();
 
-            return null;//executeService.ExecuteServiceGetEvent(response);
+            return executeService.ExecuteServiceGetEvent(response);
 
         } catch (Exception e) {
 
@@ -259,14 +259,14 @@ public class EventDataSource implements Constantes {
 
     public Result<JsonObject> loadComments(String token, long eventId, String o) {
 
-        Call<JsonObject > userAuthenticatedCall = service.loadComments(token,eventId,token);
+        Call<JsonObject > userAuthenticatedCall = service.loadComments(token,eventId,o);
         try {
 
             Response<JsonObject> response = userAuthenticatedCall.execute();
 
             ExecuteService executeService = new ExecuteService();
 
-            return null;//executeService.ExecuteServiceGetEvent(response);
+            return executeService.ExecuteServiceGetEvent(response);
 
         } catch (Exception e) {
 

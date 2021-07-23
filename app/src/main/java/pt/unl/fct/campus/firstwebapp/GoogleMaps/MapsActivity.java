@@ -12,19 +12,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,9 +32,6 @@ import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.R;
@@ -47,7 +39,6 @@ import pt.unl.fct.campus.firstwebapp.data.Events.CreateEventPage;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeEventsPage;
 import pt.unl.fct.campus.firstwebapp.data.model.Location;
 import pt.unl.fct.campus.firstwebapp.data.model.LooClass;
-import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
@@ -320,21 +311,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent oldIntent = getIntent();
 
-       /* Location loc = new Location("34",address.getLocality(),new LooClass(address.getLatitude(),address.getLongitude()));
+       Location loc = new Location("34",address.getLocality(),new LooClass(address.getLatitude(),address.getLongitude()));
 
         Gson g = new Gson();
 
         String c = g.toJson(loc);
-*/
+
+
 
         if(oldIntent != null) {
             params = oldIntent.getExtras();
-           // params.putString("location", c);
+            params.putString("location", c);
             params.putDouble("Latitude",address.getLatitude());
             params.putDouble("Longitude", address.getLongitude());
-           // params.putString("POSTAL_CODE", address.getPostalCode() );
-            //params.putString("COUNTRY_NAME",address.getCountryName());
+            params.putString("POSTAL_CODE", address.getPostalCode() );
+            params.putString("COUNTRY_NAME",address.getCountryName());
             params.putString("LOCALITY",address.getLocality());
+            params.putString("Street", address.getThoroughfare());
+
 
             if(params != null)
                 intent.putExtras(params);

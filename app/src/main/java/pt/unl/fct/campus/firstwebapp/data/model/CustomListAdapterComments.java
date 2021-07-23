@@ -1,5 +1,6 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +12,20 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
+
+import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
+import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Constantes;
+import pt.unl.fct.campus.firstwebapp.data.Events.EventCreatedView;
+import pt.unl.fct.campus.firstwebapp.data.Events.EventResult;
+import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModel;
+import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModelFactory;
+import pt.unl.fct.campus.firstwebapp.data.Events.SeeFullEventPage;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -23,16 +34,26 @@ import com.google.cloud.storage.StorageOptions;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> implements Constantes {
 
     private static final String TAG = "CustomListAdapter";
+
+    private EventViewModel eventViewModel;
+    private LifecycleOwner lifecycleOwner;
+
+
+    private String  imageName,token;
 
     private Context mContext;
     private int mResource;
@@ -44,6 +65,7 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
     private static class ViewHolder {
         TextView userName,date,comment;
         ImageView image;
+        Button removeComment;
     }
 
     /**
@@ -52,12 +74,16 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
      * @param resource
      * @param objects
      */
-    public CustomListAdapterComments(Context context, int resource, ArrayList<CommentObject2> objects) {
+    public CustomListAdapterComments(LifecycleOwner lifecycleOwner, EventViewModel eventViewModel, Context context, int resource, ArrayList<CommentObject2> objects, String token) {
         super(context, resource, objects);
 
-
+        this.lifecycleOwner = lifecycleOwner;
         mContext = context;
         mResource = resource;
+
+        this.token = token;
+
+        this.eventViewModel = eventViewModel;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -73,6 +99,8 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
         String user = getItem(position).getOwnerName();
         String comment =  getItem(position).getComment();
         String date =  getItem(position).getDate();
+
+        long commentId = getItem(position).getEventid();
 
         try{
 
@@ -90,6 +118,7 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
                 holder.image =  convertView.findViewById(R.id.imageEventCard2);
                 holder.comment =  convertView.findViewById(R.id.textNameCard3);
                 holder.date =  convertView.findViewById(R.id.textNameCard4);
+                holder.removeComment =  convertView.findViewById(R.id.ButtonRemoveComment);
 
                 result = convertView;
 
@@ -100,6 +129,35 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
                 result = convertView;
             }
 
+
+            holder.removeComment.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                        eventViewModel.deleteComment(token,commentId);
+                }
+            });
+
+
+
+            eventViewModel.getLoginResult().observe(lifecycleOwner, new Observer<EventResult>() {
+                @Override
+                public void onChanged(EventResult eventResult) {
+                    if (eventResult == null) {
+                        return;
+                    }
+
+                    if (eventResult.getError() != null) {
+
+                        //showLoginFailed(loginResult.getError());
+                    }
+                    if (eventResult.getSuccess() != null) {
+
+
+                    }
+                }
+            });
 
 
             Animation animation = AnimationUtils.loadAnimation(mContext,
@@ -115,6 +173,8 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
 
             if(imgUrl != null) {
 
+
+
                 File f = new File(mContext.getCacheDir(), user + ".png");
                 try {
                     f.createNewFile();
@@ -123,6 +183,10 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
                 }
 
                 String[] split = imgUrl.split("/");
+                 imageName = imgUrl;
+
+                if(split.length > 1)
+                    imageName = split[4];
 
 
                 Storage storage = StorageOptions.newBuilder()
@@ -132,13 +196,14 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
                         .getService();
 
 
+
                 Thread thread = new Thread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void run() {
 
                         try {
-                            Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, split[4]));
+                            Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
                             blob.downloadTo(Paths.get(f.toString()));
 
                         } catch (Exception e) {

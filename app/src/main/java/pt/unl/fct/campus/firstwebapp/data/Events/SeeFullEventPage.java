@@ -57,17 +57,20 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     private JsonObject list;
 
-    List<CommentObject2> listCard;
+    ArrayList<CommentObject2> listCard;
 
     ImageView imageView,organizerpicView;
 
     TextView eventName,owner,description,where,when,until,numMaxVol,numIntered,commentBoard;
     EditText commentText;
     Button showOnMap,addComment,loadComents,participate,remove;
+    ;
 
     Bundle params;
 
     String message,tokenEvent;
+
+    Boolean doParticipate = true;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -79,13 +82,15 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         listView =  findViewById(R.id.listView2);
 
         listCard = new ArrayList<>();
-        CustomListAdapterComments adapter = new CustomListAdapterComments(SeeFullEventPage.this, R.layout.comments_card_view, (ArrayList<CommentObject2>) listCard);
 
         imageView = findViewById(R.id.imageEvent1);
         organizerpicView = findViewById(R.id.imageEventCard3);
 
         commentText = findViewById(R.id.CommentText);
         commentBoard = findViewById(R.id.textShowComments);
+
+
+
 
         eventName = findViewById(R.id.textShowEvent);
         owner = findViewById(R.id.textOwner);
@@ -111,7 +116,14 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
         tokenEvent = params.getString("tokenEvent");
 
+        EventData2 eventData = gson.fromJson(params.getString("Event"), EventData2.class);
+
+        if(eventData.isOwner())
+            remove.setVisibility(View.VISIBLE);
+
+
         if(type.equalsIgnoreCase("SeeEventsFinished")){
+
             addComment.setVisibility(View.INVISIBLE);
             loadComents.setVisibility(View.INVISIBLE);
             participate.setVisibility(View.INVISIBLE);
@@ -121,13 +133,13 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
         }
 
-        if(type.equalsIgnoreCase("SeeMyEvents")) {
-            remove.setVisibility(View.VISIBLE);
+        if(type.equalsIgnoreCase("SeeParticipatingEvents")){
+            doParticipate = false;
+            participate.setText("Remove Participation");
+
         }
 
-        EventData2 eventData = gson.fromJson(params.getString("Event"), EventData2.class);
-
-       Coords coords =  eventData.getEventCoords();
+        Coords coords =  eventData.getEventCoords();
 
         eventName.setText(eventData.getName());
         owner.setText(eventData.getOrganizer());
@@ -146,14 +158,18 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         Storage storage1;
         Bitmap bitmap;
 
+
         if(image != null){
             split1 = image.split("/");
 
-            f1 = createNewFile(this,split1[4]);
+            if(split1.length > 1)
+                image = split1[4];
+
+            f1 = createNewFile(this,image);
 
             storage1 = getStorage(BLOB_ID_PROJECT);
 
-           bitmap = getBitmap(storage1,BLOB_ID_PROJECT,split1[4],f1);
+           bitmap = getBitmap(storage1,BLOB_ID_PROJECT,image,f1);
 
            imageView.setImageBitmap(bitmap);
 
@@ -194,8 +210,14 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         participate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                message = "Now Participating";
-                eventViewModel.participate(token, eventData.getEventId());
+
+                if(doParticipate == false){
+                    message = "No longer Participating";
+                    eventViewModel.removeParticipation(token, eventData.getEventId());
+                }else {
+                    message = "Now Participating";
+                    eventViewModel.participate(token, eventData.getEventId());
+                }
             }
         });
 
@@ -206,9 +228,11 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
                 Calendar cal = Calendar.getInstance();
 
                 CommentObject commentObject = new CommentObject(eventData.getEventId(),commentText.getText().toString(),
-                                                                cal.getTime().toString(),0);
+                                                                cal.getTime().toString());
 
                 eventViewModel.postComment(token, commentObject);
+
+               // listView.setVisibility(View.VISIBLE);
 
                 message = "Post";
             }
@@ -220,6 +244,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
             public void onClick(View v) {
                 message = "loaded";
 
+                //listView.setVisibility(View.VISIBLE);
                 eventViewModel.loadComments(token, eventData.getEventId(),"");
             }
         });
@@ -239,19 +264,17 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
                     if (message.equals("Post")) {
                         showMessage("Comment added");
-                        eventViewModel.loadComments(token, eventData.getEventId(), "");
+                       // eventViewModel.loadComments(token, eventData.getEventId(), "");
 
                     }else if(message.equals("Removing")){
 
                         showMessage("Event Removed");
-                        Intent intent = new Intent(getApplicationContext(), Main_Page.class);
-                        intent.putExtras(params);
-                        startActivity(intent);
-
+                        openPage();
 
                     }else if(message.equals("loaded")){
 
                         EventCreatedView model = eventResult.getSuccess();
+
 
                         list = model.getJsonObject();
 
@@ -265,18 +288,29 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
                         } else {
 
-                            listView.setVisibility(View.VISIBLE);
-                            listCard = result.getList();
+
+                            listCard = (ArrayList<CommentObject2>) result.getList();
+                            CustomListAdapterComments adapter = new CustomListAdapterComments(SeeFullEventPage.this,eventViewModel,SeeFullEventPage.this, R.layout.comments_card_view,  listCard,token);
+
                             listView.setAdapter(adapter);
 
                         }
-                    } else {
+                   } else {
                         showMessage(message);
+                        openPage();
                     }
                 }
             }
         });
 
+
+    }
+
+    private void openPage() {
+
+        Intent intent = new Intent(getApplicationContext(), Main_Page.class);
+        intent.putExtras(params);
+        startActivity(intent);
 
     }
 

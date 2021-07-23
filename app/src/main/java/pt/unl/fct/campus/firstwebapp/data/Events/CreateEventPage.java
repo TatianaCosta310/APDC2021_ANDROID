@@ -11,15 +11,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.text.format.DateFormat;
 
-import android.text.method.Touch;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +35,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,8 +43,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,14 +58,17 @@ import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
+import pt.unl.fct.campus.firstwebapp.data.model.EventLocationArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.StoragePics;
 import pt.unl.fct.campus.firstwebapp.data.model.UploadImageFromPhone;
 import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
+import android.location.Geocoder;
 
-
-public class CreateEventPage extends AppCompatActivity implements StoragePics {
+public class CreateEventPage extends AppCompatActivity implements StoragePics, Constantes {
 
     Uri selectedImage;
     ImageView image ;
@@ -80,7 +85,10 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
     private AlertDialog.Builder alerta;
 
 
-    private String token,location;
+    private String token,location,locationName,address;
+
+
+    private Double lat,lng;
     
     private int timeHour,timeMinute;
 
@@ -123,7 +131,29 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
          params = oldIntent.getExtras();
 
         token = params.getString("token");
-        location = params.getString("location");
+        location = "";
+
+        String street = params.getString("Street");
+       String postal_code = params.getString("POSTAL_CODE");
+
+        locationName = params.getString("LOCALITY");
+       String country = params.getString("COUNTRY_NAME");
+
+        if(street != null)
+            location = street;
+
+        if(location.length() > 0)
+            location = location + "\n";
+
+        location = (location +  postal_code + " ," + locationName + "\n" + country );
+
+        lat = params.getDouble("Latitude");
+        lng = params.getDouble("Longitude");
+
+
+
+
+
 
          bitmap = null;
 
@@ -245,7 +275,17 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                     e.setEndTime(eventFinalHour.getText().toString());
                     e.setStartDate(eventDateCreation.getText().toString());
                     e.setEndDate(eventDue.getText().toString());
-                    e.setLocation(location);
+
+
+                    EventLocationArgs l = new EventLocationArgs();
+
+                    Coords coords = new Coords(lat,lng);
+
+                    l.setLoc(coords);
+                    //location =
+                    l.setName(location);
+
+                    e.setLocation(gson.toJson(l));
 
 
                     //Send to Server
@@ -288,7 +328,8 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics {
                     }
 
                     RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), f);
-                    map.put("img_cover",fbody);
+                  //  map.put("img_cover",fbody);
+                    map.put("img_",fbody);
 
                     eventViewModel.createEvent(token,map);
 

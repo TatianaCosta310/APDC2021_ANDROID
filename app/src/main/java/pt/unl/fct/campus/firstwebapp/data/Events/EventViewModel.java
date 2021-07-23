@@ -254,4 +254,22 @@ public class EventViewModel extends ViewModel {
             }
         });
     }
+
+    public void deleteComment(String token, long commentId) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                Result<JsonObject> result = null;// = eventRepository.deleteComment(token,commentId);
+
+                if (result instanceof Result.Success) {
+                    eventResult.postValue(new EventResult(new EventCreatedView(((Result.Success<JsonObject>) result).getData())));
+                } else {
+                    eventResult.postValue(new EventResult(R.string.Failed_To_Load_Comment));
+                }
+
+            }
+        });
+    }
 }

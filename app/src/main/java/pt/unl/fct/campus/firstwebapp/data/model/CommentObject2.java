@@ -18,8 +18,8 @@ public class CommentObject2 extends CommentObject {
         this.owner = owner;
     }
     public CommentObject2() {}
-    public CommentObject2(long eventid, String comment, String date, long commentId, long ownerId){
-        super(eventid, comment, date,commentId);
+    public CommentObject2(long eventid, String comment, String date , long ownerId){
+        super(eventid, comment, date);
         this.ownerId=ownerId;
     }
     public String getOwnerName() {

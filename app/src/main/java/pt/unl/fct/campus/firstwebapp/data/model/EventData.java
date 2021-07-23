@@ -1,11 +1,6 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
-import android.icu.util.ULocale;
-
 import java.io.File;
-
-import okhttp3.MultipartBody;
-import retrofit2.http.Part;
 
 public class EventData {
 

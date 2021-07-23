@@ -3,14 +3,13 @@ package pt.unl.fct.campus.firstwebapp.data.model;
 public class CommentObject {
 
     String comment, date;
-    long eventid, commentid;
+    long eventid;
     public CommentObject() {
     }
-    public CommentObject(long eventid, String comment, String date,long commentId){
+    public CommentObject(long eventid, String comment, String date ){
         this.eventid=eventid;
         this.comment=comment;
         this.date=date;
-        this.commentid=commentId;
     }
     public String getDate() {
         return date;

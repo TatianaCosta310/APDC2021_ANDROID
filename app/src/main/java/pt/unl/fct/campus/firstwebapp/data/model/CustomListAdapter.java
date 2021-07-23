@@ -40,6 +40,8 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
     private static final String TAG = "CustomListAdapter";
 
+    private String imageName;
+
     private Context mContext;
     private int mResource;
     private int lastPosition = -1;
@@ -134,6 +136,10 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
                 String[] split = imgUrl.split("/");
 
+                imageName = imgUrl;
+
+                if(split.length > 1 )
+                    imageName = split[4];
 
                 Storage storage = StorageOptions.newBuilder()
                         .setProjectId(BLOB_ID_PROJECT)
@@ -148,7 +154,7 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
                     public void run() {
 
                         try {
-                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, split[4]));
+                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, imageName));
                             blob.downloadTo(Paths.get(f.toString()));
 
                         } catch (Exception e) {

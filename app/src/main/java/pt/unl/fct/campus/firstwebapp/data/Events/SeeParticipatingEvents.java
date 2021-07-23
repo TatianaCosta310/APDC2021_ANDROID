@@ -1,14 +1,12 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -16,22 +14,33 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.Constantes;
+import pt.unl.fct.campus.firstwebapp.data.model.CustomListAdapter;
+import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
-import pt.unl.fct.campus.firstwebapp.data.model.EventsAdapter;
+import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
-public class SeeParticipatingEvents extends AppCompatActivity {
+
+public class SeeParticipatingEvents extends AppCompatActivity implements Constantes {
 
     private EventViewModel eventViewModel;
 
     private ArrayList<EventData2> eventsList = new ArrayList<>();
 
-    private EventsAdapter adapter;
+    private List<EventData2> list;
+
+    //private EventsAdapter adapter;
 
     EventData2 event = null;
 
@@ -41,36 +50,62 @@ public class SeeParticipatingEvents extends AppCompatActivity {
 
     TextView text;
 
-    String token;
+    String token,tokenEvent;
 
     Intent oldIntent;
 
-    Bundle savedInstanceState;
+
+    Boolean getEvent;
+
+    Button changePlaceButton,removeParticipation;
+
+    int i,page = 1,limit = 10;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        this.savedInstanceState = savedInstanceState;
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.listviewadapter);
 
-     /*   setContentView(R.layout.listviewadapter);
+        listView =  findViewById(R.id.listView);
 
+        ArrayList<EventData2> listCard = new ArrayList<>();
+        CustomListAdapter adapter = new CustomListAdapter(SeeParticipatingEvents.this, R.layout.card_view, listCard);
 
-        text = findViewById(R.id.textListEvents);
-        text.setText("Volunteering");
-
-
-        eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
-                .get(EventViewModel.class);
+        i = 0;
 
         oldIntent = getIntent();
         params = oldIntent.getExtras();
 
+        Double lat = params.getDouble("Latitude");
+        Double lng = params.getDouble("Longitude");
+        // String postal_code = params.getString("POSTAL_CODE");
+        //String country_name = params.getString("COUNTRY_NAME");
+        String locality = params.getString("LOCALITY");
+
+
+        UpcomingEventsArgs upcomingEventsArgs = new UpcomingEventsArgs();
+
+        upcomingEventsArgs.setLat(lat);
+        upcomingEventsArgs.setLng(lng);
+
+
+        changePlaceButton = findViewById(R.id.PlaceId);
+        changePlaceButton.setVisibility(View.INVISIBLE);
+
+        text = findViewById(R.id.textListEvents);
+        text.setText("  Events ");
+        getEvent = false;
+
+        eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(EventViewModel.class);
+
         token = params.getString("token");
 
+        list = new ArrayList<>();
 
-        eventViewModel.getParticipatingEvents(token, token,"participating");
+
+        eventViewModel.seeEvent(token, token, "participating",null);
 
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
@@ -80,57 +115,146 @@ public class SeeParticipatingEvents extends AppCompatActivity {
                 }
 
                 if (eventResult.getError() != null) {
+
                     //showLoginFailed(loginResult.getError());
                 }
                 if (eventResult.getSuccess() != null) {
 
-                    EventCreatedView model = eventResult.getSuccess();
+                    if(getEvent == false) {
+                        EventCreatedView model = eventResult.getSuccess();
+                        tokenEvent = model.getToken();
 
-                    List<JsonObject> list = model.getEventsList();
+                        String [] s = model.getListP();
 
-                    if (list.size() == 0) {
-                        //alerta a dizer que nao existem Eventos em que o ususario participa!
-                        AlertDialog.Builder alert = new AlertDialog.Builder(SeeParticipatingEvents.this);
-                        alert.setTitle("no participation");
-                        alert.setMessage("You are not participating in any events ");
+                        Type fooType = new TypeToken<ArrayList<EventData2>>() {}.getType();
+
+                        list = gson.fromJson(s[0],fooType);
+
                     } else {
 
-                        Gson gson = new Gson();
+                        EventCreatedView model = eventResult.getSuccess();
 
-                        for (int i = 0; i < list.size(); i++) {
-                            event = gson.fromJson(list.get(i).toString(), EventData2.class);
-                            eventsList.add(event);
-                        }
-
-                        showEvents(eventsList);
+                        event = gson.fromJson(model.getJsonObject(), EventData2.class);
+                        listCard.add(event);
                     }
 
-                    setResult(Activity.RESULT_OK);
+                    if (list != null) {
+                        if (list.size() == 0) {
+                            // alerta a dizer que nao existem Eventos ainda !
+                            AlertDialog.Builder alert = new AlertDialog.Builder(SeeParticipatingEvents.this);
+                            alert.setTitle("no events");
+                            alert.setMessage("You are not Participating on any Event yet ");
 
+                        } else {
+
+                            EventLocationResponse  eventData2;
+
+                            if(i == 0)
+                                doSomething();
+
+                            if(i <= list.size() - 1) {
+
+                                //vai buscar os eventos completos (dados todos)
+                                //  eventData2 = gson.fromJson(list.get(i).toString(), EventLocationResponse .class);
+
+                                eventViewModel.getEvent(list.get(i).getEventId(), token);
+
+                                i++;
+
+                            }else if(i == list.size()){
+
+
+                                listView.setAdapter(adapter);
+
+
+
+                            }
+
+                        }
+                    }
                 }
 
 
-                //Complete and destroy  activity once successful
-                //finish();
             }
         });
-    }
 
 
-    public void showEvents(ArrayList<EventData2> events) {
 
-        listView = findViewById(R.id.listViewEvents);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-        adapter = new EventsAdapter( savedInstanceState,null,this,this,this,events,R.layout.participating_events,token,oldIntent);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(SeeParticipatingEvents.this, "click to item: "+position, Toast.LENGTH_SHORT).show();
+                EventData2 val = adapter.getItem(position);
+
+                openFullEventPage(val);
+
+
+
             }
-        });*/
+        });
+
+
+
+
+        changePlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(SeeParticipatingEvents.this , MapsActivity.class);
+
+                Intent oldIntent = getIntent();
+
+                if(oldIntent != null) {
+                    params = oldIntent.getExtras();
+                    params.putString("Page", "SeeParticipatingEvents");
+
+                    if(params != null)
+                        intent.putExtras(params);
+                } else {
+                    params = new Bundle();
+                }
+
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+    private void doSomething (){
+
+        getEvent = true;
+
+        eventViewModel = new ViewModelProvider(SeeParticipatingEvents.this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                .get(EventViewModel.class);
+    }
+
+    /*public void addElements(List<JsonObject> m){
+        for (JsonObject o : m)
+            list.add(o);
+
+    }*/
+
+    public void  openFullEventPage(EventData2 event) {
+        Intent intent = new Intent(getApplicationContext(), SeeFullEventPage.class);
+
+        Intent oldIntent = getIntent();
+
+        if (oldIntent != null) {
+            params = oldIntent.getExtras();
+
+            if (params != null)
+                params.putString("Page", "SeeParticipatingEvents");
+            params.putString("Event", gson.toJson(event));
+            intent.putExtras(params);
+        } else {
+            params = new Bundle();
+        }
+
+        startActivity(intent);
     }
 
 }
+
+
