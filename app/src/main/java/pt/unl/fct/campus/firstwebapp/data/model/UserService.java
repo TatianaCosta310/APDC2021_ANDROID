@@ -1,20 +1,12 @@
 package pt.unl.fct.campus.firstwebapp.data.model;
 
-import com.google.firebase.encoders.annotations.Encodable;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
-
-import java.net.CookieHandler;
-import java.net.HttpCookie;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Cookie;
 import okhttp3.RequestBody;
-import pt.unl.fct.campus.firstwebapp.data.Events.EventCreatedView;
-import pt.unl.fct.campus.firstwebapp.data.Events.EventLocationResponse;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -26,7 +18,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -117,7 +108,7 @@ public interface UserService {
     Call<JsonObject> postComment(@Header("Cookie") String value, @Body CommentObject comment);
 
     @DELETE("rest/comments/remove/{commentId}")
-    Call<LoginData> deleteComment(@Header("token") String token, @Path("commentId") long commentId);
+    Call<Void> deleteComment(@Header("Cookie") String value, @Path("commentId") long commentId);
 
     @GET("rest/comments/load/{eventid}")
     Call<JsonObject> loadComments(@Header("Cookie") String value, @Path("eventid") long eventId,@Query("c") String cursor);

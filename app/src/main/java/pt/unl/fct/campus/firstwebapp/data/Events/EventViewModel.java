@@ -1,6 +1,5 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
-import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,8 +11,7 @@ import com.google.gson.JsonObject;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -48,7 +46,6 @@ public class EventViewModel extends ViewModel {
     public LiveData<EventResult> getLoginResult() {
         return eventResult;
     }
-
 
 
     public void createEvent(String token, Map<String,RequestBody> map) {
@@ -257,19 +254,25 @@ public class EventViewModel extends ViewModel {
 
     public void deleteComment(String token, long commentId) {
 
+
         executor.execute(new Runnable() {
+
+
             @Override
             public void run() {
 
-                Result<JsonObject> result = null;// = eventRepository.deleteComment(token,commentId);
+                Result<Void> result  = eventRepository.deleteComment(token,commentId);
 
                 if (result instanceof Result.Success) {
-                    eventResult.postValue(new EventResult(new EventCreatedView(((Result.Success<JsonObject>) result).getData())));
+                    eventResult.postValue(new EventResult(new EventCreatedView("Success")));
                 } else {
-                    eventResult.postValue(new EventResult(R.string.Failed_To_Load_Comment));
+                    eventResult.postValue(new EventResult(new EventCreatedView("Failed")));
                 }
 
             }
+
+
         });
+
     }
 }

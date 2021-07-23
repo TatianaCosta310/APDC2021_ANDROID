@@ -15,4 +15,8 @@ public class LoadCommentsResponse {
     public List<CommentObject2> getList(){
         return  comments;
     }
+
+    public String getCursor(){
+        return  cursor;
+    }
 }

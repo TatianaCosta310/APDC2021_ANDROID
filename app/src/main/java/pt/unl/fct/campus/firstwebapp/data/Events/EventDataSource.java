@@ -273,4 +273,21 @@ public class EventDataSource implements Constantes {
             return new Result.Error(new IOException("Error To see Events", e));
         }
     }
+
+    public Result<Void> deleteComment(String token, long commentId) {
+
+        Call<Void > userAuthenticatedCall = service.deleteComment(token,commentId);
+        try {
+
+            Response<Void> response = userAuthenticatedCall.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceRemoveEvent(response);
+
+        } catch (Exception e) {
+
+            return new Result.Error(new IOException("Error To see Events", e));
+        }
+    }
 }

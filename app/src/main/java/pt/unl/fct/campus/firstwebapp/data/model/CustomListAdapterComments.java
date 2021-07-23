@@ -2,9 +2,11 @@ package pt.unl.fct.campus.firstwebapp.data.model;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
@@ -26,6 +29,7 @@ import pt.unl.fct.campus.firstwebapp.data.Events.EventResult;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModel;
 import pt.unl.fct.campus.firstwebapp.data.Events.EventViewModelFactory;
 import pt.unl.fct.campus.firstwebapp.data.Events.SeeFullEventPage;
+import pt.unl.fct.campus.firstwebapp.ui.login.Main_Page;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -34,9 +38,13 @@ import com.google.cloud.storage.StorageOptions;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +60,7 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
     private EventViewModel eventViewModel;
     private LifecycleOwner lifecycleOwner;
 
-
+    private Bundle params;
     private String  imageName,token;
 
     private Context mContext;
@@ -74,16 +82,22 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
      * @param resource
      * @param objects
      */
-    public CustomListAdapterComments(LifecycleOwner lifecycleOwner, EventViewModel eventViewModel, Context context, int resource, ArrayList<CommentObject2> objects, String token) {
+    public CustomListAdapterComments(Bundle params,LifecycleOwner lifecycleOwner, EventViewModel eventViewModel, Context context, int resource, ArrayList<CommentObject2> objects, String token) {
         super(context, resource, objects);
 
-        this.lifecycleOwner = lifecycleOwner;
+        this.params = params;
+
+      //  this.lifecycleOwner = lifecycleOwner;
+
+
+
         mContext = context;
         mResource = resource;
 
         this.token = token;
 
         this.eventViewModel = eventViewModel;
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -99,6 +113,7 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
         String user = getItem(position).getOwnerName();
         String comment =  getItem(position).getComment();
         String date =  getItem(position).getDate();
+        Boolean isOwner = getItem(position).isOwner();
 
         long commentId = getItem(position).getEventid();
 
@@ -135,29 +150,14 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
                 @Override
                 public void onClick(View v) {
 
-                        eventViewModel.deleteComment(token,commentId);
+                    eventViewModel.deleteComment(token,commentId);
+
+                    /*Toast.makeText(mContext, "Removed", Toast.LENGTH_SHORT).show();
+                        openpage();*/
+
                 }
             });
 
-
-
-            eventViewModel.getLoginResult().observe(lifecycleOwner, new Observer<EventResult>() {
-                @Override
-                public void onChanged(EventResult eventResult) {
-                    if (eventResult == null) {
-                        return;
-                    }
-
-                    if (eventResult.getError() != null) {
-
-                        //showLoginFailed(loginResult.getError());
-                    }
-                    if (eventResult.getSuccess() != null) {
-
-
-                    }
-                }
-            });
 
 
             Animation animation = AnimationUtils.loadAnimation(mContext,
@@ -168,6 +168,9 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
             holder.userName.setText(user);
             holder.comment.setText(comment);
             holder.date.setText(date);
+
+            if(isOwner)
+                holder.removeComment.setVisibility(View.VISIBLE);
 
             //set the imageCover
 
@@ -235,4 +238,9 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
         }
     }
 
+    private void openpage(){
+        Intent intent = new Intent(mContext.getApplicationContext(), SeeFullEventPage.class);
+        intent.putExtras(params);
+        mContext.getApplicationContext().startActivity(intent);
+    }
 }

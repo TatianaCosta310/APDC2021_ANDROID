@@ -48,6 +48,6 @@ public class EventCreatedView {
 
     public JsonObject getJsonObject(){return  jsonObject;}
 
-    String getResponse(){return response;}
+    public String getResponse(){return response;}
 }
 

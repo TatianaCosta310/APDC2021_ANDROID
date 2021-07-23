@@ -63,12 +63,12 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     TextView eventName,owner,description,where,when,until,numMaxVol,numIntered,commentBoard;
     EditText commentText;
-    Button showOnMap,addComment,loadComents,participate,remove;
-    ;
+    Button showOnMap,addComment,loadComents, loadmoreComments,participate,remove;
+
 
     Bundle params;
 
-    String message,tokenEvent;
+    String message,tokenEvent, cursor;
 
     Boolean doParticipate = true;
 
@@ -91,7 +91,6 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
 
 
-
         eventName = findViewById(R.id.textShowEvent);
         owner = findViewById(R.id.textOwner);
         description = findViewById(R.id.textDescription);
@@ -104,6 +103,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         showOnMap = findViewById(R.id.ButtonShowOnMap);
         addComment = findViewById(R.id.ButtonAddComments);
         loadComents = findViewById(R.id.ButtonShowOnComments);
+        loadmoreComments = findViewById(R.id.ButtonLoadMoreComments);
         participate = findViewById(R.id.ButtonDoParticipate);
         remove = findViewById(R.id.ButtonRemoveEvent);
 
@@ -249,6 +249,17 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
             }
         });
 
+
+        loadmoreComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                message = "loaded";
+
+                eventViewModel.loadComments(token, eventData.getEventId(),cursor);
+            }
+        });
+
+
         eventViewModel.getLoginResult().observe(this, new Observer<EventResult>() {
             @Override
             public void onChanged(EventResult eventResult) {
@@ -279,6 +290,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
                         list = model.getJsonObject();
 
                         LoadCommentsResponse result = gson.fromJson(list, LoadCommentsResponse .class);
+                         cursor = result.getCursor();
 
                         if (result.getList().size() == 0) {
                             // alerta a dizer que nao existem comentarios neste evento ainda !
@@ -288,9 +300,23 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
                         } else {
 
+                            loadmoreComments.setVisibility(View.VISIBLE);
 
-                            listCard = (ArrayList<CommentObject2>) result.getList();
-                            CustomListAdapterComments adapter = new CustomListAdapterComments(SeeFullEventPage.this,eventViewModel,SeeFullEventPage.this, R.layout.comments_card_view,  listCard,token);
+
+                            if(listCard.size() > 0){
+                                ArrayList<CommentObject2> a = (ArrayList<CommentObject2>) result.getList();
+
+                                for(CommentObject2 c: a){
+                                    listCard.add(c);
+
+                                }
+
+                            }else{
+                                listCard = (ArrayList<CommentObject2>) result.getList();
+                            }
+
+                            CustomListAdapterComments adapter = new CustomListAdapterComments(params,SeeFullEventPage.this,eventViewModel,SeeFullEventPage.this, R.layout.comments_card_view,  listCard,token);
+
 
                             listView.setAdapter(adapter);
 

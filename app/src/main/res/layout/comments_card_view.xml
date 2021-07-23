@@ -63,6 +63,7 @@
 
 
         <Button
+            android:visibility="invisible"
             android:id="@+id/ButtonRemoveComment"
             style="@style/text_box_style"
             android:layout_width="130dp"

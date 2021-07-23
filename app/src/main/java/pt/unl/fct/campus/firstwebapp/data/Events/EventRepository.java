@@ -115,5 +115,12 @@ public class EventRepository extends AppCompatActivity {
 
         return result;
     }
+
+    public Result<Void> deleteComment(String token, long commentId) {
+
+        Result<Void > result = dataSource.deleteComment(token,commentId);
+
+        return result;
+    }
 }
 
