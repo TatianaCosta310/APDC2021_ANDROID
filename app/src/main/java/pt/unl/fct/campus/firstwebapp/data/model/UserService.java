@@ -18,6 +18,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -38,7 +39,11 @@ public interface UserService {
     @GET("rest/login/vcd/{email}")
     Call<Void> verification_code(@Path("email") String email, @Query("n") String newUser);
 
-   @POST("rest/login/op3")
+    @POST("rest/login/chgmailvcd")
+    Call<Void> verification_code_email(@Header("Cookie") String value, @Body ChangeEmailArgs args);
+
+
+    @POST("rest/login/op3")
    Call<Void> updateInfos(@Header("Cookie") String value,@Body AdditionalAttributes atributs);
 
     @Headers({"Accept: application/json"})
@@ -54,9 +59,15 @@ public interface UserService {
    @HTTP(method = "DELETE",path = "rest/login/op8", hasBody = true)
     Call<Void> removeAccount(@Header("Cookie") String value, @Field("p") String password);
 
-    //Nao completa pelo servidor
-    @POST("rest/login/op11")
-    Call<Void> changePassword();
+    @POST("rest/login/chgpwd")
+    Call<Void> changePassword(@Header("vrfcck") String serverVcode, @Body ChangePasswordArgs args);
+
+    @PUT("rest/login/updatename/{name}")
+    Call<Void> changeName(@Header("Cookie") String token,@Path("name") String newName);
+
+
+    @PUT("rest/login/chgmail")
+    Call<Void> changeEmail(@Header("Cookie") String value,@Header("vrfcck") String loginToken, @Body ChangeEmailArgs args);
 
     //EVENTS ENDPOINTS
     @Multipart

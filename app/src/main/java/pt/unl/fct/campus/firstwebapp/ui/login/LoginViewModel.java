@@ -20,6 +20,8 @@ import pt.unl.fct.campus.firstwebapp.data.Events.EventResult;
 import pt.unl.fct.campus.firstwebapp.data.LoginRepository;
 import pt.unl.fct.campus.firstwebapp.data.Result;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangeEmailArgs;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangePasswordArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
 import pt.unl.fct.campus.firstwebapp.R;
@@ -60,7 +62,7 @@ public class LoginViewModel extends ViewModel {
 
                 if (result instanceof Result.Success) {
                     LoginData data = ((Result.Success<LoginData>) result).getData();
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getEmail(),data.getToken(),data.getProfilePictureURL())));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getEmail(),data.getName(),data.getToken(),data.getProfilePictureURL())));
                 } else {
 
                     String error = result.toString();
@@ -83,7 +85,7 @@ public class LoginViewModel extends ViewModel {
                 Result<Void> result = loginRepository.logout();
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("Logout","","")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("Logout","","","")));
                 }else {
                     loginResult.postValue(new LoginResult(R.string.logout_failed));
                 }
@@ -101,7 +103,7 @@ public class LoginViewModel extends ViewModel {
 
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getName(),"","")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView(data.getName(),"","","")));
                 } else {
 
                     String error = result.toString();
@@ -117,12 +119,12 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
-    public void sendVerificationCode(String email) {
+    public void sendVerificationCode(String email ,String email2) {
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<RegisterData> result = loginRepository.sendVerificationCode(email);
+                Result<RegisterData> result = loginRepository.sendVerificationCode(email,email2);
 
 
                 if (result instanceof Result.Success) {
@@ -145,6 +147,40 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
+
+    public void sendVerificationCodeEmail(String token, ChangeEmailArgs changeEmailArgs) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<RegisterData> result = loginRepository.sendVerificationCodeEmail(token,changeEmailArgs);
+
+
+                if (result instanceof Result.Success) {
+                    LoggedInUserView loggedInUserView = new LoggedInUserView();
+
+                    loggedInUserView.setvCode(((Result.Success<String>) result).getData());
+                    loginResult.postValue(new LoginResult(loggedInUserView));
+                } else {
+
+                    String error = result.toString();
+
+                    if (error.equals("Error[exception=java.lang.Exception: 409]"))
+                        loginResult.postValue(new LoginResult(R.string.user_already_exist));
+
+                    if (error.equals("Error[exception=java.lang.Exception: 403]"))
+                        loginResult.postValue(new LoginResult(R.string.prompt_wrong_Password));
+
+
+                    else loginResult.postValue(new LoginResult(R.string.user_not_found));
+
+                }
+
+            }
+        });
+    }
+
+
     public void updateInfo( String cookie,AdditionalAttributes atribs) {
 
         executor.execute(new Runnable() {
@@ -153,7 +189,7 @@ public class LoginViewModel extends ViewModel {
                 Result<AdditionalAttributes> result = loginRepository.updateInfo(cookie,atribs);
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("success","","")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("success","","","")));
                 } else {
                     String error = result.toString();
                     if (error.equals("Error[exception=java.lang.Exception: 401]"))
@@ -176,7 +212,7 @@ public class LoginViewModel extends ViewModel {
 
                     String s = ((Result.Success<String>) result).getData();
 
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("s","",s)));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("s","","","s")));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.Failed_to_update_profile_pic));
                 }
@@ -211,13 +247,65 @@ public class LoginViewModel extends ViewModel {
                 Result<String> result = loginRepository.removeAccount(token,password);
 
                 if (result instanceof Result.Success) {
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("","","")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("","","","")));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.remove_failed));
                 }
 
             }
         });
+    }
+
+    public void changePassword(String verificationCode, ChangePasswordArgs data) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<Void> result = loginRepository.changePassword(verificationCode,data);
+
+                if (result instanceof Result.Success) {
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("","","","")));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.remove_failed));
+                }
+
+            }
+        });
+    }
+
+    public void changeEmail(String token, String verificationCode, ChangeEmailArgs changeEmailArgs) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<Void> result = loginRepository.changeEmail(token,verificationCode,changeEmailArgs);
+
+                if (result instanceof Result.Success) {
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("","","","")));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.remove_failed));
+                }
+
+            }
+        });
+    }
+
+    public void changeName(String token, String username) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<Void> result = loginRepository.changeName(token,username);
+
+                if (result instanceof Result.Success) {
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("","","","")));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.remove_failed));
+                }
+
+            }
+        });
+
     }
 
     public void loginDataChanged(String username, String password, String confirmPassword,String name) {
@@ -234,6 +322,33 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
+
+
+    public void onlyEmailChanged(String email,String password) {
+
+        if (!isUserNameValid(email)) {
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null, null,null,null));
+      } else if (!isPasswordValid(password)) {
+            loginFormState.setValue(new LoginFormState(null,  R.string.invalid_password,null,null,null));
+
+        }else {
+        loginFormState.setValue(new LoginFormState(true,0,true));
+    }
+    }
+
+
+    public void onlyPasswordChanged(String password,String confirmPassword) {
+        if (!isPasswordValid(password)) {
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password, null, null, null));
+        } else if (confirmPassword != null && !isConfirmPasswordValid(password, confirmPassword)) {
+            loginFormState.setValue(new LoginFormState(null, null, R.string.must_match_password, null, null));
+
+        }else {
+        loginFormState.setValue(new LoginFormState(true,0));
+        }
+    }
+
+
     public void verificationCodeChanged(String verification_code) {
         if (!iscodeValid(verification_code)) {
             loginFormState.setValue(new LoginFormState(null, null, null, null,R.string.invalide_code));
@@ -241,6 +356,8 @@ public class LoginViewModel extends ViewModel {
         loginFormState.setValue(new LoginFormState(true,"a"));
     }
     }
+
+
 
     private boolean iscodeValid(String verification_code) {
 

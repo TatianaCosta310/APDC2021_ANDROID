@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -49,12 +50,10 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
     private EditText instagram;
     private EditText twitter;
 
-  /*  private EditText mainAdress;
-    private EditText optionalAdress;
-    private EditText fixNumber;
-    private EditText mobileNumber;
-    private EditText locality;
-*/
+    private TextView username;
+
+    private String name;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,16 +67,11 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
         facebook = findViewById(R.id.Social_networks_Facebook);
         twitter = findViewById(R.id.Social_networks_Twitter);
 
+        username = findViewById(R.id.UpdTextName);
+
         image = findViewById(R.id.person2);
 
 
-       /* mainAdress = findViewById(R.id.new_address);
-        optionalAdress = findViewById(R.id.new_address2);
-        fixNumber = findViewById(R.id.new_fixNumber);
-        mobileNumber = findViewById(R.id.new_mobileNumber);
-        locality = findViewById(R.id.local);
-
-*/
         final Button update=findViewById(R.id.update);
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
@@ -92,6 +86,7 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
             bundleExtra = oldIntent.getExtras();
             token = bundleExtra.getString("token");
             profilePic = bundleExtra.getString("profile_pic");
+            name = bundleExtra.getString("name");
         }
 
 
@@ -146,7 +141,7 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
 
         }
 
-        loginViewModel.getInfos(token,token); // have to get userId as long value????
+        loginViewModel.getInfos(token,token);
 
         loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
 
@@ -200,6 +195,8 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
     private void putInfos(AdditionalAttributes atribs) {
 
 
+        username.setText(name);
+
         if(!atribs.getQuote().equals("")){
             quote.setText(atribs.getQuote());
         }
@@ -229,25 +226,7 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
 
         }
 
-        /*if(atribs.getAddress() != null){
-            mainAdress.setText(atribs.getAddress());
-        }
 
-        if(atribs.getMore_address() != null){
-            optionalAdress.setText(atribs.getMore_address());
-        }
-
-        if(atribs.getLocality()!= null){
-            locality.setText(atribs.getLocality());
-        }
-
-        if(atribs.getCellphone()!= null){
-            mobileNumber.setText(atribs.getCellphone());
-        }
-
-        if(atribs.getTelephone() != null){
-            fixNumber.setText(atribs.getTelephone());
-        }*/
     }
 
     private void showGetInfosFailed(@StringRes Integer error) {

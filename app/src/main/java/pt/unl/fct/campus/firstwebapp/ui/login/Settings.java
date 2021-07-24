@@ -21,23 +21,21 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import org.w3c.dom.Text;
+
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginResult;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModel;
-import pt.unl.fct.campus.firstwebapp.ui.login.LoginViewModelFactory;
-import pt.unl.fct.campus.firstwebapp.ui.login.MainActivity;
-import retrofit2.http.Field;
 
 public class Settings extends AppCompatActivity {
 
     ListView listView;
     String [] options;
-    TextView textView,textAlert;
+    TextView textAlert;
     EditText passwordEditText;
     Button doRemove;
     String token;
-
+    Bundle params = new Bundle();
+    Boolean change = false;
     private LoginViewModel loginViewModel;
 
     @Override
@@ -46,7 +44,6 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.settings);
 
         passwordEditText = findViewById(R.id.editTextTextPassword);
-        textView = findViewById(R.id.editTextTextPassword);
         textAlert = findViewById(R.id.textAlert);
         listView = findViewById(R.id.listview);
         options = getResources().getStringArray(R.array.options_List);
@@ -62,7 +59,7 @@ public class Settings extends AppCompatActivity {
 
 
         Intent oldIntent = getIntent();
-        Bundle params;
+
          token = null;
 
         if(oldIntent != null) {
@@ -75,9 +72,11 @@ public class Settings extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.removeAccount(token,textView.toString());
-                    openPage();
 
+                    if(change == false) {
+                        loginViewModel.removeAccount(token, passwordEditText.getText().toString());
+                        openPage(MainActivity.class, null);
+                    }
                 }
                 return false;
             }
@@ -88,11 +87,11 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-                loginViewModel.removeAccount(token,passwordEditText.getText().toString());
-
-
-
+                    if(change){
+                       loginViewModel.changeName(token, passwordEditText.getText().toString());
+                    }else {
+                        loginViewModel.removeAccount(token, passwordEditText.getText().toString());
+                    }
 
             }
         });
@@ -110,8 +109,16 @@ public class Settings extends AppCompatActivity {
                     showRemoveFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                    setResult(Activity.RESULT_OK);
+
+                    if(change){
+
+                        params.putString("name",passwordEditText.getText().toString());
+                        Toast.makeText(Settings.this,"Username Changed!",Toast.LENGTH_SHORT).show();
+                        openPage(Main_Page.class,params);
+                    }else {
+                        updateUiWithUser(loginResult.getSuccess());
+                        setResult(Activity.RESULT_OK);
+                    }
                 }
 
 
@@ -130,24 +137,60 @@ public class Settings extends AppCompatActivity {
                 String val = adapter.getItem(position);
 
                 if(position == 0) {
-                   // loginViewModel.changePassword();
-                    Toast.makeText(getApplicationContext(),val,Toast.LENGTH_SHORT).show();
+                   // changePassword();
+                    params.putString("email",params.getString("email"));
+                    openPage(ChangePassword.class,params);
                 }
 
-                if(position == 1){
+               if(position == 1) {
+                   // changeEmail();
+                   openPage(ChangeEmail.class,params);
+               }
 
+               if(position == 2) {
+                   // chanheUsername();
+
+
+
+                   change = true;
+
+                   textAlert.setVisibility(View.VISIBLE);
+                   textAlert.setText("Insert new Name");
+
+                   passwordEditText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+                   passwordEditText.setVisibility(View.VISIBLE);
+                   passwordEditText.setHint("insert new username");
+
+                   doRemove.setText("Change");
+                   doRemove.setVisibility(View.VISIBLE);
+                   doRemove.setEnabled(true);
+
+
+               }
+
+                if(position == 3){
+                    //removeAccount
                     // fica visivel
+
+                    if(change) {
+                        textAlert.setText("Insert Password to remove Account");
+                        passwordEditText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+                        passwordEditText.setHint("password");
+                        doRemove.setText("Remove Account");
+                    }
+
+                    passwordEditText.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+                    change = false;
+
                     textAlert.setVisibility(View.VISIBLE);
-                    textView.setVisibility(View.VISIBLE);
+                    passwordEditText.setVisibility(View.VISIBLE);
                     doRemove.setVisibility(View.VISIBLE);
                     doRemove.setEnabled(true);
 
 
-
-
                 }
 
-               if(position == 2){
+               if(position == 4){
                     //missing help settings, maybe later
                }
 
@@ -158,15 +201,21 @@ public class Settings extends AppCompatActivity {
 
     }
 
-    public void  openPage() {
 
-        Intent intent = new Intent(this, MainActivity.class);
+
+    public void  openPage(Class c,Bundle params) {
+
+        Intent intent = new Intent(this, c);
+
+        if(params!= null)
+            intent.putExtras(params);
+
         startActivity(intent);
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
 
-        openPage();
+        openPage(MainActivity.class,null);
     }
 
     private void showRemoveFailed(@StringRes Integer errorString) {

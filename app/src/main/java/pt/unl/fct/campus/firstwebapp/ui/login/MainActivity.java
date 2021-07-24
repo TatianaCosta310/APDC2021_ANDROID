@@ -28,7 +28,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
-    TextView aboutUsText;
+    TextView aboutUsText,forgotPassword;
 
 
     @Override
@@ -47,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
     final Button signUpButton = findViewById(R.id.register);
     final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-
         aboutUsText = findViewById(R.id.textAbout1);
         aboutUsText.setPaintFlags(aboutUsText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        forgotPassword = findViewById(R.id.ForgotPassword);
+        forgotPassword.setPaintFlags(forgotPassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
         signUpButton.setEnabled(true);
@@ -165,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
             Bundle params = new Bundle();
             params.putString("token", model.getToken());
             params.putString("profile_pic",model.getProfile_pic());
+            params.putString("email",model.getEmail());
+            params.putString("name",model.getDisplayName());
 
             intent.putExtras(params);
         }
@@ -190,4 +194,9 @@ public class MainActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
+
+    public void OpenPageChangePassword(View view) {
+        openPage(ChangePassword.class,null);
+    }
+
 }

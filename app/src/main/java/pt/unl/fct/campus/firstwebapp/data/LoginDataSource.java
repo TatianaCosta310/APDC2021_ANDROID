@@ -7,6 +7,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.model.AddCookiesInterceptor;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangeEmailArgs;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangePasswordArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
 import pt.unl.fct.campus.firstwebapp.data.model.ReceivedCookiesInterceptor;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
@@ -127,9 +129,9 @@ public class LoginDataSource extends Application implements Constantes {
     }
 
 
-    public Result<RegisterData> sendVerificationCode(String email) {
+    public Result<RegisterData> sendVerificationCode(String email,String email2) {
 
-        Call<Void> verification_code = service.verification_code(email,email);
+        Call<Void> verification_code = service.verification_code(email,email2);
 
 
         try {
@@ -143,6 +145,38 @@ public class LoginDataSource extends Application implements Constantes {
 
                 if (code==409)
                     return new Result.Error(new Exception("409")); //email already exists
+            }
+
+
+            return executeService.ExecuteServiceRegister(response);
+
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error Sending verification code", e));
+        }
+    }
+
+
+
+    public Result<RegisterData> sendVerificationCodeEmail(String token, ChangeEmailArgs changeEmailArgs) {
+
+        Call<Void> verification_code = service.verification_code_email(token,changeEmailArgs);
+
+
+        try {
+
+            Response<Void> response = verification_code.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            if(!response.isSuccessful()){
+                int code=response.code();
+
+                if (code==409)
+                    return new Result.Error(new Exception("409")); //email already exists
+
+                if (code==403)
+                    return new Result.Error(new Exception("403"));
+
             }
 
 
@@ -239,5 +273,53 @@ public class LoginDataSource extends Application implements Constantes {
     }
 
 
+    public Result<Void> changePassword(String verificationCode, ChangePasswordArgs data) {
+        Call<Void> changePassword = service.changePassword(verificationCode,data);
 
+        try {
+
+            Response<Void> response = changePassword.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceRemoveEvent(response);
+
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error Removing Account", e));
+        }
+    }
+
+
+    public Result<Void> changeEmail(String token, String verificationCode, ChangeEmailArgs changeEmailArgs) {
+
+        Call<Void> changeEmail = service.changeEmail(token,verificationCode,changeEmailArgs);
+
+        try {
+
+            Response<Void> response = changeEmail.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceRemoveEvent(response);
+
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error", e));
+        }
+    }
+
+    public Result<Void> changeName(String token, String username) {
+        Call<Void> changeName = service.changeName(token,username);
+
+        try {
+
+            Response<Void> response = changeName.execute();
+
+            ExecuteService executeService = new ExecuteService();
+
+            return executeService.ExecuteServiceRemoveEvent(response);
+
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error", e));
+        }
+    }
 }

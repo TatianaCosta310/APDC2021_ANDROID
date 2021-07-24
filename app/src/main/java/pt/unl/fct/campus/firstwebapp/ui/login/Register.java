@@ -141,8 +141,9 @@ public class Register  extends AppCompatActivity {
             public void onClick(View v) {
                 openNextOptionalPage();
 
+                String email = emailEditText.getText().toString();
 
-                loginViewModel.sendVerificationCode(emailEditText.getText().toString());
+                loginViewModel.sendVerificationCode(email,email);
               //  loginViewModel.registrate(usernameEditText.getText().toString(),
                 //        passwordEditText.getText().toString(), emailEditText.getText().toString());
 
@@ -158,6 +159,7 @@ public class Register  extends AppCompatActivity {
         params.putString("username", usernameEditText.getText().toString());
         params.putString("email", emailEditText.getText().toString());
         params.putString("password", passwordEditText.getText().toString());
+        params.putString("change","register");
 
         intent.putExtras(params);
 

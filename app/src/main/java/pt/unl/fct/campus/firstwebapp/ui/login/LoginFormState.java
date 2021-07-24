@@ -46,6 +46,19 @@ class LoginFormState {
         this.isCodeValid = isCodeValid;
     }
 
+    LoginFormState(boolean isDataValid,int b) {
+        this.passwordError = null;
+        this.confirmPassError = null;
+        this.isDataValid = isDataValid;
+    }
+
+     LoginFormState(boolean isDataValid, int i, boolean b1) {
+         this.usernameError = null;
+         this.passwordError = null;
+         this.isDataValid = isDataValid;
+     }
+
+
     @Nullable
     Integer getUsernameError() {
         return usernameError;

@@ -29,8 +29,8 @@
     <Button
 
         android:id="@+id/editProfileTxt"
-        android:layout_width="310dp"
-        android:layout_height="46dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="48dp"
@@ -52,8 +52,8 @@
         android:id="@+id/buttoncamera"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="160dp"
         android:background="@drawable/camera"
         android:onClick="Upload"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,9 +61,9 @@
 
     <TextView
         android:id="@+id/UserProfilePicText"
-        android:layout_width="233dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="244dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
         android:text="Change Profile Image"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -78,19 +78,19 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="272dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editProfileTxt"
+        app:layout_constraintTop_toBottomOf="@+id/buttoncamera"
         app:srcCompat="@drawable/no_image" />
 
     <Button
         android:id="@+id/button5"
         style="@style/text_box_style"
-        android:layout_width="120dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="280dp"
-        android:layout_marginTop="404dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="600dp"
         android:layout_marginEnd="48dp"
         android:backgroundTint="@color/turquoise_500"
         android:enabled="true"
@@ -104,10 +104,10 @@
     <Button
         android:id="@+id/button4"
         style="@style/text_box_style"
-        android:layout_width="310dp"
-        android:layout_height="46dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="48dp"
         android:backgroundTint="@color/turquoise_500"
         android:enabled="true"
@@ -116,7 +116,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.016"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttoncamera" />
+        app:layout_constraintTop_toBottomOf="@+id/editProfileTxt" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

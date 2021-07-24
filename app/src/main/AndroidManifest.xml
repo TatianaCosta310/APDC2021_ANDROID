@@ -63,6 +63,8 @@
         <activity android:name=".data.Events.SeeParticipatingEvents"/>
         <activity android:name=".data.model.UploadImageFromPhone"/>
         <activity android:name=".ui.login.AboutUs"/>
+        <activity android:name=".ui.login.ChangePassword"/>
+        <activity android:name=".ui.login.ChangeEmail"/>
 
     </application>
 

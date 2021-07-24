@@ -3,6 +3,8 @@ import java.util.Map;
 
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangeEmailArgs;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangePasswordArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
@@ -80,12 +82,21 @@ public class LoginRepository {
         return result;
     }
 
-    public Result<RegisterData> sendVerificationCode(String email) {
+    public Result<RegisterData> sendVerificationCode(String email,String email2) {
 
-        Result<RegisterData> result = dataSource.sendVerificationCode(email);
+        Result<RegisterData> result = dataSource.sendVerificationCode(email,email2);
 
         return result;
     }
+
+
+    public Result<RegisterData> sendVerificationCodeEmail(String token, ChangeEmailArgs changeEmailArgs) {
+
+        Result<RegisterData> result = dataSource.sendVerificationCodeEmail(token,changeEmailArgs);
+
+        return result;
+    }
+
 
     public Result<AdditionalAttributes> updateInfo( String cookie,AdditionalAttributes atribs) {
 
@@ -121,5 +132,27 @@ public class LoginRepository {
     }
 
 
+    public Result<Void> changePassword(String verificationCode, ChangePasswordArgs data) {
 
+        Result<Void> result = dataSource.changePassword(verificationCode,data);
+
+
+        return result;
+    }
+
+
+    public Result<Void> changeEmail(String token, String verificationCode, ChangeEmailArgs changeEmailArgs) {
+
+        Result<Void> result = dataSource.changeEmail(token,verificationCode,changeEmailArgs);
+
+
+        return result;
+    }
+
+    public Result<Void> changeName(String token, String username) {
+
+        Result<Void> result = dataSource.changeName(token,username);
+
+        return result;
+    }
 }

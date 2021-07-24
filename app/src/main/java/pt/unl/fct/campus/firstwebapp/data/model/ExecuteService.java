@@ -35,6 +35,7 @@ public class ExecuteService extends Application implements Constantes {
                 String token = response.headers().get("Set-Cookie");
 
                 LoginData data = new LoginData(ua.getEmail(),ua.password);
+                data.setName(ua.getName());
                 data.setToken(token);
                 data.setProfilePictureURL(ua.getProfilePictureURL());
                 

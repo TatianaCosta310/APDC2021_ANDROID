@@ -318,7 +318,7 @@
         <ListView
             android:id="@+id/listView2"
             android:layout_width="match_parent"
-            android:layout_height="597dp"
+            android:layout_height="700dp"
             android:layout_marginTop="40dp"
             android:nestedScrollingEnabled="true"
             android:scrollbarAlwaysDrawVerticalTrack="true" />

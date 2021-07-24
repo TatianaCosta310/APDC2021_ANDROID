@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangeEmailArgs;
+import pt.unl.fct.campus.firstwebapp.data.model.ChangePasswordArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 
 public class Register2VerificationCode  extends AppCompatActivity {
@@ -29,6 +31,8 @@ public class Register2VerificationCode  extends AppCompatActivity {
     private String username;
     private String  password;
     private String  email;
+    private String change;
+    private String token;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,8 @@ public class Register2VerificationCode  extends AppCompatActivity {
         username = params.getString("username");
         email = params.getString("email");
         password = params.getString("password");
+        change = params.getString("change");
+        token = params.getString("token");
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(LoginViewModel.class);
@@ -91,15 +97,37 @@ public class Register2VerificationCode  extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                RegisterData data = new RegisterData();
 
-                data.setName(username);
-                data.setEmail(email);
-                data.setPassword(password);
-                data.setVcode(verificationCode.getText().toString());
 
-                loginViewModel.registrate(data, verificationCode.getText().toString());
+                if(change.equalsIgnoreCase("password")) {
 
+                    ChangePasswordArgs data = new ChangePasswordArgs(email, password, verificationCode.getText().toString());
+
+                    loginViewModel.changePassword(verificationCode.getText().toString(), data);
+
+
+                }else if(change.equals("email")){
+
+                    ChangeEmailArgs changeEmailArgs = new ChangeEmailArgs();
+
+                    changeEmailArgs.setNewEmail(email);
+                    changeEmailArgs.setPassword(verificationCode.getText().toString());
+
+
+                    loginViewModel.changeEmail(token,verificationCode.getText().toString(), changeEmailArgs);
+
+                }else {
+
+                    RegisterData data = new RegisterData();
+
+                    data.setName(username);
+                    data.setEmail(email);
+                    data.setPassword(password);
+                    data.setVcode(verificationCode.getText().toString());
+
+                    loginViewModel.registrate(data, verificationCode.getText().toString());
+
+                }
             }
         });
 
@@ -127,7 +155,18 @@ public class Register2VerificationCode  extends AppCompatActivity {
 
 
     public void  openNextOptionalPage( ){
-        Toast.makeText(getApplicationContext(), "Registration Complete!", Toast.LENGTH_SHORT).show();
+
+
+        if(change.equalsIgnoreCase("password")) {
+            Toast.makeText(getApplicationContext(), "Changed Password !", Toast.LENGTH_SHORT).show();
+
+        }else if(change.equalsIgnoreCase("email")){
+                Toast.makeText(getApplicationContext(), "Email Changed !", Toast.LENGTH_SHORT).show();
+
+        }else{
+            Toast.makeText(getApplicationContext(), "Registration Complete!", Toast.LENGTH_SHORT).show();
+        }
+
 
         Intent intent = new Intent(this, MainActivity.class);
 

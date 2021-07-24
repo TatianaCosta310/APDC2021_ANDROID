@@ -74,10 +74,13 @@
 
     <string-array name="options_List">
         <item> Change Password </item>
+        <item> Change Email </item>
+        <item> Change Username </item>
         <item> Remove Account </item>
         <item> Help </item>
-
     </string-array>
+
+
     <string name="title_activity_maps">Map</string>
     <string name="Failed_Create_Event">Failed To create Event</string>
     <string name="invalid_day">Invalid Day</string>
@@ -113,6 +116,9 @@
     <string name="Social_Networks">Social Networks</string>
     <string name="Failed_To_Post_Comment">Failed To Post Comment</string>
     <string name="Failed_To_Load_Comment">Failed To Load Commnents</string>
+    <string name="prompt_forgot_password">Forgot Password</string>
+    <string name="prompt_wrong_Password">Wrong Password</string>
+    <string name="user_not_found">User not found</string>
 
 
 </resources>

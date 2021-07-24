@@ -9,9 +9,12 @@ class LoggedInUserView {
     private Object a;
     private String profile_pic;
     private String vCode;
+    private String email;
     //... other data fields that may be accessible to the UI
 
-    LoggedInUserView(String displayName,String token,String profile_pic) {
+    LoggedInUserView(String email,String displayName,String token,String profile_pic) {
+
+        this.email = email;
         this.displayName = displayName;
         this.token = token;
         this.profile_pic = profile_pic;
@@ -28,12 +31,15 @@ class LoggedInUserView {
 
     }
 
-    String getDisplayName() {
+   public String getDisplayName() {
         return displayName;
     }
-    String getToken(){return token;}
-    String getProfile_pic(){return  profile_pic;}
+    public String getToken(){return token;}
+    public String getProfile_pic(){return  profile_pic;}
 
+    public String getEmail(){
+        return email;
+    }
     public  void setvCode(String vCode){
         this.vCode = vCode;
     }
