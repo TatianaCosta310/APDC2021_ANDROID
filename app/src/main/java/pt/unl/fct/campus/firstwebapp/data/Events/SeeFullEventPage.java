@@ -68,7 +68,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     Bundle params;
 
-    String message,tokenEvent, cursor;
+    String message,tokenEvent, cursor, image;
 
     Boolean doParticipate = true;
 
@@ -150,39 +150,263 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         numMaxVol.setText(String.valueOf(eventData.getVolunteers()));
         numIntered.setText(String.valueOf(eventData.getCurrentParticipants()));
 
-        String image = eventData.getImages();
+         image = eventData.getImages();
         String organizerCover = eventData.getImgUrl();
 
         File f1;
         String[] split1;
         Storage storage1;
-        Bitmap bitmap;
+        Bitmap bitmap = null;
 
 
         if(image != null){
+
+
             split1 = image.split("/");
 
-            if(split1.length > 1)
-                image = split1[4];
 
-            f1 = createNewFile(this,image);
+            String blob2 = split1[4];
 
-            storage1 = getStorage(BLOB_ID_PROJECT);
+            split1 = split1[5].split("]");
 
-           bitmap = getBitmap(storage1,BLOB_ID_PROJECT,image,f1);
 
-           imageView.setImageBitmap(bitmap);
+            StringBuffer sb = new StringBuffer(split1[0]);
+
+            sb.deleteCharAt(sb.length()-1);
+
+            image = blob2 + "/" + sb;
+
+         /*   File f = new File(getCacheDir(), image + ".png");
+            try {
+                f.createNewFile();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+
+            Storage storage = StorageOptions.newBuilder()
+                    .setProjectId(BLOB_ID_PROJECT)
+                    .build()
+                    .getService();*/
+
+//          f1 = createNewFile(SeeFullEventPage.this.getCacheDir(),"lalala");
+
+        /*    f1 = new File(SeeFullEventPage.this.getCacheDir(), image + ".png");
+            try {
+                f1.createNewFile();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }*/
+
+
+            //storage1 = getStorage(BLOB_ID_PROJECT);
+
+          // bitmap = getBitmap(storage1,BLOB_ID_PROJECT,image,f1);
+
+
+
+            Storage storage = StorageOptions.newBuilder()
+                    .setProjectId(BLOB_ID_PROJECT)
+                    .build()
+                    .getService();
+
+           File f11 = new File(SeeFullEventPage.this.getCacheDir(), "lala" + ".png");
+            try {
+                f11.createNewFile();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+                Thread thread = new Thread(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run() {
+
+                        try {
+                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, image));
+                            blob.downloadTo(Paths.get(f11.toString()));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                thread.start();
+
+
+                byte[] decodedString = new byte[0];
+                try {
+                    decodedString = Files.readAllBytes(f11.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+
+           if(bitmap == null) {
+
+                    File f = f11;
+
+                   Thread thread1 = new Thread(new Runnable() {
+                       @RequiresApi(api = Build.VERSION_CODES.O)
+                       @Override
+                       public void run() {
+
+                           try {
+                               Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, image));
+                               blob.downloadTo(Paths.get(f.toString()));
+
+                           } catch (Exception e) {
+                               e.printStackTrace();
+                           }
+                       }
+                   });
+
+                   thread1.start();
+
+
+                   try {
+                       decodedString = Files.readAllBytes(f.toPath());
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+
+                   bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+               }
+             /*  Storage storage = StorageOptions.newBuilder()
+                       .setProjectId(BLOB_ID_PROJECT)
+                       .build()
+                       .getService();
+
+               File f = new File(SeeFullEventPage.this.getCacheDir(), "lalala" + ".png");
+               try {
+                   f.createNewFile();
+               } catch (IOException ioException) {
+                   ioException.printStackTrace();
+               }
+
+
+               Thread thread = new Thread(new Runnable() {
+                   @RequiresApi(api = Build.VERSION_CODES.O)
+                   @Override
+                   public void run() {
+
+                       try {
+                           Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, blob2 + "/" + image));
+                           blob.downloadTo(Paths.get(f.toString()));
+
+                       } catch (Exception e) {
+                           e.printStackTrace();
+                       }
+                   }
+               });
+
+               thread.start();
+
+
+               byte[] decodedString = new byte[0];
+               try {
+                   decodedString = Files.readAllBytes(f1.toPath());
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+
+
+               bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+*/
+
+
+            imageView.setImageBitmap(bitmap);
 
         }
 
-        if(organizerCover != null) {
+        if(organizerCover != null && organizerCover.contains("google")) {
             split1 = organizerCover.split("/");
+            image = split1[4];
 
-            f1 = createNewFile(this,split1[4]);
+          //  f1 = createNewFile(SeeFullEventPage.this.getCacheDir(),split1[4]);
+            //storage1 = getStorage(BLOB_PIC_ID_PROJECT);
 
-            storage1 = getStorage(BLOB_PIC_ID_PROJECT);
+          /*  bitmap = getBitmap(storage1,BLOB_PIC_ID_PROJECT,split1[4],f1);
 
-            bitmap = getBitmap(storage1,BLOB_PIC_ID_PROJECT,split1[4],f1);
+            if(bitmap == null)
+                bitmap = getBitmap(storage1,BLOB_ID_PROJECT,image,f1);
+*/
+
+            Storage storage = StorageOptions.newBuilder()
+                    .setProjectId(BLOB_PIC_ID_PROJECT)
+                    .build()
+                    .getService();
+
+            File f11 = new File(SeeFullEventPage.this.getCacheDir(), "lele" + ".png");
+            try {
+                f11.createNewFile();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+            Thread thread = new Thread(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void run() {
+
+                    try {
+                        Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, image));
+                        blob.downloadTo(Paths.get(f11.toString()));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
+
+
+            byte[] decodedString = new byte[0];
+            try {
+                decodedString = Files.readAllBytes(f11.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+
+            if(bitmap == null) {
+
+                File f = f11;
+
+                Thread thread1 = new Thread(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run() {
+
+                        try {
+                            Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, image));
+                            blob.downloadTo(Paths.get(f.toString()));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                thread1.start();
+
+
+                try {
+                    decodedString = Files.readAllBytes(f.toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+            }
 
             organizerpicView.setImageBitmap(bitmap);
 
@@ -357,9 +581,9 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private File createNewFile(Context context,String image){
+    private File createNewFile(File f,String image){
 
-        File file = new File(context.getCacheDir(), image + ".png");
+        File file = new File(f, image + ".png");
         try {
             file.createNewFile();
         } catch (IOException ioException) {
@@ -381,14 +605,31 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Bitmap getBitmap(Storage storage, String id, String name, File f){
-        Thread thread = new Thread(new Runnable() {
+
+        final byte[][] decodedString = {new byte[0]};
+
+
+        Thread thread = new Thread(new  Runnable() {
+
+
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void run() {
 
+                byte[] decodedString2 = new byte[0];
+
                 try {
                     Blob blob = storage.get(BlobId.of(id, name));
                     blob.downloadTo(Paths.get(f.toString()));
+
+                    try {
+                        decodedString2 = Files.readAllBytes(f.toPath());
+
+                        decodedString[0] = decodedString2;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -396,16 +637,11 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
             }
         });
 
+      //  thread.setPriority(10);
         thread.start();
 
-        byte[] decodedString = new byte[0];
-        try {
-            decodedString = Files.readAllBytes(f.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString[0], 0, decodedString[0].length);
 
         return decodedByte;
     }

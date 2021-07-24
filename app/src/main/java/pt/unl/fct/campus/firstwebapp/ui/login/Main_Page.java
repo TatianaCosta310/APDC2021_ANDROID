@@ -95,7 +95,6 @@ public class Main_Page extends AppCompatActivity implements Constantes {
 
                 Storage storage = StorageOptions.newBuilder()
                         .setProjectId(BLOB_PIC_ID_PROJECT)
-                        // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
                         .build()
                         .getService();
 

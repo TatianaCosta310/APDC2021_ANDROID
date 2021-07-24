@@ -142,9 +142,11 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
 
 
-                imageName = split[0];
+                StringBuffer sb = new StringBuffer(split[0]);
 
+                sb.deleteCharAt(sb.length()-1);
 
+                imageName = sb.toString();
 
                // if(split.length > 1 )
                  //   imageName = split[4];
@@ -156,36 +158,39 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
                         .getService();
 
 
-
-               /* Thread thread = new Thread(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void run() {
-
-                        try {
-                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT , imageName));
-                            blob.downloadTo(Paths.get(f.toString()));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-               // thread.setPriority(10 );
-                thread.start();
-                */
-
                 Bitmap decodedByte =  getBitmap(storage,BLOB_ID_PROJECT , blob2 + "/" + imageName ,f);
 
-               /* byte[] decodedString = new byte[0];
-                try {
-                    decodedString = Files.readAllBytes(f.toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                if(decodedByte == null) {
 
-               // Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    Thread thread = new Thread(new Runnable() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
+                        @Override
+                        public void run() {
+
+                            try {
+                                Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, blob2 + "/" + imageName));
+                                blob.downloadTo(Paths.get(f.toString()));
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    thread.start();
+
+
+                    byte[] decodedString = new byte[0];
+                    try {
+                        decodedString = Files.readAllBytes(f.toPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                }
 
                 holder.image.setImageBitmap(decodedByte);
 
@@ -203,14 +208,27 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
     private Bitmap getBitmap(Storage storage, String id,String name, File f){
 
    String a ="";
+        final byte[][] decodedString = {new byte[0]};
+
         Thread thread = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void run() {
 
+                byte[] decodedString2 = new byte[0];
+
                 try {
                     Blob blob = storage.get(BlobId.of(id, name));
                     blob.downloadTo(Paths.get(f.toString()));
+
+                    try {
+                        decodedString2 = Files.readAllBytes(f.toPath());
+
+                        decodedString[0] = decodedString2;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -220,14 +238,8 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
         thread.start();
 
-        byte[] decodedString = new byte[0];
-        try {
-            decodedString = Files.readAllBytes(f.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString[0], 0, decodedString[0].length);
 
         return decodedByte;
     }

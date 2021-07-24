@@ -231,6 +231,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
             if (params != null)
 
                 params.putString("Event", gson.toJson(event));
+                params.putString("Page", "SeeEventsFinished");
             intent.putExtras(params);
         } else {
             params = new Bundle();
