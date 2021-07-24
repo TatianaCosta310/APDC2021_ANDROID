@@ -129,6 +129,7 @@ public class Main_Page extends AppCompatActivity implements Constantes {
 
                 image.setImageBitmap(decodedByte);
 
+
             }
 
         }

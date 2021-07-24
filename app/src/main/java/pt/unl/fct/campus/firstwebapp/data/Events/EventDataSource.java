@@ -103,15 +103,6 @@ public class EventDataSource implements Constantes {
 
     public Result<EventCreatedView> seeEvents(String value, String token, UpcomingEventsArgs upcomingEventsArgs)  {
 
-        /*Cookie cookie = new Cookie.Builder()
-                .value(token)
-                .name("token")
-                .domain("apdc-project-310922.ew.r.appspot.com")
-                .path("/")
-                .build();
-*/
-
-        ;
         Call<List<JsonObject> > userAuthenticatedCall = service.seeEvents(null, token, upcomingEventsArgs ,ACCEPT_CHARSET,HEADER_CONTENT_TYPE_JSON);
         try {
 
@@ -129,14 +120,6 @@ public class EventDataSource implements Constantes {
 
 
     public Result<EventCreatedView> seeFinishedEvents(String value, String token) {
-
-        Cookie cookie = new Cookie.Builder()
-                .value(token)
-                .name("Cookie")
-                //.domain("appspot.com")
-                .domain("apdc-project-310922.ew.r.appspot.com")
-                .path("/")
-                .build();
 
         Call<List<JsonObject>> userAuthenticatedCall = service.seeFinishedEvents(value,value);
         try {

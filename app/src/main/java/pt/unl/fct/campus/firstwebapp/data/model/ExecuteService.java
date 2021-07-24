@@ -74,11 +74,11 @@ public class ExecuteService extends Application implements Constantes {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
-    public Result<AdditionalAttributes> ExecuteServiceGetInfo(Response<AdditionalAttributes> response) {
+    public Result<ProfileResponse> ExecuteServiceGetInfo(Response<ProfileResponse> response) {
 
         if (response.isSuccessful()) {
 
-            AdditionalAttributes ua = response.body();
+            ProfileResponse ua = response.body();
 
             return new Result.Success<>(ua);
         }

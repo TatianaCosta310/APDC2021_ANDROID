@@ -12,115 +12,42 @@
 
     <TextView
         android:id="@+id/textViewUserEventsLibrary"
-        style="@style/text_box_style"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:layout_weight="1"
+        android:textColor="@color/black"
         android:text="User Events Profile "
         android:textAlignment="center"
         android:textSize="34dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewParticipatingNum"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="52dp"
-        android:layout_weight="1"
-        android:text="Participating in "
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewUserEventsLibrary" />
 
-    <TextView
-        android:id="@+id/textViewParticipatingNumber"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="260dp"
-        android:layout_marginTop="52dp"
-        android:layout_weight="1"
-        android:text="0"
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewUserEventsLibrary" />
-
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ButtonSeeParticipatingEvents"
-        style="@style/text_box_style"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:text=" Participating In"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/rounded_corners"
+        android:text=" Events Interested "
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewParticipatingNum" />
+        app:layout_constraintTop_toBottomOf="@id/textViewUserEventsLibrary" />
 
-
-    <TextView
-        android:id="@+id/textViewCreated"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="70dp"
-        android:layout_weight="1"
-        android:text="Created "
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewParticipatingNumber" />
-
-    <TextView
-        android:id="@+id/textViewCreatedNumber"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="260dp"
-        android:layout_marginTop="70dp"
-        android:layout_weight="1"
-        android:text="0 "
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewParticipatingNumber" />
-
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ButtonSeeCreatedEvents"
-        style="@style/text_box_style"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_corners"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
         android:text="Created Events"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewCreated"/>
+       app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/textViewPoints"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="70dp"
-        android:layout_weight="1"
-        android:text="Points "
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewCreated" />
-
-    <TextView
-        android:id="@+id/textViewPointsNumber"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="260dp"
-        android:layout_marginTop="70dp"
-        android:layout_weight="1"
-        android:text="0 "
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewCreated" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

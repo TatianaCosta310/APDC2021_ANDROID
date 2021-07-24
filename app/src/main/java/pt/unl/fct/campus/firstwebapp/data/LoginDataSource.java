@@ -10,10 +10,12 @@ import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
 import pt.unl.fct.campus.firstwebapp.data.model.ChangeEmailArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.ChangePasswordArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.ExecuteService;
+import pt.unl.fct.campus.firstwebapp.data.model.ProfileResponse;
 import pt.unl.fct.campus.firstwebapp.data.model.ReceivedCookiesInterceptor;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
 import pt.unl.fct.campus.firstwebapp.data.model.UserService;
+import pt.unl.fct.campus.firstwebapp.ui.login.Profile;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -232,14 +234,14 @@ public class LoginDataSource extends Application implements Constantes {
         }
     }
 
-    public Result<AdditionalAttributes> getInfos(String token,String userid) {
+    public Result<ProfileResponse> getInfos(String token, String userid) {
 
-        Call<AdditionalAttributes> updateInfos = service.getInfos(token,userid);
+        Call<ProfileResponse> updateInfos = service.getInfos(token,userid);
 
 
         try {
 
-            Response<AdditionalAttributes> response = updateInfos.execute();
+            Response<ProfileResponse> response = updateInfos.execute();
 
             ExecuteService executeService = new ExecuteService();
 

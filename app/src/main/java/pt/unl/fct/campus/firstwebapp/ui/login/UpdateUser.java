@@ -34,6 +34,7 @@ import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.model.AdditionalAttributes;
+import pt.unl.fct.campus.firstwebapp.data.model.ProfileResponse;
 
 
 public class UpdateUser extends AppCompatActivity implements Constantes {
@@ -41,18 +42,18 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
     private LoginViewModel loginViewModel;
     String token,profilePic;
     Bundle bundleExtra;
-    AdditionalAttributes atribs;
+    ProfileResponse atribs;
     ImageView image;
 
     private EditText quote;
     private EditText about;
     private EditText facebook;
-    private EditText instagram;
     private EditText twitter;
 
-    private TextView username;
+    private TextView username,ranking,instagram;
 
     private String name;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -68,6 +69,7 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
         twitter = findViewById(R.id.Social_networks_Twitter);
 
         username = findViewById(R.id.UpdTextName);
+        ranking = findViewById(R.id.Ranking);
 
         image = findViewById(R.id.person2);
 
@@ -158,7 +160,7 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
 
                     LoggedInUserView model = loginResult.getSuccess();
 
-                    atribs =  (AdditionalAttributes) model.getObject();
+                    atribs =  (ProfileResponse) model.getObject();
 
                     putInfos(atribs);
                 }
@@ -172,12 +174,6 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
             @Override
             public void onClick (View v){
 
-              /*  bundleExtra.putString("mainAdress",mainAdress.getText().toString());
-                bundleExtra.putString("optionalAdress",optionalAdress.getText().toString());
-                bundleExtra.putString("fixNumber",fixNumber.getText().toString());
-                bundleExtra.putString("mobileNumber",mobileNumber.getText().toString());
-                bundleExtra.putString("locality",locality.getText().toString());
-*/
 
                 bundleExtra.putString("quote",quote.getText().toString());
                 bundleExtra.putString("about",about.getText().toString());
@@ -192,10 +188,11 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
 
     }
 
-    private void putInfos(AdditionalAttributes atribs) {
+    private void putInfos(ProfileResponse atribs) {
 
 
         username.setText(name);
+        ranking.setText("PARTICIPATION SCORE: " + atribs.getParticipationScore());
 
         if(!atribs.getQuote().equals("")){
             quote.setText(atribs.getQuote());
@@ -223,7 +220,6 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
             twitter.setText(atribs.getTwitter());
             twitter.setPaintFlags(twitter.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-
         }
 
 
@@ -236,7 +232,8 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
 
     public void openNextPage(Bundle bundleExtra){
 
-        Intent intent = new Intent(this, RegisterOptional2.class);
+        Intent intent = new Intent(this, UpdateInfos.class);
+
 
         intent.putExtras(bundleExtra);
         startActivity(intent);

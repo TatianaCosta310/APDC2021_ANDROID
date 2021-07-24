@@ -25,67 +25,33 @@
             android:layout_width="383dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/about"
+            android:text="@string/update_user"
             android:textAlignment="center"
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/UpdTextName"
-            style="@style/text_box_style"
+
+        <EditText
+
+            android:id="@+id/QUOTE"
+            style="text_box_style2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profile"
+            android:layout_height="match_parent"
             android:layout_marginTop="100dp"
-            android:textAlignment="center"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/UpdText" />
-
-
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/person2"
-        android:scaleType="centerCrop"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="150dp"
-        android:drawingCacheQuality="high"
-        android:src="@drawable/person"
-        app:civ_border_color="@color/teal_700"
-        app:civ_border_width="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-
-        android:id="@+id/QUOTE"
-        style="text_box_style2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="220dp"
-        android:background="@drawable/textboxshape"
-        android:hint="@string/prompt_quote"
-        android:inputType="text"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:selectAllOnFocus="true"
-        android:textAlignment="center" />
+            android:background="@drawable/textboxshape"
+            android:hint="@string/prompt_quote"
+            android:inputType="text"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:selectAllOnFocus="true" />
 
         <EditText
 
             android:id="@+id/About"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="330dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
             android:background="@drawable/textboxshape"
             android:hint="@string/prompt_about"
             android:inputType="text"
@@ -98,29 +64,11 @@
 
 
         <TextView
-            android:id="@+id/Ranking"
-            style="text_box_style2"
-            android:background="@drawable/textboxshape"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="400dp"
-            android:layout_marginEnd="24dp"
-            android:drawableLeft="@drawable/star_image"
-            android:drawableRight="@drawable/star_image"
-            android:text="  Ranking"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
             android:id="@+id/Social"
             style="@style/text_box_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="600dp"
+            android:layout_marginTop="300dp"
             android:text="@string/Social_Networks"
             android:textAlignment="center"
             android:textSize="28sp"
@@ -129,14 +77,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <EditText
 
             android:autoLink="all"
             android:id="@+id/Social_networks_Instagram"
             android:layout_width="338dp"
             android:layout_height="55dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="670dp"
+            android:layout_marginTop="370dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/textboxshape"
             android:drawableLeft="@mipmap/intagram_foreground"
@@ -156,7 +104,7 @@
             android:layout_width="338dp"
             android:layout_height="55dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="730dp"
+            android:layout_marginTop="470dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/textboxshape"
             android:drawableLeft="@mipmap/facebook_foreground"
@@ -175,7 +123,7 @@
             android:layout_width="338dp"
             android:layout_height="55dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="790dp"
+            android:layout_marginTop="570dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/textboxshape"
             android:drawableLeft="@mipmap/twitter_foreground"
@@ -195,18 +143,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="124dp"
-            android:layout_marginTop="880dp"
+            android:layout_marginTop="670dp"
             android:backgroundTint="@color/turquoise_500"
             android:enabled="true"
-            android:text="@string/update_user"
+            android:text="Save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.154"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Social_networks_Twitter" />
-
-
-
-
 
 
     </RelativeLayout>

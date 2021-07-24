@@ -83,7 +83,7 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
         //get the persons information
         String title = getItem(position).getName();
-        String imgUrl = getItem(position).getImages();
+        String images = getItem(position).getImages();
 
 
         try{
@@ -125,7 +125,7 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
             //set the imageCover
 
-            if(imgUrl != null) {
+            if(images != null) {
 
                 File f = new File(mContext.getCacheDir(), title + ".png");
                 try {
@@ -134,12 +134,20 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
                     ioException.printStackTrace();
                 }
 
-                String[] split = imgUrl.split("/");
+                String[] split = images.split("/");
 
-                imageName = imgUrl;
+                String blob2 = split[4];
 
-                if(split.length > 1 )
-                    imageName = split[4];
+                split = split[5].split("]");
+
+
+
+                imageName = split[0];
+
+
+
+               // if(split.length > 1 )
+                 //   imageName = split[4];
 
                 Storage storage = StorageOptions.newBuilder()
                         .setProjectId(BLOB_ID_PROJECT)
@@ -148,13 +156,14 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
                         .getService();
 
 
-                Thread thread = new Thread(new Runnable() {
+
+               /* Thread thread = new Thread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void run() {
 
                         try {
-                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, imageName));
+                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT , imageName));
                             blob.downloadTo(Paths.get(f.toString()));
 
                         } catch (Exception e) {
@@ -163,16 +172,20 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
                     }
                 });
 
+               // thread.setPriority(10 );
                 thread.start();
+                */
 
-                byte[] decodedString = new byte[0];
+                Bitmap decodedByte =  getBitmap(storage,BLOB_ID_PROJECT , blob2 + "/" + imageName ,f);
+
+               /* byte[] decodedString = new byte[0];
                 try {
                     decodedString = Files.readAllBytes(f.toPath());
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
 
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+               // Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 holder.image.setImageBitmap(decodedByte);
 
@@ -184,6 +197,39 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
             Log.e(TAG, "getView: IllegalArgumentException: " + e.getMessage() );
             return convertView;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Bitmap getBitmap(Storage storage, String id,String name, File f){
+
+   String a ="";
+        Thread thread = new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void run() {
+
+                try {
+                    Blob blob = storage.get(BlobId.of(id, name));
+                    blob.downloadTo(Paths.get(f.toString()));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+        byte[] decodedString = new byte[0];
+        try {
+            decodedString = Files.readAllBytes(f.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        return decodedByte;
     }
 
 }

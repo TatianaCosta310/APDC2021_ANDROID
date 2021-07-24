@@ -13,13 +13,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.internal.LinkedTreeMap;
+
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
@@ -27,7 +25,6 @@ import pt.unl.fct.campus.firstwebapp.LoginApp;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.model.CustomListAdapter;
-import pt.unl.fct.campus.firstwebapp.data.model.EventData;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.UpcomingEventsArgs;
 
@@ -40,7 +37,6 @@ public class MyEvents extends AppCompatActivity implements Constantes {
 
     private List<EventData2> list;
 
-    //private EventsAdapter adapter;
 
     EventData2 event = null;
 
@@ -54,7 +50,6 @@ public class MyEvents extends AppCompatActivity implements Constantes {
 
     Intent oldIntent;
 
-    Gson gson;
 
     Boolean getEvent;
 
@@ -97,7 +92,6 @@ public class MyEvents extends AppCompatActivity implements Constantes {
 
         text = findViewById(R.id.textListEvents);
         text.setText(" My Events ");
-        gson = new Gson();
         getEvent = false;
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))

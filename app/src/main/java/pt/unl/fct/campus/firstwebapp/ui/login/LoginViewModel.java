@@ -26,6 +26,7 @@ import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoggedInUser;
 import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
+import pt.unl.fct.campus.firstwebapp.data.model.ProfileResponse;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
 
@@ -226,10 +227,10 @@ public class LoginViewModel extends ViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<AdditionalAttributes> result = loginRepository.getInfos(token,userid);
+                Result<ProfileResponse> result = loginRepository.getInfos(token,userid);
 
                 if (result instanceof Result.Success) {
-                    AdditionalAttributes data = ((Result.Success<AdditionalAttributes>) result).getData();
+                    ProfileResponse data = ((Result.Success<ProfileResponse>) result).getData();
                     loginResult.postValue(new LoginResult(new LoggedInUserView(data)));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.get_infos_failed));

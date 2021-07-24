@@ -40,7 +40,6 @@ public class SeeParticipatingEvents extends AppCompatActivity implements Constan
 
     private List<EventData2> list;
 
-    //private EventsAdapter adapter;
 
     EventData2 event = null;
 
@@ -94,7 +93,7 @@ public class SeeParticipatingEvents extends AppCompatActivity implements Constan
         changePlaceButton.setVisibility(View.INVISIBLE);
 
         text = findViewById(R.id.textListEvents);
-        text.setText("  Events ");
+        text.setText(" Interested Events ");
         getEvent = false;
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))

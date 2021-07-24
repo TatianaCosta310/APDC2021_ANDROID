@@ -7,6 +7,7 @@ import pt.unl.fct.campus.firstwebapp.data.model.ChangeEmailArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.ChangePasswordArgs;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoginData;
+import pt.unl.fct.campus.firstwebapp.data.model.ProfileResponse;
 import pt.unl.fct.campus.firstwebapp.data.model.RegisterData;
 import pt.unl.fct.campus.firstwebapp.data.model.UserAuthenticated;
 
@@ -113,9 +114,9 @@ public class LoginRepository {
         return result;
     }
 
-    public Result<AdditionalAttributes> getInfos(String token,String userid) {
+    public Result<ProfileResponse> getInfos(String token, String userid) {
 
-        Result<AdditionalAttributes> result = dataSource.getInfos(token,userid);
+        Result<ProfileResponse> result = dataSource.getInfos(token,userid);
 
         return result;
     }

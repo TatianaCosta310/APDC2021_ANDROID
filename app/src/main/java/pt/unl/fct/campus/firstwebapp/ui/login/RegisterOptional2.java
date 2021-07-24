@@ -37,14 +37,6 @@ public class RegisterOptional2 extends AppCompatActivity {
         bundleExtra = oldIntent.getExtras();
 
 
-     /*   String address = bundleExtra.getString("mainAdress");
-        String c_address = bundleExtra.getString("optionalAdress");
-        String fixNumber = bundleExtra.getString("fixNumber");
-
-        String mobileNumber = bundleExtra.getString("mobileNumber");
-
-        String locality = bundleExtra.getString("locality");
-*/
 
         String about = bundleExtra.getString("about");
         String quote = bundleExtra.getString("quote");

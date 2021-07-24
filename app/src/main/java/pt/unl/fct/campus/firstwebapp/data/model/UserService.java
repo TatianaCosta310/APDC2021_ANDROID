@@ -52,7 +52,7 @@ public interface UserService {
     Call<String> updateProfilePicture(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
 
    @GET("rest/login/infos/{userid}")
-   Call<AdditionalAttributes> getInfos(@Header("Cookie") String value,@Path(value = "userid") String userid);
+   Call<ProfileResponse> getInfos(@Header("Cookie") String value,@Path(value = "userid") String userid);
 
 
    @FormUrlEncoded
