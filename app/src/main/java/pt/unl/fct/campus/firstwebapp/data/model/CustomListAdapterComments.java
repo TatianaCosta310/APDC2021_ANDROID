@@ -188,46 +188,45 @@ public class CustomListAdapterComments extends ArrayAdapter<CommentObject2> impl
                 String[] split = imgUrl.split("/");
                  imageName = imgUrl;
 
-                if(split.length > 1)
+                if(imageName != null && imageName.contains("google")) {
                     imageName = split[4];
 
 
-                Storage storage = StorageOptions.newBuilder()
-                        .setProjectId(BLOB_PIC_ID_PROJECT)
-                        // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
-                        .build()
-                        .getService();
+                    Storage storage = StorageOptions.newBuilder()
+                            .setProjectId(BLOB_PIC_ID_PROJECT)
+                            // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
+                            .build()
+                            .getService();
 
 
+                    Thread thread = new Thread(new Runnable() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
+                        @Override
+                        public void run() {
 
-                Thread thread = new Thread(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void run() {
+                            try {
+                                Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
+                                blob.downloadTo(Paths.get(f.toString()));
 
-                        try {
-                            Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
-                            blob.downloadTo(Paths.get(f.toString()));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
+                    });
+
+                    thread.start();
+
+                    byte[] decodedString = new byte[0];
+                    try {
+                        decodedString = Files.readAllBytes(f.toPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
 
-                thread.start();
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                byte[] decodedString = new byte[0];
-                try {
-                    decodedString = Files.readAllBytes(f.toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    holder.image.setImageBitmap(decodedByte);
                 }
-
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                holder.image.setImageBitmap(decodedByte);
-
             }
 
             return convertView;
