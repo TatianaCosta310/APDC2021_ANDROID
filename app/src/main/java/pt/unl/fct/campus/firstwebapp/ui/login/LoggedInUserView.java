@@ -10,6 +10,7 @@ class LoggedInUserView {
     private String profile_pic;
     private String vCode;
     private String email;
+    private String role;
     //... other data fields that may be accessible to the UI
 
     LoggedInUserView(String email,String displayName,String token,String profile_pic) {
@@ -30,6 +31,15 @@ class LoggedInUserView {
     LoggedInUserView() {
 
     }
+
+
+    public void setRole(String role){
+        this.role=role;
+    }
+    public String getRole(){
+        return role;
+    }
+
 
    public String getDisplayName() {
         return displayName;

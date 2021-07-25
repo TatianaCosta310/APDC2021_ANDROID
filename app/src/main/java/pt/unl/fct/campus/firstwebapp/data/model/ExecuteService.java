@@ -182,6 +182,14 @@ public class ExecuteService extends Application implements Constantes {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
+    public Result<String> ExecuteSHandleRole(Response<String> response) {
+        if (response.isSuccessful()) {
 
+            String data = response.body();
+
+            return new Result.Success<>(data);
+        }
+        return new Result.Error(new Exception(response.errorBody().toString()));
+    }
 
 }

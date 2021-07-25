@@ -156,4 +156,10 @@ public class LoginRepository {
 
         return result;
     }
+
+    public Result<String> whatRoleIs(String token) {
+        Result<String> result = dataSource.handleRole(token);
+        return result;
+    }
 }
+

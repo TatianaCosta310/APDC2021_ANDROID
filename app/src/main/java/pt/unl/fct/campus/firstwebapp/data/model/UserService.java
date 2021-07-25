@@ -25,7 +25,15 @@ import retrofit2.http.Query;
 
 public interface UserService {
 
+
+    //SUPERUSER ENDPOINTS
+
+    @GET("rest/super/role")
+    Call<String> handleRole(@Header("Cookie") String value);
+
     //UESER ENDPOINTS
+
+
     @POST("rest/login/op2")
     Call<LoginData> authenticateUser(@Body LoginData data);
 

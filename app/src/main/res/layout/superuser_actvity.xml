@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.login.SuperUser_Page">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@color/turquoise_200">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/person"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="0dp"
+            android:drawingCacheQuality="high"
+            android:src="@drawable/person"
+            app:civ_border_color="@color/teal_700"
+            app:civ_border_width="2dp"/>
+
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="350dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/settings" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/welcome"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/paymentlogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="150dp"
+            android:src="@drawable/criar_evento"
+            app:civ_border_color="@color/teal_700"
+            app:civ_border_width="3dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/paymentlogo2"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="150dp"
+            android:src="@drawable/ver_evento"
+            app:civ_border_color="@color/teal_700"
+            app:civ_border_width="3dp"/>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/paymentlogo3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="320dp"
+            android:src="@drawable/create_event2"
+            app:civ_border_color="@color/teal_700"
+            app:civ_border_width="3dp" />
+
+
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="255dp"
+            android:text="Create Event"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="See Events"
+            android:layout_marginTop="255dp"
+            android:layout_marginStart="250dp"
+            android:textSize="10dp"
+            />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="135dp"
+            android:layout_marginTop="425dp"
+            android:text="See Finished Events"
+            android:textSize="10dp" />
+
+
+
+        <ImageButton
+            android:id="@+id/tools_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="330dp"
+            android:layout_marginTop="490dp"
+            android:background="@drawable/tools" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:background="@color/turquoise_200">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Created by "
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PineApple Inc."
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_marginTop="50dp" />
+
+        <TextView
+            android:id="@+id/textAbout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="245dp"
+            android:onClick="OpenAboutPage"
+            android:text="@string/About_Us"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+
+    </RelativeLayout>
+</LinearLayout>

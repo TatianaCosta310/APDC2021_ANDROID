@@ -66,6 +66,9 @@
         <activity android:name=".ui.login.ChangePassword"/>
         <activity android:name=".ui.login.ChangeEmail"/>
         <activity android:name=".ui.login.UpdateInfos"/>
+        <activity android:name=".ui.login.SuperUser_Page"/>
+        <activity android:name=".ui.login.SuperUserToolsPage"/>
+        <activity android:name=".ui.login.Users"/>
 
     </application>
 

@@ -309,6 +309,23 @@ public class LoginViewModel extends ViewModel {
 
     }
 
+
+    public void handleRole(String token) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Result<String> result = loginRepository.whatRoleIs(token);
+                if (result instanceof Result.Success) {
+                    LoggedInUserView user= new LoggedInUserView("","","","");
+                    user.setRole(((Result.Success<String>) result).getData());
+                    loginResult.postValue(new LoginResult(user));
+                } else {
+                    loginResult.postValue(new LoginResult(R.string.error));
+                }
+            }
+        });
+    }
+
     public void loginDataChanged(String username, String password, String confirmPassword,String name) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null, null,null,null));

@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     TextView aboutUsText,forgotPassword;
+    public boolean role=false;
 
+    LoggedInUserView loginResultFirst;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,7 +98,24 @@ public class MainActivity extends AppCompatActivity {
                 showLoginFailed(loginResult.getError());
             }
             if (loginResult.getSuccess() != null) {
-                updateUiWithUser(loginResult.getSuccess());
+               // updateUiWithUser(loginResult.getSuccess());
+
+                    LoggedInUserView log = loginResult.getSuccess();
+                    if (role==false) {
+                        loginResultFirst = loginResult.getSuccess();
+                        String token= log.getToken();
+                        loginViewModel = new ViewModelProvider(MainActivity.this, new LoginViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
+                                .get(LoginViewModel.class);
+                        loginViewModel.handleRole(token);
+                        role = true;
+                    }
+                    else{
+                        if(log.getRole().equals("true")) {
+                            openSuperUserPage(loginResult.getSuccess());
+                        } else
+                            updateUiWithUser(loginResultFirst);
+                    }
+
                 setResult(Activity.RESULT_OK);
             }
 
@@ -177,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+        private void openSuperUserPage(LoggedInUserView model) {
+            openPage(SuperUser_Page.class,model);
+        }
 
     private void doSignup(){
       openPage( Register.class, null);

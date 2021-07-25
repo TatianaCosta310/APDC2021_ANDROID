@@ -324,4 +324,16 @@ public class LoginDataSource extends Application implements Constantes {
             return new Result.Error(new IOException("Error", e));
         }
     }
+
+    public Result<String> handleRole(String token) {
+        Call<String> handleRole = service.handleRole(token);
+        try {
+            Response<String> response = handleRole.execute();
+            ExecuteService executeService = new ExecuteService();
+            return executeService.ExecuteSHandleRole(response);
+        } catch (Exception e) {
+            return new Result.Error(new IOException("Error handle role", e));
+        }
+    }
+
 }
