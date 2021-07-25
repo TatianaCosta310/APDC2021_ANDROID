@@ -89,7 +89,7 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
         changePlaceButton = findViewById(R.id.PlaceId);
 
-        text = findViewById(R.id.textListEvents);
+        text = findViewById(R.id.PlaceId);
 
         text.setVisibility(View.INVISIBLE);
 
