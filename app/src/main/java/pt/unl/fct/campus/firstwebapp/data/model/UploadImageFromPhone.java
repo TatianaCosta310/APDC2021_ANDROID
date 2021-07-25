@@ -21,13 +21,8 @@ import pt.unl.fct.campus.firstwebapp.R;
 
 public class UploadImageFromPhone extends AppCompatActivity implements StoragePics {
 
-
-
     private Bitmap bitmap;
-    private Activity activity;
     private Uri selectedImage;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -13,6 +13,10 @@ public interface Constantes {
     String HEADER_CONTENT_TYPE_JSON =  "application/json";
     String ACCEPT_CHARSET =  "utf-8";
 
+
     Gson gson = new Gson();
     HashSet<String> cookies   = new HashSet<>();
+
+    int [] goalRange = new int [5];
+
 }

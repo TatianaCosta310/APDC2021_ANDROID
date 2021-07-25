@@ -150,11 +150,6 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics, C
         lat = params.getDouble("Latitude");
         lng = params.getDouble("Longitude");
 
-
-
-
-
-
          bitmap = null;
 
          uploadImageFromPhone = new UploadImageFromPhone();
@@ -249,8 +244,12 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics, C
                     alerta.setMessage("Event hour, is not valid!");
                     alerta.create().show();
 
-                }else if(!isNumVolunteersValid(numVolunteers.getText().toString())){
+                }else if(!isNumVolunteersValid(numVolunteers.getText().toString())) {
                     alerta.setMessage("Number of volunteers, is not valid!");
+                    alerta.create().show();
+
+                }else if(!isGoalValid(goal.getText().toString())){
+                    alerta.setMessage("Number of goal, is not valid! Must be between 1 and 2!");
                     alerta.create().show();
 
                 }else if(bitmap == null){
@@ -360,14 +359,37 @@ public class CreateEventPage extends AppCompatActivity implements StoragePics, C
     }
 
     public boolean isDataValidText() {
-        if (isNameValid(eventName.getText().toString()) == false || isNameValid(goal.getText().toString()) == false
-                || isNameValid(description.getText().toString()) == false) {
+        if (isNameValid(eventName.getText().toString()) == false || isNameValid(description.getText().toString()) == false) {
             return false;
         }
 
         return true;
     }
 
+
+    public boolean isGoalValid(String num){
+
+        int a = 0;
+
+
+        if(num.isEmpty() || num == null) {
+            return false;
+        }
+
+        int number = Integer.valueOf(num);
+
+        for(int i = 0; i < 5; i++){
+            a++;
+            goalRange[i] = a;
+        }
+
+        for(int b : goalRange) {
+            if (b == number){
+                return true;
+            }
+        }
+        return  false;
+        }
 
     public boolean isDataValidDate() {
         Date startDate = null, endDate = null;

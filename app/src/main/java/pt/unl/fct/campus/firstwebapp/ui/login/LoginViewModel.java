@@ -391,9 +391,9 @@ public class LoginViewModel extends ViewModel {
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
 
-            return password != null && password.trim().length() > 6 && password.trim().length() < 12
-                        && password.matches(".*[a-zA-Z]+.*");
-                      //  && password.matches(".*[0-9]+.*"); //retirar maximo de length
+            return password != null && password.trim().length() >= 7  && password.trim().length() <= 15
+                        && password.matches(".*[a-zA-Z]+.*")
+                        && password.matches(".*[0-9]+.*");
     }
 
     private boolean isConfirmPasswordValid(String password, String confirmPassword) {

@@ -25,7 +25,7 @@
     <string name="user_already_exist">user already exist</string>
     <string name="invalid_name">Not a valid name</string>
     <string name="prompt_wrong_Data"> Email or Password incorret!</string>
-    <string name="invalid_password">Password must be >6 characters, contain at lest one letter and one digit </string>
+    <string name="invalid_password">Password must have between 8 and 15 characters, at least a number and a letter </string>
     <string name="must_match_password"> This password must be the same as the one above</string>
     <string name="prompt_no_account_yet"> "No account yet? Create an Account"</string>
     <string name="fill_next_optional"> "If you don't want to fill now, you can do it later, click on Next button"</string>
@@ -88,7 +88,7 @@
     <string name="StartHour">Start Hour</string>
     <string name="FinalHour">Final Hour</string>
     <string name="Failed_See_Event">Failed To see Events</string>
-    <string name="Goal">Goal</string>
+    <string name="Goal">Goal 1-5</string>
     <string name="get_infos_failed">Failed To Get Infos</string>
     <string name="Failed_Remove_See_Event">Failded To Remove Event</string>
     <string name="Failed_Remove_Participation">Failed To Remove Participation</string>

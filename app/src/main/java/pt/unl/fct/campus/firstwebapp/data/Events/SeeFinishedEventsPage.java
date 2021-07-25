@@ -90,7 +90,8 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
         changePlaceButton = findViewById(R.id.PlaceId);
 
         text = findViewById(R.id.textListEvents);
-        text.setText("Events near/in " + locality );
+
+        text.setVisibility(View.INVISIBLE);
 
         gson = new Gson();
         getEvent = false;
