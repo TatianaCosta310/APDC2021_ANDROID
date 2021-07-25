@@ -61,4 +61,20 @@ class LoggedInUserView {
      Object getObject() {
         return a;
     }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setProfile_pic(String profile_pic) {
+        this.profile_pic = profile_pic;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 }

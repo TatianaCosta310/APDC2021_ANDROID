@@ -111,7 +111,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{
                         if(log.getRole().equals("true")) {
-                            openSuperUserPage(loginResult.getSuccess());
+                            LoggedInUserView l = loginResult.getSuccess();
+                            l.setToken(loginResultFirst.getToken());
+                            l.setProfile_pic(loginResultFirst.getProfile_pic());
+                            l.setDisplayName(loginResultFirst.getDisplayName());
+                            l.setEmail(loginResultFirst.getEmail());
+
+                            openSuperUserPage(l);
                         } else
                             updateUiWithUser(loginResultFirst);
                     }
