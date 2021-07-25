@@ -10,11 +10,12 @@
     <TextView
         style="@style/text_box_style"
         android:id="@+id/RegText"
+
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:text ="Verification Code Sent to email"
         android:textAlignment="center"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:paddingVertical="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
