@@ -40,7 +40,9 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
     private static final String TAG = "CustomListAdapter";
 
-    private String imageName;
+    private String imageName,  blob2 = "";;
+
+    private LoginApp loginApp = new LoginApp();
 
     private Context mContext;
     private int mResource;
@@ -123,78 +125,95 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
 
             holder.title.setText(title);
 
+
+
             //set the imageCover
 
             if(images != null) {
 
-                File f = new File(mContext.getCacheDir(), title + ".png");
-                try {
-                    f.createNewFile();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                String[] split = images.split(",");
+
+                if(split.length > 1){
+
+                    split = split[0].split("/");
+
+                    blob2 = split[4];
+
+                    StringBuffer sb = new StringBuffer(split[5]);
+
+                    sb.deleteCharAt(sb.length() - 1);
+
+                    imageName = sb.toString();
+
+
+                }else {
+                    split = images.split("/");
+
+                     blob2 = split[4];
+
+                    split = split[5].split("]");
+
+
+                    StringBuffer sb = new StringBuffer(split[0]);
+
+                    sb.deleteCharAt(sb.length() - 1);
+
+                    imageName = sb.toString();
                 }
 
-                String[] split = images.split("/");
-
-                String blob2 = split[4];
-
-                split = split[5].split("]");
-
-
-
-                StringBuffer sb = new StringBuffer(split[0]);
-
-                sb.deleteCharAt(sb.length()-1);
-
-                imageName = sb.toString();
-
-               // if(split.length > 1 )
-                 //   imageName = split[4];
 
                 Storage storage = StorageOptions.newBuilder()
-                        .setProjectId(BLOB_ID_PROJECT)
-                        // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
+                        .setProjectId(BLOB_ID_EVENT_PHOTOS)
                         .build()
                         .getService();
 
 
-                Bitmap decodedByte =  getBitmap(storage,BLOB_ID_PROJECT , blob2 + "/" + imageName ,f);
-
-                if(decodedByte == null) {
-
-
                     Thread thread = new Thread(new Runnable() {
+
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void run() {
 
+                            File f = new File(loginApp.getAppContext().getCacheDir(), title + ".png");
                             try {
-                                Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, blob2 + "/" + imageName));
+                                f.createNewFile();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+
+
+                            try {
+                                Blob blob = storage.get(BlobId.of(BLOB_ID_EVENT_PHOTOS, blob2 + "/" + imageName));
                                 blob.downloadTo(Paths.get(f.toString()));
 
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
+
+                            byte[] decodedString = new byte[0];
+                            try {
+                                decodedString = Files.readAllBytes(f.toPath());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+
+                            holder.image.post(new Runnable() {
+                                public void run() {
+                                    holder.image.setImageBitmap(decodedByte);
+                                }
+                            });
                         }
                     });
 
                     thread.start();
-
-
-                    byte[] decodedString = new byte[0];
-                    try {
-                        decodedString = Files.readAllBytes(f.toPath());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
                 }
 
-                holder.image.setImageBitmap(decodedByte);
 
-            }
 
             return convertView;
 
@@ -207,7 +226,7 @@ public class CustomListAdapter extends ArrayAdapter<EventData2> implements Const
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Bitmap getBitmap(Storage storage, String id,String name, File f){
 
-   String a ="";
+
         final byte[][] decodedString = {new byte[0]};
 
         Thread thread = new Thread(new Runnable() {

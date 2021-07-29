@@ -143,6 +143,7 @@ public class SeeParticipatingEvents extends AppCompatActivity implements Constan
                             AlertDialog.Builder alert = new AlertDialog.Builder(SeeParticipatingEvents.this);
                             alert.setTitle("no events");
                             alert.setMessage("You are not Participating on any Event yet ");
+                            alert.show();
 
                         } else {
 

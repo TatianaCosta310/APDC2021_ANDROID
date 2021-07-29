@@ -213,7 +213,7 @@ public class LoginViewModel extends ViewModel {
 
                     String s = ((Result.Success<String>) result).getData();
 
-                    loginResult.postValue(new LoginResult(new LoggedInUserView("s","","","s")));
+                    loginResult.postValue(new LoginResult(new LoggedInUserView("s","","",s)));
                 } else {
                     loginResult.postValue(new LoginResult(R.string.Failed_to_update_profile_pic));
                 }

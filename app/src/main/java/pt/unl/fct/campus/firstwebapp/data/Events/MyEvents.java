@@ -140,7 +140,8 @@ public class MyEvents extends AppCompatActivity implements Constantes {
                             // alerta a dizer que nao existem Eventos ainda !
                             AlertDialog.Builder alert = new AlertDialog.Builder(MyEvents.this);
                             alert.setTitle("no events");
-                            alert.setMessage("There aren't Events created yet ");
+                            alert.setMessage("You didn't create Events yet");
+                            alert.show();
 
                         } else {
 

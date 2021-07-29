@@ -1,31 +1,12 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
-import android.webkit.CookieManager;
-import android.webkit.ValueCallback;
-import android.webkit.WebView;
-
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.common.api.Api;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
 
 import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Cookie;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.Result;
@@ -38,7 +19,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Url;
 
 public class EventDataSource implements Constantes {
 
@@ -53,7 +33,6 @@ public class EventDataSource implements Constantes {
                 .build();
 
         this.service = retrofit.create(UserService.class);
-
 
     }
 

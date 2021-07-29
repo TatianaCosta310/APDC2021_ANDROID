@@ -71,22 +71,45 @@ android:layout_weight="0.2">
 
     <TextView
         android:id="@+id/text2"
-        android:textColor="@color/teal_700"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="220dp"
+        android:layout_marginTop="320dp"
         android:text="Our Goals "
-        android:layout_marginTop="340dp"
         android:textAlignment="center"
+        android:textColor="@color/teal_700"
         android:textSize="23sp" />
 
     <TextView
         android:id="@+id/text22"
-        android:layout_width="229dp"
-        android:layout_height="157dp"
+        android:layout_width="225dp"
+        android:layout_height="147dp"
         android:layout_marginStart="200dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="360dp"
         android:text="Our goals are very simple, to develop a tool that allows for solidary people/companies to help others in need, specially on these hard times that we are facing due to the pandemic. "
+        android:textAlignment="center"
+        android:textSize="28sp"
+        app:autoSizeTextType="uniform" />
+
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="550dp"
+        android:text="what you cand do "
+        android:textAlignment="center"
+        android:textColor="@color/teal_700"
+        android:textSize="23sp" />
+
+    <TextView
+        android:id="@+id/text24"
+        android:layout_width="wrap_content"
+        android:layout_height="101dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="590dp"
+        android:text="You can join us in this mission to help make the world a better place for everyone."
         android:textAlignment="center"
         android:textSize="28sp"
         app:autoSizeTextType="uniform" />

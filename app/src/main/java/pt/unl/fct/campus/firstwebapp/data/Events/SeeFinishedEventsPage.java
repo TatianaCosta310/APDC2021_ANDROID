@@ -128,7 +128,18 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
 
                         EventCreatedView model = eventResult.getSuccess();
                         event = gson.fromJson(model.getJsonObject(), EventData2.class);
-                        listCard.add(event);
+
+                        Boolean add = true;
+                        for(int i = 0; i < listCard.size(); i++) {
+
+                            if(listCard.get(i).getEventId() == event.getEventId()) {
+                                add = false;
+                                break;
+                            }
+                        }
+
+                        if(add == true)
+                            listCard.add(event);
                     }
 
                     if (list != null) {
@@ -136,7 +147,8 @@ public class SeeFinishedEventsPage extends AppCompatActivity {
                             // alerta a dizer que nao existem Eventos ainda !
                             AlertDialog.Builder alert = new AlertDialog.Builder(SeeFinishedEventsPage.this);
                             alert.setTitle("no events");
-                            alert.setMessage("There aren't Events created yet ");
+                            alert.setMessage("There aren't Finished Events ");
+                            alert.show();
 
                         } else {
 

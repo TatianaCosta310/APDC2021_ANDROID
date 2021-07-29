@@ -121,6 +121,7 @@
     <string name="user_not_found">User not found</string>
     <string name="error">its not an user</string>
     <string name="other_tools">Super User Special Tools</string>
+    <string name="Dificulty">Dificulty (1-5)</string>
 
 
 </resources>

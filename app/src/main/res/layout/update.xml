@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
 
         android:id="@+id/QUOTE"
         style="text_box_style2"
@@ -79,7 +79,7 @@
         android:selectAllOnFocus="true"
         android:textAlignment="center" />
 
-        <EditText
+        <TextView
 
             android:id="@+id/About"
             android:layout_width="match_parent"

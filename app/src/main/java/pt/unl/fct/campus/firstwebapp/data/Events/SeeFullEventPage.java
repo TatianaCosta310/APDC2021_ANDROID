@@ -1,14 +1,12 @@
 package pt.unl.fct.campus.firstwebapp.data.Events;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,7 +23,6 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.File;
@@ -35,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import pt.unl.fct.campus.firstwebapp.GoogleMaps.MapsActivity;
 import pt.unl.fct.campus.firstwebapp.LoginApp;
@@ -43,7 +38,6 @@ import pt.unl.fct.campus.firstwebapp.R;
 import pt.unl.fct.campus.firstwebapp.data.Constantes;
 import pt.unl.fct.campus.firstwebapp.data.model.CommentObject;
 import pt.unl.fct.campus.firstwebapp.data.model.CommentObject2;
-import pt.unl.fct.campus.firstwebapp.data.model.CustomListAdapter;
 import pt.unl.fct.campus.firstwebapp.data.model.CustomListAdapterComments;
 import pt.unl.fct.campus.firstwebapp.data.model.EventData2;
 import pt.unl.fct.campus.firstwebapp.data.model.LoadCommentsResponse;
@@ -53,6 +47,8 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     private EventViewModel eventViewModel;
 
+    private LoginApp loginApp = new LoginApp();
+
     private ListView listView;
 
     private JsonObject list;
@@ -61,6 +57,9 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     ImageView imageView,organizerpicView;
 
+    String blob2 = "";
+    StringBuffer sb = null;
+
     TextView eventName,owner,description,where,when,until,numMaxVol,numIntered,commentBoard;
     EditText commentText;
     Button showOnMap,addComment,loadComents, loadmoreComments,participate,remove;
@@ -68,7 +67,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
     Bundle params;
 
-    String message,tokenEvent, cursor, image;
+    String message,tokenEvent, cursor, image,imageName;
 
     Boolean doParticipate = true;
 
@@ -88,7 +87,6 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
         commentText = findViewById(R.id.CommentText);
         commentBoard = findViewById(R.id.textShowComments);
-
 
 
         eventName = findViewById(R.id.textShowEvent);
@@ -153,173 +151,85 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
          image = eventData.getImages();
         String organizerCover = eventData.getImgUrl();
 
-        File f1;
         String[] split1;
-        Storage storage1;
-        Bitmap bitmap = null;
 
 
         if(image != null){
 
 
-            split1 = image.split("/");
+
+            String[] split = image.split(",");
+
+            if(split.length > 1) {
+
+                split = split[0].split("/");
+
+                blob2 = split[4];
+
+                 sb = new StringBuffer(split[5]);
+
+                sb.deleteCharAt(sb.length() - 1);
+
+                imageName = blob2 + "/" + sb;
+
+            }else {
+                split1 = image.split("/");
+
+               blob2 = split1[4];
+
+                split1 = split1[5].split("]");
 
 
-            String blob2 = split1[4];
+                 sb = new StringBuffer(split1[0]);
 
-            split1 = split1[5].split("]");
+                sb.deleteCharAt(sb.length() - 1);
 
-
-            StringBuffer sb = new StringBuffer(split1[0]);
-
-            sb.deleteCharAt(sb.length()-1);
-
-            image = blob2 + "/" + sb;
-
-         /*   File f = new File(getCacheDir(), image + ".png");
-            try {
-                f.createNewFile();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+                imageName = blob2 + "/" + sb;
             }
 
 
             Storage storage = StorageOptions.newBuilder()
-                    .setProjectId(BLOB_ID_PROJECT)
-                    .build()
-                    .getService();*/
-
-//          f1 = createNewFile(SeeFullEventPage.this.getCacheDir(),"lalala");
-
-        /*    f1 = new File(SeeFullEventPage.this.getCacheDir(), image + ".png");
-            try {
-                f1.createNewFile();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }*/
-
-
-            //storage1 = getStorage(BLOB_ID_PROJECT);
-
-          // bitmap = getBitmap(storage1,BLOB_ID_PROJECT,image,f1);
-
-
-
-            Storage storage = StorageOptions.newBuilder()
-                    .setProjectId(BLOB_ID_PROJECT)
+                    .setProjectId(BLOB_ID_EVENT_PHOTOS)
                     .build()
                     .getService();
 
-           File f11 = new File(SeeFullEventPage.this.getCacheDir(), "lala" + ".png");
-            try {
-                f11.createNewFile();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
 
                 Thread thread = new Thread(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void run() {
 
-                        try {
-                            Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, image));
-                            blob.downloadTo(Paths.get(f11.toString()));
 
-                        } catch (Exception e) {
+                        File f11 = new File(loginApp.getAppContext().getCacheDir(), sb  + ".png");
+
+
+                            try {
+                                Blob blob = storage.get(BlobId.of(BLOB_ID_EVENT_PHOTOS, imageName));
+                                blob.downloadTo(Paths.get(f11.toString()));
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        byte[] decodedString = new byte[0];
+                        try {
+                            decodedString = Files.readAllBytes(f11.toPath());
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                        imageView.post(new Runnable() {
+                            public void run() {
+                                imageView.setImageBitmap(bitmap);
+                            }
+                        });
                     }
                 });
 
                 thread.start();
-
-
-                byte[] decodedString = new byte[0];
-                try {
-                    decodedString = Files.readAllBytes(f11.toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-
-           if(bitmap == null) {
-
-                    File f = f11;
-
-                   Thread thread1 = new Thread(new Runnable() {
-                       @RequiresApi(api = Build.VERSION_CODES.O)
-                       @Override
-                       public void run() {
-
-                           try {
-                               Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, image));
-                               blob.downloadTo(Paths.get(f.toString()));
-
-                           } catch (Exception e) {
-                               e.printStackTrace();
-                           }
-                       }
-                   });
-
-                   thread1.start();
-
-
-                   try {
-                       decodedString = Files.readAllBytes(f.toPath());
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-
-                   bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-               }
-             /*  Storage storage = StorageOptions.newBuilder()
-                       .setProjectId(BLOB_ID_PROJECT)
-                       .build()
-                       .getService();
-
-               File f = new File(SeeFullEventPage.this.getCacheDir(), "lalala" + ".png");
-               try {
-                   f.createNewFile();
-               } catch (IOException ioException) {
-                   ioException.printStackTrace();
-               }
-
-
-               Thread thread = new Thread(new Runnable() {
-                   @RequiresApi(api = Build.VERSION_CODES.O)
-                   @Override
-                   public void run() {
-
-                       try {
-                           Blob blob = storage.get(BlobId.of(BLOB_ID_PROJECT, blob2 + "/" + image));
-                           blob.downloadTo(Paths.get(f.toString()));
-
-                       } catch (Exception e) {
-                           e.printStackTrace();
-                       }
-                   }
-               });
-
-               thread.start();
-
-
-               byte[] decodedString = new byte[0];
-               try {
-                   decodedString = Files.readAllBytes(f1.toPath());
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-
-
-               bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-*/
-
-
-            imageView.setImageBitmap(bitmap);
 
         }
 
@@ -327,21 +237,14 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
             split1 = organizerCover.split("/");
             image = split1[4];
 
-          //  f1 = createNewFile(SeeFullEventPage.this.getCacheDir(),split1[4]);
-            //storage1 = getStorage(BLOB_PIC_ID_PROJECT);
-
-          /*  bitmap = getBitmap(storage1,BLOB_PIC_ID_PROJECT,split1[4],f1);
-
-            if(bitmap == null)
-                bitmap = getBitmap(storage1,BLOB_ID_PROJECT,image,f1);
-*/
 
             Storage storage = StorageOptions.newBuilder()
                     .setProjectId(BLOB_PIC_ID_PROJECT)
                     .build()
                     .getService();
 
-            File f11 = new File(SeeFullEventPage.this.getCacheDir(), "lele" + ".png");
+            File f11 = new File(loginApp.getAppContext().getCacheDir(), "lele" + ".png");
+
             try {
                 f11.createNewFile();
             } catch (IOException ioException) {
@@ -373,7 +276,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
                 e.printStackTrace();
             }
 
-            bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+          Bitmap  bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
 
             if(bitmap == null) {
@@ -521,6 +424,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
                             AlertDialog.Builder alert = new AlertDialog.Builder(SeeFullEventPage.this);
                             alert.setTitle("no comments");
                             alert.setMessage("There aren't Comments  yet ");
+                            alert.show();
 
                         } else {
 

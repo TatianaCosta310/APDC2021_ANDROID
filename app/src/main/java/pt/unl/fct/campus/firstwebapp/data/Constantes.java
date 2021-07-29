@@ -10,6 +10,8 @@ public interface Constantes {
     String BLOB_PIC_ID_PROJECT = "profile_pics46335560256500";
     String BLOB_ID_PROJECT = "daniel1624401699897";
 
+    String BLOB_ID_EVENT_PHOTOS = "events_photoes_bucket";
+
     String HEADER_CONTENT_TYPE_JSON =  "application/json";
     String ACCEPT_CHARSET =  "utf-8";
 

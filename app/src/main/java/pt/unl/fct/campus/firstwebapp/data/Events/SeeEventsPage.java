@@ -136,6 +136,7 @@ public class SeeEventsPage extends AppCompatActivity implements Constantes {
                             AlertDialog.Builder alert = new AlertDialog.Builder(SeeEventsPage.this);
                             alert.setTitle("no events");
                             alert.setMessage("There aren't Events created yet ");
+                            alert.show();
 
                         } else {
 

@@ -45,10 +45,10 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
     ProfileResponse atribs;
     ImageView image;
 
-    private EditText quote;
-    private EditText about;
-    private EditText facebook;
-    private EditText twitter;
+    private TextView quote;
+    private TextView about;
+    private TextView facebook;
+    private TextView twitter;
 
     private TextView username,ranking,instagram;
 
@@ -98,13 +98,6 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
             if(split.length == 5) {
                 String imageName = split[4];
 
-                File f = new File(UpdateUser.this.getCacheDir(), imageName + ".png");
-                try {
-                    f.createNewFile();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
                 Storage storage = StorageOptions.newBuilder()
                         .setProjectId(BLOB_PIC_ID_PROJECT)
                         // .setCredentials(GoogleCredentials.fromStream(new FileInputStream(f)))
@@ -117,6 +110,15 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
                     @Override
                     public void run() {
 
+                        File f = new File(UpdateUser.this.getCacheDir(), imageName + ".png");
+                        try {
+                            f.createNewFile();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+
+
+
                         try {
                             Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
                             blob.downloadTo(Paths.get(f.toString()));
@@ -124,21 +126,31 @@ public class UpdateUser extends AppCompatActivity implements Constantes {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
+
+                        byte[] decodedString = new byte[0];
+                        try {
+                            decodedString = Files.readAllBytes(f.toPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+
+                        image.post(new Runnable() {
+                            public void run() {
+                                image.setImageBitmap(decodedByte);
+                            }
+                        });
+
                     }
                 });
 
                 thread.start();
 
-                byte[] decodedString = new byte[0];
-                try {
-                    decodedString = Files.readAllBytes(f.toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                image.setImageBitmap(decodedByte);
             }
 
         }

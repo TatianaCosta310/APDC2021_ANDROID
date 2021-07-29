@@ -86,13 +86,6 @@ public class Main_Page extends AppCompatActivity implements Constantes {
             if (split.length == 5) {
                 String imageName = split[4];
 
-                File f = new File(Main_Page.this.getCacheDir(), imageName + ".png");
-                try {
-                    f.createNewFile();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
                 Storage storage = StorageOptions.newBuilder()
                         .setProjectId(BLOB_PIC_ID_PROJECT)
                         .build()
@@ -104,6 +97,14 @@ public class Main_Page extends AppCompatActivity implements Constantes {
                     @Override
                     public void run() {
 
+
+                        File f = new File(Main_Page.this.getCacheDir(), imageName + ".png");
+                        try {
+                            f.createNewFile();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+
                         try {
                             Blob blob = storage.get(BlobId.of(BLOB_PIC_ID_PROJECT, imageName));
                             blob.downloadTo(Paths.get(f.toString()));
@@ -111,22 +112,32 @@ public class Main_Page extends AppCompatActivity implements Constantes {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
+
+                        byte[] decodedString = new byte[0];
+                        try {
+                            decodedString = Files.readAllBytes(f.toPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                        image.post(new Runnable() {
+                            public void run() {
+                                image.setImageBitmap(decodedByte);
+                            }
+                        });
+
                     }
                 });
 
                 thread.start();
 
 
-                byte[] decodedString = new byte[0];
-                try {
-                    decodedString = Files.readAllBytes(f.toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                image.setImageBitmap(decodedByte);
+
 
 
             }
