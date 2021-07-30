@@ -60,6 +60,8 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
     String blob2 = "";
     StringBuffer sb = null;
 
+    Bitmap  bitmap = null;
+
     TextView eventName,owner,description,where,when,until,numMaxVol,numIntered,commentBoard;
     EditText commentText;
     Button showOnMap,addComment,loadComents, loadmoreComments,participate,remove;
@@ -78,7 +80,7 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.see_full_event);
 
-        listView =  findViewById(R.id.listView2);
+        listView = findViewById(R.id.listView2);
 
         listCard = new ArrayList<>();
 
@@ -106,9 +108,9 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
         remove = findViewById(R.id.ButtonRemoveEvent);
 
         Intent oldIntent = getIntent();
-         params = oldIntent.getExtras();
+        params = oldIntent.getExtras();
 
-        String token =  params.getString("token");
+        String token = params.getString("token");
 
         String type = params.getString("Page");
 
@@ -116,11 +118,11 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
         EventData2 eventData = gson.fromJson(params.getString("Event"), EventData2.class);
 
-        if(eventData.isOwner())
+        if (eventData.isOwner())
             remove.setVisibility(View.VISIBLE);
 
 
-        if(type.equalsIgnoreCase("SeeEventsFinished")){
+        if (type.equalsIgnoreCase("SeeEventsFinished")) {
 
             addComment.setVisibility(View.INVISIBLE);
             loadComents.setVisibility(View.INVISIBLE);
@@ -131,56 +133,55 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
         }
 
-        if(type.equalsIgnoreCase("SeeParticipatingEvents")){
+        if (type.equalsIgnoreCase("SeeParticipatingEvents")) {
             doParticipate = false;
             participate.setText("Remove Participation");
 
         }
 
-        Coords coords =  eventData.getEventCoords();
+        Coords coords = eventData.getEventCoords();
 
         eventName.setText(eventData.getName());
         owner.setText(eventData.getOrganizer());
         description.setText(eventData.getDescription());
         where.setText(eventData.getEventAddress());
-        when.setText(eventData.getStartDate()  );
-        until.setText(eventData.getEndDate() );
+        when.setText(eventData.getStartDate());
+        until.setText(eventData.getEndDate());
         numMaxVol.setText(String.valueOf(eventData.getVolunteers()));
         numIntered.setText(String.valueOf(eventData.getCurrentParticipants()));
 
-         image = eventData.getImages();
+        image = eventData.getImages();
         String organizerCover = eventData.getImgUrl();
 
         String[] split1;
 
 
-        if(image != null){
-
+        if (image != null) {
 
 
             String[] split = image.split(",");
 
-            if(split.length > 1) {
+            if (split.length > 1) {
 
                 split = split[0].split("/");
 
                 blob2 = split[4];
 
-                 sb = new StringBuffer(split[5]);
+                sb = new StringBuffer(split[5]);
 
                 sb.deleteCharAt(sb.length() - 1);
 
                 imageName = blob2 + "/" + sb;
 
-            }else {
+            } else {
                 split1 = image.split("/");
 
-               blob2 = split1[4];
+                blob2 = split1[4];
 
                 split1 = split1[5].split("]");
 
 
-                 sb = new StringBuffer(split1[0]);
+                sb = new StringBuffer(split1[0]);
 
                 sb.deleteCharAt(sb.length() - 1);
 
@@ -194,46 +195,46 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
                     .getService();
 
 
-                Thread thread = new Thread(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void run() {
+            Thread thread = new Thread(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void run() {
 
 
-                        File f11 = new File(loginApp.getAppContext().getCacheDir(), sb  + ".png");
+                    File f11 = new File(loginApp.getAppContext().getCacheDir(), sb + ".png");
 
 
-                            try {
-                                Blob blob = storage.get(BlobId.of(BLOB_ID_EVENT_PHOTOS, imageName));
-                                blob.downloadTo(Paths.get(f11.toString()));
+                    try {
+                        Blob blob = storage.get(BlobId.of(BLOB_ID_EVENT_PHOTOS, imageName));
+                        blob.downloadTo(Paths.get(f11.toString()));
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-
-                        byte[] decodedString = new byte[0];
-                        try {
-                            decodedString = Files.readAllBytes(f11.toPath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                        imageView.post(new Runnable() {
-                            public void run() {
-                                imageView.setImageBitmap(bitmap);
-                            }
-                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
 
-                thread.start();
+
+                    byte[] decodedString = new byte[0];
+                    try {
+                        decodedString = Files.readAllBytes(f11.toPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                     bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    imageView.post(new Runnable() {
+                        public void run() {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    });
+                }
+            });
+
+            thread.start();
 
         }
 
-        if(organizerCover != null && organizerCover.contains("google")) {
+        if (organizerCover != null && organizerCover.contains("google")) {
             split1 = organizerCover.split("/");
             image = split1[4];
 
@@ -276,10 +277,10 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
                 e.printStackTrace();
             }
 
-          Bitmap  bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
 
-            if(bitmap == null) {
+            if (bitmap == null) {
 
                 File f = f11;
 
@@ -311,9 +312,14 @@ public class SeeFullEventPage extends AppCompatActivity implements Constantes {
 
             }
 
-            organizerpicView.setImageBitmap(bitmap);
-
+            Bitmap finalBitmap = bitmap;
+            organizerpicView.post(new Runnable() {
+                public void run() {
+                    imageView.setImageBitmap(finalBitmap);
+                }
+            });
         }
+
 
         eventViewModel = new ViewModelProvider(this, new EventViewModelFactory(((LoginApp) getApplication()).getExecutorService()))
                 .get(EventViewModel.class);
