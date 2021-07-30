@@ -80,7 +80,7 @@ public interface UserService {
     //EVENTS ENDPOINTS
     @Multipart
     @POST("rest/events/create")
-    Call<EventData2> createEvent(@Header("Cookie") String value,@PartMap Map<String,RequestBody> map);
+    Call<Long> createEvent(@Header("Cookie") String value, @PartMap Map<String,RequestBody> map);
 
     // da 401 whyy???  supostamente nao autorizado?? hmmm
     @DELETE("rest/events/delete/{eventId}")

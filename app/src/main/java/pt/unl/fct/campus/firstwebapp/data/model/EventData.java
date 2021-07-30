@@ -4,18 +4,10 @@ import java.io.File;
 
 public class EventData {
 
+
     String name, description, difficulty, location,
             startDate, endDate, organizer, startTime, endTime, images;
-    File img_cover;
     long eventId, volunteers;
-
-    public File getImg_cover() {
-        return img_cover;
-    }
-
-    public void setImg_cover(File img_cover) {
-        this.img_cover = img_cover;
-    }
     //volunteers is long because I am unable to fetch integer value from datastore without casting.
 	/*
 	description: ""

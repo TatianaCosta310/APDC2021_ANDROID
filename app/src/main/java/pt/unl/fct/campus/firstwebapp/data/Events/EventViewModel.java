@@ -53,7 +53,7 @@ public class EventViewModel extends ViewModel {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Result<EventData2> result = eventRepository.createEvent( token,map);
+                Result<Long> result = eventRepository.createEvent( token,map);
 
                 if (result instanceof Result.Success) {
 

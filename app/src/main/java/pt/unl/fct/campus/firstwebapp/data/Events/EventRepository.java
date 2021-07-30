@@ -43,13 +43,13 @@ public class EventRepository extends AppCompatActivity {
 
 
 
-    public Result<EventData2> createEvent(String token ,Map<String,RequestBody> map){
+    public Result<Long> createEvent(String token ,Map<String,RequestBody> map){
 
         //Long v1 = new Long(30);
 
         //Long v = v1.valueOf(volunteers);
 
-        Result<EventData2> result = dataSource.createEvent(token,map);
+        Result<Long> result = dataSource.createEvent(token,map);
 
         return result;
     }

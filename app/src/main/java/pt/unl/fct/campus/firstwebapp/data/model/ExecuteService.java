@@ -101,7 +101,7 @@ public class ExecuteService extends Application implements Constantes {
         return new Result.Error(new Exception(response.errorBody().toString()));
     }
 
-    public Result<EventData2> ExecuteServiceCreateEvent(Response<EventData2> response){
+    public Result<Long> ExecuteServiceCreateEvent(Response<Long> response){
 
         if (response.isSuccessful()) {
             return new Result.Success<>("SUCCESS, EVENT CREATED");

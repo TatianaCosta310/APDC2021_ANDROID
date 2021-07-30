@@ -37,12 +37,12 @@ public class EventDataSource implements Constantes {
     }
 
 
-    public Result<EventData2> createEvent(String token,Map<String,RequestBody> map) {
+    public Result<Long> createEvent(String token,Map<String,RequestBody> map) {
 
-        Call<EventData2> userAuthenticatedCall = service.createEvent(token,map);
+        Call<Long> userAuthenticatedCall = service.createEvent(token,map);
         try {
 
-            Response<EventData2> response = userAuthenticatedCall.execute();
+            Response<Long> response = userAuthenticatedCall.execute();
 
             ExecuteService executeService = new ExecuteService();
 
